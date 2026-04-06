@@ -1,0 +1,86 @@
+{
+  "_comment": "Direct GGUF inference config. Bypasses Ollama. Uses llama-cpp-python.",
+
+  "mode": "direct_gguf",
+  "engine": "llama-cpp-python >= 0.2.70",
+  "cuda_version": "11.8",
+  "gpu": "NVIDIA GeForce GT 1030 (sm_61, 2GB VRAM)",
+
+  "blob_root": "E:/LLMmodel/blobs",
+
+  "models": {
+    "gemma4-e4b": {
+      "blob":          "sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a",
+      "quant":         "Q4_K_M",
+      "size_gb":       9.1,
+      "architecture":  "MoE (Mixture of Experts)",
+
+      "flash_moe_strategy": {
+        "_desc":          "Expert tensor offloading: attention layers on GPU, FFN experts in CPU RAM",
+        "n_gpu_layers":   12,
+        "_why":           "12 attn layers fit in 2GB VRAM; 31 expert FFN layers stay mmap'd in RAM"
+      },
+      "mlx_no_swap": {
+        "use_mmap":       true,
+        "_mmap_why":      "GGUF memory-mapped: only accessed (active expert) pages load into RAM",
+        "use_mlock":      true,
+        "_mlock_why":     "Pinned pages cannot be evicted to swap; 16GB free RAM > 9.1GB model"
+      },
+      "n_ctx":           1024,
+      "n_batch":         256,
+      "n_threads":       3,
+      "type_k":          "q8_0",
+      "type_v":          "q8_0",
+      "max_tokens":      60,
+      "timeout_s":       900
+    },
+
+    "gemma3-1b": {
+      "blob":          "sha256-7cd4618c1faf8b7233c6c906dac1694b6a47684b37b8895d470ac688520b9c01",
+      "quant":         "Q4_K_M",
+      "size_gb":       0.76,
+      "n_gpu_layers":  -1,
+      "_gpu_note":     "Fully on GPU: 760MB < 1137MB free VRAM",
+      "use_mmap":      true,
+      "use_mlock":     true,
+      "n_ctx":         2048,
+      "n_batch":       512,
+      "n_threads":     3,
+      "max_tokens":    250,
+      "timeout_s":     120
+    },
+
+    "deepseek-r1-1.5b": {
+      "blob":          "sha256-aabd4debf0c8f08881923f2c25fc0fdeed24435271c2b3e92c4af36704040dbc",
+      "quant":         "Q4_K_M",
+      "size_gb":       1.04,
+      "n_gpu_layers":  20,
+      "_gpu_note":     "Partial GPU: ~1GB near VRAM limit; remainder mmap'd",
+      "use_mmap":      true,
+      "use_mlock":     true,
+      "n_ctx":         2048,
+      "n_batch":       512,
+      "n_threads":     3,
+      "max_tokens":    250,
+      "timeout_s":     120
+    }
+  },
+
+  "cpu_control": {
+    "affinity":        [1, 2, 3],
+    "_affinity_why":   "Core 0 reserved for OS; prevents system hang",
+    "priority":        "BELOW_NORMAL",
+    "throttle_threshold_pct": 60,
+    "inter_test_sleep_s":     12,
+    "model_switch_sleep_s":   25
+  },
+
+  "notes": [
+    "Flash-MoE: MoE models only activate a subset of experts per token.",
+    "With use_mmap=True, inactive expert weights are NOT loaded into RAM — only accessed pages are.",
+    "This achieves sparse expert loading comparable to Flash-MoE without custom kernels.",
+    "use_mlock=True prevents active pages from being swapped — essential on 34GB RAM + 9GB model.",
+    "Q4_K_M is already 4-bit. Further requantization (Q3_K_S/Q2_K) possible with llama-quantize.",
+    "MLX concept applied: lazy load (mmap) + unified address space (no GPU copy overhead for experts)."
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "Gemma3 1B": {
+    "summarization": {
+      "status": "ok",
+      "response": "Artificial intelligence is rapidly advancing across various industries through machine learning, allowing computers to learn and make decisions without direct human input. This technology is now impacting areas like healthcare and transportation, becoming increasingly integrated into our daily routines.",
+      "elapsed_s": 22.9,
+      "tok_s": 21.35
+    },
+    "synonym": {
+      "status": "ok",
+      "response": "Here are a few options for rewriting \"AI is changing the way we work and live\" with a more sophisticated vocabulary, each with a slightly different nuance:\n\n**Option 1 (Focus on transformative impact):**\n\n“Artificial Intelligence is fundamentally reshaping the contours of both professional and personal existence.”\n\n**Option 2 (More emphasis on the scope of change):**\n\n“The proliferation of Artific",
+      "elapsed_s": 10.4,
+      "tok_s": 21.27
+    },
+    "chat": {
+      "status": "ok",
+      "response": "Here are the top 3 benefits of running LLMs locally:\n\n1.  **Privacy:** Your data stays private.\n2.  **Speed & Control:** Faster responses and no reliance on cloud services.\n3.  **Cost Savings:** Avoid API fees. \n\nDo you want to know more about any of these benefits?",
+      "elapsed_s": 4.2,
+      "tok_s": 21.15
+    },
+    "vision": {
+      "status": "ok",
+      "response": "",
+      "elapsed_s": 0.7,
+      "tok_s": 0.0
+    },
+    "audio_stt": {
+      "status": "not_supported",
+      "response": "Audio STT not supported via Ollama",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "video": {
+      "status": "not_supported",
+      "response": "Video input not supported via any local GGUF model",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "tts": {
+      "status": "ok",
+      "response": "WAV generated via Windows SAPI",
+      "elapsed_s": 2.0,
+      "tok_s": 0
+    }
+  },
+  "DeepSeek-r1 1.5B": {
+    "summarization": {
+      "status": "ok",
+      "response": "Artificial intelligence is transforming industries by enabling machines to learn from data with minimal human intervention",
+      "elapsed_s": 29.1,
+      "tok_s": 12.87
+    },
+    "synonym": {
+      "status": "ok",
+      "response": "",
+      "elapsed_s": 17.3,
+      "tok_s": 12.5
+    },
+    "chat": {
+      "status": "ok",
+      "response": "",
+      "elapsed_s": 15.2,
+      "tok_s": 14.21
+    },
+    "vision": {
+      "status": "not_supported",
+      "response": "No vision support",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "audio_stt": {
+      "status": "not_supported",
+      "response": "Audio STT not supported via Ollama",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "video": {
+      "status": "not_supported",
+      "response": "Video input not supported via any local GGUF model",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "tts": {
+      "status": "ok",
+      "response": "WAV generated via Windows SAPI",
+      "elapsed_s": 2.0,
+      "tok_s": 0
+    }
+  },
+  "Gemma4 E4B": {
+    "summarization": {
+      "status": "error",
+      "response": "timed out",
+      "elapsed_s": 905.4,
+      "tok_s": 0
+    },
+    "synonym": {
+      "status": "error",
+      "response": "timed out",
+      "elapsed_s": 934.5,
+      "tok_s": 0
+    },
+    "chat": {
+      "status": "error",
+      "response": "timed out",
+      "elapsed_s": 905.4,
+      "tok_s": 0
+    },
+    "vision": {
+      "status": "ok",
+      "response": "",
+      "elapsed_s": 313.9,
+      "tok_s": 0.0
+    },
+    "audio_stt": {
+      "status": "error",
+      "response": "timed out",
+      "elapsed_s": 900.4,
+      "tok_s": 0
+    },
+    "video": {
+      "status": "not_supported",
+      "response": "Video input not supported via any local GGUF model",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "tts": {
+      "status": "ok",
+      "response": "WAV generated via Windows SAPI",
+      "elapsed_s": 2.0,
+      "tok_s": 0
+    }
+  }
+}

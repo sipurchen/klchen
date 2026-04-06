@@ -1,0 +1,37 @@
+# Gemma 4 E4B - TurboQuant+ Optimized Configuration
+# Techniques: KV Cache Quantization + Flash Attention + MoE GPU Streaming
+# Target: <10 min first response, <3 min warm response
+
+FROM gemma4:e4b
+
+# === TurboQuant+ : Optimized Context & Batch ===
+# 4096 context balances capability vs KV cache memory
+# Smaller KV cache -> more VRAM headroom for GPU layer offloading
+PARAMETER num_ctx 1024
+
+# Larger batch improves GPU utilization throughput
+PARAMETER num_batch 256
+
+# === Streaming Experts for MoE: GPU Layer Offload ===
+# 12 layers fit in GT 1030 2GB VRAM with n_ctx=2048 + q8_0 KV cache
+PARAMETER num_gpu -1
+
+# CRITICAL: 2 threads only — leaves cores 0+1 free for OS/system
+# 8 threads caused 100% CPU on all 4 cores → system hang
+PARAMETER num_thread 2
+
+# === Generation Parameters ===
+PARAMETER temperature 0.7
+PARAMETER top_p 0.95
+PARAMETER top_k 64
+PARAMETER repeat_penalty 1.0
+
+# === System Prompt Template ===
+TEMPLATE """<start_of_turn>user
+{{ if .System }}{{ .System }}
+
+{{ end }}{{ .Prompt }}<end_of_turn>
+<start_of_turn>model
+{{ .Response }}<end_of_turn>"""
+
+SYSTEM """You are Gemma 4 E4B, a highly capable AI assistant running locally. You excel at reasoning, coding, multimodal understanding, and agentic workflows. Respond helpfully and concisely."""
