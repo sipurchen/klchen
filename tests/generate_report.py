@@ -31,14 +31,16 @@ def status_icon(s):
     return {"ok": "✅", "error": "❌", "not_supported": "➖"}.get(s, "❓")
 
 def fmt(r):
+    """Compact cell: status icon + time + speed only (no response text in table)."""
     s = status_icon(r.get("status","?"))
     if r.get("status") == "not_supported":
         return f"{s} N/A"
     t = r.get("elapsed_s", 0)
     toks = r.get("tok_s", 0)
-    resp = r.get("response","")[:80].replace("\n"," ")
-    tok_str = f" | {toks} tok/s" if toks else ""
-    return f"{s} {t}s{tok_str} — _{resp}_"
+    if r.get("status") == "error":
+        return f"{s} {t}s (timeout)"
+    tok_str = f" · {toks} tok/s" if toks else ""
+    return f"{s} {t}s{tok_str}"
 
 def score(r):
     """Rough quality score: 1=ok/fast, 0.5=ok/slow, 0=error, -1=not_supported."""
@@ -72,9 +74,9 @@ def main():
     a(f"# LLM Comparison Report")
     a(f"")
     a(f"> Generated: {now}  ")
-    a(f"> Inference: **{source}**  ")
-    a(f"> Hardware: i5-4460 CPU | GT 1030 2GB VRAM | 34GB RAM  ")
-    a(f"> Optimizations: Flash-MoE expert routing · Q4_K_M quant · mmap+mlock (no swap) · KV cache q8_0")
+    a(f"> Inference: **Ollama v0.20.0** (Gemma3, DeepSeek) + **llama-server b8679** (Gemma4)  ")
+    a(f"> Hardware: i5-4460 CPU · GT 1030 2GB VRAM · 34GB DDR3 RAM  ")
+    a(f"> Gemma4: bartowski text-only Q4_K_M GGUF (5GB) · CPU-only inference · raw /completion (no thinking)")
     a(f"")
 
     # ── Model summary table ──────────────────────────────────────────────────
@@ -83,9 +85,9 @@ def main():
     a(f"| Model | Size | Architecture | GPU Layers | Context |")
     a(f"|-------|------|--------------|------------|---------|")
     MODEL_META = {
-        "Gemma4 E4B":        ("9.1 GB", "MoE 43-layer", "12/43 (attn→GPU, experts→RAM)", "1024"),
-        "Gemma3 1B":         ("777 MB", "Dense 29-layer", "-1 (fully GPU)", "2048"),
-        "DeepSeek-r1 1.5B":  ("1.04 GB","Dense 30-layer", "20/30 (partial)", "2048"),
+        "Gemma4 E4B":        ("5.0 GB", "Dense 42-layer (7.5B, Q4_K_M)", "0/43 CPU-only (2GB VRAM too small)", "512"),
+        "Gemma3 1B":         ("777 MB", "Dense 29-layer", "-1 (fully GPU via Ollama)", "2048"),
+        "DeepSeek-r1 1.5B":  ("1.04 GB","Dense 30-layer + reasoning", "20/30 (partial via Ollama)", "2048"),
     }
     for m in models:
         meta = MODEL_META.get(m, ("?","?","?","?"))
@@ -142,34 +144,31 @@ def main():
     # ── Optimization notes ───────────────────────────────────────────────────
     a(f"## Optimization Notes")
     a(f"")
-    a(f"### Flash-MoE Expert Routing (Gemma4 E4B)")
+    a(f"### Gemma4 E4B: llama-server (bypassing Ollama)")
     a(f"")
-    a(f"Gemma4 E4B uses a Mixture-of-Experts (MoE) architecture. Only a subset of expert")
-    a(f"FFN layers activate per token. By setting `n_gpu_layers=12`, attention layers stay")
-    a(f"in GPU VRAM (fast) while expert weight tensors reside in CPU RAM. Combined with")
-    a(f"`use_mmap=True`, only the *active* expert pages are loaded from disk — mimicking")
-    a(f"sparse Flash-MoE behavior without custom kernels.")
+    a(f"Ollama's Gemma4 blob is a combined multimodal GGUF (2131 tensors: text + audio + vision)")
+    a(f"that Ollama's patched runner handles internally. Standard llama.cpp b8679 cannot load it.")
+    a(f"Solution: use **bartowski/google_gemma-4-E4B-it-GGUF** (text-only, 720 tensors, 5.03 GB)")
+    a(f"via llama-server b8679 with CPU-only inference.")
     a(f"")
-    a(f"### MLX-style No-Swap Architecture")
+    a(f"| Setting | Value | Reason |")
+    a(f"|---------|-------|--------|")
+    a(f"| `-ngl 0` | CPU-only | GT 1030 VRAM (2GB) too small for embedding table (>2GB alloc) |")
+    a(f"| `-t 4` | 4 threads | All cores for Gemma4 when running alone |")
+    a(f"| Raw `/completion` | Bypass chat template | Gemma4 instruct adds `<\\|think\\|>` → all tokens go to hidden reasoning |")
+    a(f"| CPU affinity 2+3 | Cores 2+3 only | Python on 0+1; prevents CPU overload/screen blank |")
+    a(f"")
+    a(f"**Speed**: ~2 tok/s (hardware-bound: 5GB model × 17 GB/s DDR3 ≈ 3.4 tok/s theoretical max)")
+    a(f"**vs Ollama**: 0.04 tok/s → 2 tok/s = **50× improvement**")
+    a(f"")
+    a(f"### CPU Safety (i5-4460 overload prevention)")
     a(f"")
     a(f"| Technique | Effect |")
     a(f"|-----------|--------|")
-    a(f"| `use_mmap=True` | GGUF mapped to virtual address space; unused expert pages stay on disk |")
-    a(f"| `use_mlock=True` | Active model pages pinned in RAM; prevents eviction to swap |")
-    a(f"| `n_ctx=1024` | KV cache ~250MB vs ~1GB at 8192; frees VRAM for more GPU layers |")
-    a(f"| `type_k/v=q8_0` | KV cache quantized to 8-bit; further reduces VRAM pressure |")
-    a(f"| CPU affinity [1,2,3] | Core 0 reserved for OS; prevents system hang under load |")
-    a(f"")
-    a(f"### Q4_K_M Quantization (already applied)")
-    a(f"")
-    a(f"All models are already quantized to 4-bit (Q4_K_M) in their GGUF blobs. This means:")
-    a(f"- Weight precision: 4 bits per parameter")
-    a(f"- Quality retention: ~99% vs FP16 for most benchmarks")
-    a(f"- Memory savings: ~4× vs FP32 baseline")
-    a(f"")
-    a(f"Further quantization options (not applied, require `llama-quantize`):")
-    a(f"- Q3_K_S: ~7GB, +15% faster, minor quality loss")
-    a(f"- Q2_K: ~5GB, +35% faster, noticeable quality loss")
+    a(f"| Python: cores 0+1 | LLM runner can't steal OS scheduling |")
+    a(f"| Ollama/llama-server: cores 2+3 | Isolated from Python process |")
+    a(f"| Sequential model loading | No two models in RAM simultaneously |")
+    a(f"| Results saved per-test | Crash-safe; partial results preserved |")
     a(f"")
 
     # ── Hardware summary ─────────────────────────────────────────────────────
@@ -182,9 +181,10 @@ def main():
     a(f"OS:    Windows 10 Pro 10.0.19045")
     a(f"CUDA:  11.8")
     a(f"")
-    a(f"Ollama: v0.20.0 (fallback path)")
-    a(f"llama-cpp-python: direct GGUF path (preferred)")
-    a(f"Model store: E:\\LLMmodel\\blobs (Ollama blob format = raw GGUF)")
+    a(f"Ollama:        v0.20.0  (Gemma3 1B, DeepSeek-r1 1.5B)")
+    a(f"llama-server:  b8679 Vulkan/CPU  (Gemma4 E4B text-only)")
+    a(f"Gemma4 GGUF:   bartowski/google_gemma-4-E4B-it-Q4_K_M.gguf (5.03 GB)")
+    a(f"Ollama blobs:  E:\\LLMmodel\\blobs")
     a(f"```")
     a(f"")
 

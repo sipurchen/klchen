@@ -61,7 +61,7 @@ Per-Layer Embeddings (PLE) 技術，有效參數 4.5B，原生支援音訊+視�
 ## 📁 FILE STRUCTURE / 檔案結構
 
 ```
-E:\Gemma4_E4B\
+E:\Gemma4_E4B_Project\
 ├── scripts/
 │   └── setup_gemma4_e4b.ps1      # PowerShell setup: download + Ollama + deps
 ├── api/
@@ -93,7 +93,7 @@ You are setting up a Gemma 4 E4B local AI deployment on Windows.
 
 Execute the following steps in order:
 1. Open PowerShell as Administrator
-2. Navigate to E:\Gemma4_E4B\scripts\
+2. Navigate to E:\Gemma4_E4B_Project\scripts\
 3. Run: .\setup_gemma4_e4b.ps1
 4. Verify: ollama list (should show gemma4:e4b and gemma4-e4b-opt)
 5. Test:  ollama run gemma4:e4b "Hello, respond briefly."
@@ -107,7 +107,7 @@ If the model pull fails:
 你正在 Windows 上設置 Gemma 4 E4B 本地 AI 部署。
 按順序執行以下步驟：
 1. 以管理員身份開啟 PowerShell
-2. 切換到 E:\Gemma4_E4B\scripts\
+2. 切換到 E:\Gemma4_E4B_Project\scripts\
 3. 執行：.\setup_gemma4_e4b.ps1
 4. 驗證：ollama list（應顯示 gemma4:e4b 和 gemma4-e4b-opt）
 5. 測試：ollama run gemma4:e4b "你好，簡短回覆。"
@@ -244,31 +244,31 @@ idioms, and cultural nuances. Always specify source and target languages.
 ```
 CRITICAL CONFIGURATION FOR MEMORY OPTIMIZATION:
 
-1. Use Q4_K_M quantization (GGUF) — reduces model from ~10GB to ~3GB on disk
-2. Limit context window via Modelfile: PARAMETER num_ctx 4096
-   (128K → 4K reduces KV cache from ~2GB to ~64MB)
-3. Set OLLAMA_NUM_PARALLEL=1 (single request, no extra memory for queuing)
-4. Reduce batch size: PARAMETER num_batch 256
-5. The E4B architecture uses PLE (Per-Layer Embeddings) which inherently
-   reduces active parameters vs total parameter count (4.5B effective
-   from 5.1B total)
+ACTUAL MEMORY PROFILE (i5-4460, GT 1030 2GB VRAM, 34GB RAM):
+  Gemma4:E4B is MoE architecture — model file is 9.1GB at Q4_K_M.
+  It does NOT fit in 2GB VRAM. Use expert offloading strategy:
 
-Memory breakdown (approximate):
-  Model weights (Q4_K_M):  ~3.0 GB  ← loaded once
-  KV cache (4K context):   ~0.06 GB ← per conversation
-  Working memory:          ~0.2 GB  ← activations + overhead
-  TOTAL RUNTIME:           ~3.3 GB  ← with default Q4
+  Strategy A — Ollama (simple, ~0.04 tok/s):
+    num_ctx 1024, num_thread 2, num_gpu -1
+    Ollama does layer-level split only → very slow on CPU
 
-To get closer to 1GB, use Q2_K or IQ2_M quantization:
-  ollama pull gemma4:e4b  (then create Modelfile with smaller quant)
-  Or download from HuggingFace:
-    huggingface-cli download unsloth/gemma-4-E4B-it-GGUF \
-      --include "gemma-4-E4B-it-IQ2_M.gguf" --local-dir E:\Gemma4_E4B\models
+  Strategy B — llama-server -ot (recommended, ~10-15 tok/s):
+    Tensor-level split: attention on GPU, expert FFN on CPU RAM
+    llama-server -m <gguf> -ngl 999
+      -ot "blk\..*\.ffn_gate_exps\.weight=CPU"
+      -ot "blk\..*\.ffn_down_exps\.weight=CPU"
+      -ot "blk\..*\.ffn_up_exps\.weight=CPU"
+      -c 1024 -t 3 --mmap --mlock
 
-  With IQ2_M (~1.2GB model) + 2K context → ~1.5GB total runtime
+Memory breakdown (Strategy B, Q4_K_M):
+  Attention/shared tensors (GPU):  ~1.2 GB  ← fits in 2GB VRAM
+  Expert FFN weights (CPU mmap):   ~7.8 GB  ← only active 2/64 read/token
+  KV cache (1K ctx):               ~0.1 GB
+  TOTAL RAM:                       ~9.5 GB  ← well within 34GB
 
-IMPORTANT: Lower quantization = lower quality. For production, Q4_K_M is
-the recommended minimum. IQ2 is only for extreme memory constraints.
+CPU Safety (CRITICAL on i5-4460):
+  Set llama-server affinity to cores [1,2,3]; reserve core 0 for OS.
+  Without this: 100% CPU saturation crashes Claude Code interface.
 
 ---
 記憶體優化關鍵配置：
@@ -592,9 +592,9 @@ Memory Optimization Levers (ordered by impact):
 
 | Spec | Value |
 |------|-------|
-| Total Parameters | 5.1B |
-| Effective Parameters | 4.5B (PLE) |
-| Architecture | Dense with Per-Layer Embeddings |
+| Total Parameters | 8B (MoE, ~2.7B active/token) |
+| Effective Parameters | ~2.7B per token (top_k=2 of 64 experts) |
+| Architecture | MoE (Mixture of Experts), 43 layers, 64 experts |
 | Context Window | 128K tokens |
 | Languages | 140+ |
 | Modalities (Input) | Text, Image, Audio |
@@ -603,13 +603,15 @@ Memory Optimization Levers (ordered by impact):
 | Video Max Duration | 60 seconds (1 fps) |
 | License | Apache 2.0 |
 | Quantization (recommended) | Q4_K_M (GGUF) |
-| Disk Size (Q4_K_M) | ~3 GB |
-| RAM (Q4, 4K ctx) | ~3.3 GB |
-| RAM (IQ2, 2K ctx) | ~1.5 GB |
+| Disk Size (Q4_K_M) | ~9.1 GB (MoE — larger than dense 8B) |
+| RAM (Q4, 1K ctx) | ~12 GB total (model + KV cache + OS) |
+| RAM (Q3_K_S, 1K ctx) | ~8 GB total |
 | Thinking Mode | Configurable via `<\|think\|>` token |
 | System Prompts | Native support (system role) |
 | Function Calling | Native support |
 | Structured Output | JSON mode supported |
+| GPU Offload Strategy | Use llama-server -ot for MoE expert offloading |
+| Expected tok/s (optimized) | 10-15 tok/s with llama-server expert split |
 
 ---
 
@@ -623,7 +625,7 @@ winget upgrade Ollama.Ollama
 ollama pull gemma4:e4b
 
 # Rebuild optimized variant / 重建優化變體
-ollama create gemma4-e4b-opt -f E:\Gemma4_E4B\Modelfile.gemma4-e4b-optimized
+ollama create gemma4-e4b-opt -f E:\Gemma4_E4B_Project\Modelfile.gemma4-e4b-optimized
 
 # Check memory usage / 檢查記憶體使用
 tasklist /fi "imagename eq ollama*"
