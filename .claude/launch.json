@@ -1,0 +1,41 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Gemma4 FastAPI Agent Server",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["api/gemma4_api_server.py"],
+      "port": 8000,
+      "description": "OpenAI-compatible FastAPI server wrapping Ollama. Manages 6 agents (general, coder, analyst, translator, vision, planner). Requires Ollama running on port 11434."
+    },
+    {
+      "name": "llama-server (Gemma4 CPU-only)",
+      "runtimeExecutable": "bin/llama-cpp/llama-server.exe",
+      "runtimeArgs": [
+        "-m", "E:/LLMmodel/gemma4_textonly/google_gemma-4-E4B-it-Q4_K_M.gguf",
+        "-ngl", "0",
+        "-c", "512",
+        "-t", "4",
+        "-np", "1",
+        "--host", "127.0.0.1",
+        "--port", "8080"
+      ],
+      "port": 8080,
+      "description": "llama-server b8679 Vulkan, CPU-only (GT 1030 2GB VRAM too small). Text-only Gemma4 GGUF. Use raw /completion endpoint to bypass thinking template."
+    },
+    {
+      "name": "Ollama Serve",
+      "runtimeExecutable": "ollama",
+      "runtimeArgs": ["serve"],
+      "port": 11434,
+      "description": "Ollama inference engine. Serves gemma3:1b and deepseek-r1:1.5b. Pinned to CPU cores 2+3 by benchmark script."
+    },
+    {
+      "name": "Benchmark Runner",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["tests/benchmark_all_models.py"],
+      "port": null,
+      "description": "Sequential CPU-safe benchmark: Gemma3 1B → DeepSeek-r1 1.5B (Ollama) → Gemma4 E4B (llama-server). Results saved to tests/benchmark_results.json."
+    }
+  ]
+}
