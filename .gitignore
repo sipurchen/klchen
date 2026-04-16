@@ -1,0 +1,28 @@
+# Model blobs — too large, and may contain personal data from Ollama store
+ollama_models/
+*.gguf
+*.bin
+*.safetensors
+
+# Node
+node_modules/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TTS output wav (generated at runtime)
+tests/assets/tts_out.wav
+tests/assets/tts_direct_out.wav
+
+# Sensitive env files
+.env
+*.env
+secrets.*

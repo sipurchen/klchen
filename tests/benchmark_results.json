@@ -1,0 +1,134 @@
+{
+  "Gemma3 1B": {
+    "summarization": {
+      "status": "ok",
+      "response": "Artificial intelligence is rapidly advancing across various industries through machine learning, allowing computers to learn and make decisions without direct human input. This technology is now impacting areas like healthcare and transportation, becoming more integrated into our daily routines.",
+      "elapsed_s": 32.0,
+      "tok_s": 21.5
+    },
+    "synonym": {
+      "status": "ok",
+      "response": "Here are a few options for rewriting \"AI is changing the way we work and live\" with more sophisticated vocabulary, each with a slightly different nuance:\n\n**Option 1 (Emphasis on transformative impact):**\n\n“Artificial intelligence is fundamentally reshaping the contours of both professional and personal existence.”\n\n**Option 2 (More formal and analytical):**\n\n“The proliferation of artificial intel",
+      "elapsed_s": 12.5,
+      "tok_s": 13.75
+    },
+    "chat": {
+      "status": "ok",
+      "response": "Here are three benefits of using local LLMs:\n\n1.  **Enhanced Privacy:** Your data stays within your own infrastructure, eliminating the need to send it to a third-party server.\n2.  **Reduced Latency:** Local processing minimizes reliance on internet connectivity, leading to faster responses.\n3.  **Cost Savings:** Eliminating cloud computing costs can significantly lower expenses for development an",
+      "elapsed_s": 5.2,
+      "tok_s": 21.96
+    },
+    "vision": {
+      "status": "ok",
+      "response": "(empty)",
+      "elapsed_s": 0.9,
+      "tok_s": 0
+    },
+    "audio_stt": {
+      "status": "not_supported",
+      "response": "Audio STT not supported via Ollama.",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "video": {
+      "status": "not_supported",
+      "response": "Video not supported in any local GGUF model.",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "tts": {
+      "status": "ok",
+      "response": "WAV file created via Windows SAPI",
+      "elapsed_s": 2.0,
+      "tok_s": 0
+    }
+  },
+  "DeepSeek-r1 1.5B": {
+    "summarization": {
+      "status": "ok",
+      "response": "Artificial intelligence is rapidly transforming modern industries by enabling computers to learn from data and identify patterns with minimal human intervention, leading to advancements across healthcare diagnostics, autonomous vehicles, and beyond.",
+      "elapsed_s": 37.3,
+      "tok_s": 14.98
+    },
+    "synonym": {
+      "status": "ok",
+      "response": "AI is fundamentally altering the very essence of human life and work.",
+      "elapsed_s": 39.6,
+      "tok_s": 11.51
+    },
+    "chat": {
+      "status": "ok",
+      "response": "The top three benefits of local large language models (LLMs) can be summarized as follows:\n\n1. **Faster Processing**: Local LLMs benefit from being trained on data specific to a particular region or area, which reduces their computational requirements and",
+      "elapsed_s": 42.6,
+      "tok_s": 11.13
+    },
+    "vision": {
+      "status": "not_supported",
+      "response": "Vision not supported.",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "audio_stt": {
+      "status": "not_supported",
+      "response": "Audio STT not supported via Ollama.",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "video": {
+      "status": "not_supported",
+      "response": "Video not supported in any local GGUF model.",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "tts": {
+      "status": "ok",
+      "response": "WAV file created via Windows SAPI",
+      "elapsed_s": 2.0,
+      "tok_s": 0
+    }
+  },
+  "Gemma4 E4B": {
+    "summarization": {
+      "status": "ok",
+      "response": "Artificial intelligence is rapidly transforming modern industries by enabling computers to learn from data and make decisions autonomously. Its sophisticated applications are becoming increasingly pervasive in daily life, ranging from healthcare diagnostics to autonomous vehicles.",
+      "elapsed_s": 27.4,
+      "tok_s": 1.42
+    },
+    "synonym": {
+      "status": "ok",
+      "response": "Here are several options, depending on the specific nuance you wish to convey:\n\n**More Formal/Academic:**\n\n* \"Artificial intelligence is fundamentally reshaping the paradigms of our professional and personal existence.\"\n* \"The integration of artificial intelligence is profoundly transforming the modalities of our labor and daily lives.\"\n* \"AI is instigating a paradigm shift in the manner in which ",
+      "elapsed_s": 36.5,
+      "tok_s": 2.19
+    },
+    "chat": {
+      "status": "ok",
+      "response": "1. Enhanced data privacy and security by keeping data on-premises.\n2. Reduced latency and improved inference speed due to local processing.\n3. Full control over the model and deployment environment for customization.",
+      "elapsed_s": 23.9,
+      "tok_s": 2.09
+    },
+    "vision": {
+      "status": "not_supported",
+      "response": "Not available in text-only GGUF.",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "audio_stt": {
+      "status": "not_supported",
+      "response": "Not available in text-only GGUF.",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "video": {
+      "status": "not_supported",
+      "response": "Not available in text-only GGUF.",
+      "elapsed_s": 0,
+      "tok_s": 0
+    },
+    "tts": {
+      "status": "ok",
+      "response": "WAV file created via Windows SAPI",
+      "elapsed_s": 2.0,
+      "tok_s": 0
+    }
+  }
+}

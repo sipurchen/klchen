@@ -1,0 +1,26 @@
+{
+  "3.1_chat_completion": {
+    "status": "SKIP",
+    "detail": "Requires Gemma4 load - tested via benchmark"
+  },
+  "3.2_agent_coder": {
+    "status": "SKIP",
+    "detail": "Requires Gemma4 load - tested via benchmark"
+  },
+  "3.3_all_agents": {
+    "status": "PASS",
+    "detail": "6 default agents: general,coder,analyst,translator,vision,planner"
+  },
+  "3.4_custom_agent": {
+    "status": "PASS",
+    "detail": "test_agent registered successfully"
+  },
+  "3.5_model_listing": {
+    "status": "PASS",
+    "detail": "6 models: gemma4-e4b-opt, gemma4:E4b, gemma3:1b, qwen3-vl, deepseek-r1:8b, deepseek-r1:1.5b"
+  },
+  "3.6_error_handling": {
+    "status": "PASS",
+    "detail": "Non-existent model returns handled response"
+  }
+}
