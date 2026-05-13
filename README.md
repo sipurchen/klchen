@@ -299,7 +299,8 @@ Gemma4_E4B_Project/
 │       ├── llama-cli.exe
 │       └── ggml-vulkan.dll    # Vulkan GPU backend
 ├── docs/
-│   └── comparison_report.md   # 自動生成的比較報告
+│   ├── comparison_report.md         # 自動生成的比較報告
+│   └── RTX2050_LLM_Harness_Plan.md  # RTX 2050 Harness AI Agents 規劃
 ├── prompts/
 │   ├── MASTER_PROMPT.md       # 專案規格文件
 │   └── TASKS.md               # 優化任務清單
@@ -316,6 +317,8 @@ Gemma4_E4B_Project/
 │       ├── test_text.txt       # 摘要測試文字
 │       ├── image_b64.txt       # Base64 圖像
 │       └── audio_b64.txt      # Base64 音訊
+├── Others_AI.MD               # 其他平台規劃 (Mac Mini M4, RTX 2050)
+├── UserCommand.MD             # 使用者指令速查手冊
 └── README.md
 ```
 
@@ -351,20 +354,38 @@ Gemma4_E4B_Project/
 
 ## 硬體升級建議 / Hardware Upgrade Path
 
-| 目標速度 | 需要的 GPU | 預估 tok/s | 預算 |
-|---------|-----------|-----------|------|
-| 3 tok/s (現況) | GT 1030 (2 GB) | ~2 tok/s CPU-only | 現有 |
-| 10 tok/s (目標) | RTX 3060 (12 GB) | ~71 tok/s 理論 | ~NT$6,000 |
-| 20 tok/s | RTX 3070 (8 GB) | ~107 tok/s 理論 | ~NT$9,000 |
-| GPU 需求 | **最少 6 GB VRAM** | embedding table > 2 GB | — |
+| 平台 | Gemma4 E4B tok/s | 記憶體頻寬 | 預算 (NT$) | 備註 |
+|------|-----------------|-----------|-----------|------|
+| i5-4460 + GT 1030 (現況) | ~2 tok/s | DDR3 17 GB/s | 現有 | CPU-only |
+| RTX 2050 4GB Windows | ~16 tok/s | GDDR6 112 GB/s | ~8,000 | Harness Agents |
+| **Mac Mini M4 32GB** | **~19 tok/s** | **UMA 120 GB/s** | **~15,000–18,000** | **低功耗, 多模態** |
+| RTX 3060 12GB Windows | ~48 tok/s | GDDR6 360 GB/s | ~12,000 + 機殼 | 高速推論 |
+| RTX 3070 8GB Windows | ~53 tok/s | GDDR6 448 GB/s | ~18,000+ | — |
 
-**升級後的 llama-server 指令：**
+> **Mac Mini M4 32GB** 是性價比最高的升級選項：  
+> - 統一記憶體 (UMA) 120 GB/s，Gemma4 E4B 可全層 Metal GPU  
+> - Flash Attention 可正常啟用（無 CPU/GPU 設備衝突）  
+> - 32 GB 可容納多模態 GGUF (~9.1 GB) 或同時運行多個模型  
+> - 功耗僅 ~38W vs RTX 3060 的 ~170W  
+> 詳細規劃見 [Others_AI.MD](Others_AI.MD)
+
+**Windows GPU 升級後的 llama-server 指令：**
 ```bash
 # RTX 3060 (12 GB VRAM, CUDA)
 # 下載 CUDA 版本的 llama-server
 llama-server.exe -m google_gemma-4-E4B-it-Q4_K_M.gguf \
   -ngl 999 -c 2048 -t 4 \
   --host 127.0.0.1 --port 8080
+```
+
+**Mac Mini M4 llama-server 指令：**
+```bash
+# Mac Mini M4 (Metal, UMA 120 GB/s)
+llama-server \
+  -m ~/LLMmodel/google_gemma-4-E4B-it-Q4_K_M.gguf \
+  -ngl 999 -c 4096 -t 4 -fa \
+  --host 127.0.0.1 --port 8080
+# -fa: Flash Attention 在 Mac M4 可正常啟用
 ```
 
 ---
@@ -793,6 +814,12 @@ llama-server.exe \
 ---
 
 ## Changelog
+
+### v1.1.0 (2026-05-14)
+- ✅ 新增 `Others_AI.MD`：Mac Mini M4 32GB 平台規劃（UMA 120 GB/s, ~19 tok/s 預估）
+- ✅ 新增 `UserCommand.MD`：跨平台使用者指令速查手冊
+- ✅ 更新硬體升級建議表，加入 Mac Mini M4 32GB 與 RTX 2050 選項
+- ✅ 更新專案結構說明
 
 ### v1.0.0 (2026-04-08)
 - ✅ llama-server b8679 Vulkan backend for Gemma4 E4B
