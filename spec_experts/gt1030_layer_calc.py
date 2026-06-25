@@ -1,12 +1,35 @@
 """
 GT 1030 (2GB VRAM) Layer Offload Calculator
 Given a model, compute max --n-gpu-layers to stay under VRAM budget.
+
+ACTUAL measured state (2026-06-25):
+  Total VRAM:    2048 MB
+  OS + apps:     ~1384 MB (DWM, Chrome, Edge, Claude, Codex, LINE, Telegram)
+  llama-server:  already resident
+  Free VRAM:     ~571 MB
+  Vulkan runtime overhead: ~100 MB on top of free
+  Effective budget: ~470 MB (varies with app churn)
 """
 
+import subprocess
 from dataclasses import dataclass
 
-VRAM_BUDGET_MB = 1800  # leave 200MB for Vulkan overhead
-VULKAN_OVERHEAD_MB = 200
+
+def get_free_vram_mb(safety_margin_mb: int = 100) -> int:
+    """Query actual free VRAM via nvidia-smi, subtract safety margin."""
+    try:
+        out = subprocess.check_output(
+            ["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"],
+            text=True,
+        ).strip()
+        free = int(out.split("\n")[0].strip())
+        return max(0, free - safety_margin_mb)
+    except Exception:
+        return 470  # fallback: empirical measured value
+
+
+VRAM_BUDGET_MB = get_free_vram_mb()
+VULKAN_OVERHEAD_MB = 100
 
 
 @dataclass
@@ -50,14 +73,14 @@ KNOWN_MODELS = {
 }
 
 
-def calc_max_gpu_layers(model: ModelProfile, ctx: int = 2048) -> dict:
+def calc_max_gpu_layers(model: ModelProfile, budget_mb: float = None) -> dict:
+    if budget_mb is None:
+        budget_mb = VRAM_BUDGET_MB
     kv_total = model.kv_per_layer_mb * model.total_layers
-    available = VRAM_BUDGET_MB - model.embedding_mb - kv_total
+    available = budget_mb - model.embedding_mb - kv_total
     max_layers = max(0, int(available / model.layer_size_mb))
     max_layers = min(max_layers, model.total_layers)
-
     vram_used = model.embedding_mb + kv_total + max_layers * model.layer_size_mb
-
     return {
         "model": model.name,
         "total_layers": model.total_layers,
@@ -65,17 +88,29 @@ def calc_max_gpu_layers(model: ModelProfile, ctx: int = 2048) -> dict:
         "gpu_pct": f"{100 * max_layers / model.total_layers:.0f}%",
         "vram_used_mb": f"{vram_used:.0f}",
         "remaining_on_cpu": model.total_layers - max_layers,
-        "feasible": max_layers > 0,
+        "feasible": max_layers >= 0,
     }
 
 
 if __name__ == "__main__":
-    print(f"GT 1030 VRAM budget: {VRAM_BUDGET_MB}MB\n")
-    print(f"{'Model':<35} {'ngl':>4} {'GPU%':>5} {'VRAM(MB)':>9} {'Feasible':>8}")
-    print("-" * 68)
-    for key, profile in KNOWN_MODELS.items():
-        r = calc_max_gpu_layers(profile)
-        print(
-            f"{r['model']:<35} {r['max_gpu_layers']:>4} "
-            f"{r['gpu_pct']:>5} {r['vram_used_mb']:>9} {str(r['feasible']):>8}"
-        )
+    print(f"GT 1030 VRAM budget: {VRAM_BUDGET_MB}MB  (measured free - {VULKAN_OVERHEAD_MB}MB Vulkan overhead)\n")
+
+    scenarios = {
+        f"Current (apps running)  free≈{VRAM_BUDGET_MB}MB": VRAM_BUDGET_MB,
+        "Close Chrome+Edge+LINE  +~400MB est.": VRAM_BUDGET_MB + 400,
+        "Close ALL non-essential +~700MB est.": VRAM_BUDGET_MB + 700,
+    }
+
+    for scenario, budget in scenarios.items():
+        print(f"\n=== {scenario} ===")
+        print(f"{'Model':<35} {'ngl':>4} {'GPU%':>5} {'VRAM(MB)':>9} {'Feasible':>8}")
+        print("-" * 68)
+        for key, profile in KNOWN_MODELS.items():
+            r = calc_max_gpu_layers(profile, budget)
+            print(
+                f"{r['model']:<35} {r['max_gpu_layers']:>4} "
+                f"{r['gpu_pct']:>5} {r['vram_used_mb']:>9} {str(r['feasible']):>8}"
+            )
+
+    print("\n[NOTE] ngl=0 = pure CPU+RAM, still runnable but slower.")
+    print("[NOTE] Spec-Experts KV path works regardless: RAM offload + disk streaming.")
