@@ -28,7 +28,13 @@ def get_free_vram_mb(safety_margin_mb: int = 100) -> int:
         return 470  # fallback: empirical measured value
 
 
-VRAM_BUDGET_MB = get_free_vram_mb()
+# Standard environment: Chrome+Edge closed, LINE open
+# Measured free (all apps): ~489MB
+# Estimated freed by closing Chrome+Edge: ~470MB
+# LINE retained: -60MB  →  conservative budget: 850MB
+STANDARD_BASELINE_MB = 850
+VRAM_BUDGET_MB = get_free_vram_mb()          # live value (all apps running)
+VRAM_BUDGET_STANDARD_MB = STANDARD_BASELINE_MB  # planning baseline
 VULKAN_OVERHEAD_MB = 100
 
 
@@ -93,12 +99,12 @@ def calc_max_gpu_layers(model: ModelProfile, budget_mb: float = None) -> dict:
 
 
 if __name__ == "__main__":
-    print(f"GT 1030 VRAM budget: {VRAM_BUDGET_MB}MB  (measured free - {VULKAN_OVERHEAD_MB}MB Vulkan overhead)\n")
+    print(f"GT 1030  live free={VRAM_BUDGET_MB}MB  standard baseline={STANDARD_BASELINE_MB}MB\n")
 
     scenarios = {
-        f"Current (apps running)  free≈{VRAM_BUDGET_MB}MB": VRAM_BUDGET_MB,
-        "Close Chrome+Edge+LINE  +~400MB est.": VRAM_BUDGET_MB + 400,
-        "Close ALL non-essential +~700MB est.": VRAM_BUDGET_MB + 700,
+        f"All apps running (live) {VRAM_BUDGET_MB}MB": VRAM_BUDGET_MB,
+        f"STANDARD: Chrome+Edge closed, LINE open {STANDARD_BASELINE_MB}MB": STANDARD_BASELINE_MB,
+        "Close ALL non-essential ~1100MB": 1100,
     }
 
     for scenario, budget in scenarios.items():
