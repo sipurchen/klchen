@@ -42,25 +42,27 @@ MODEL_BASE = _resolve_llms_dir()
 # Per-model configs (path, ngl) at 850MB standard baseline
 TOOL_MODELS = {
     "coding": {
-        "path": MODEL_BASE / "Qwen2.5-Coder-1.5B" / "qwen2.5-coder-1.5b-instruct-q8_0.gguf",
-        "ngl": 28,
-        "ctx": 4096,
+        # Qwen2.5-Coder-1.5B Q8 outputs ? with llama.cpp b8679 (qwen2 pre-tokenizer compat issue)
+        # Using Qwen3-1.7B as fallback — supports coding well
+        "path": MODEL_BASE / "Qwen3-1.7B" / "Qwen3-1.7B-Q8_0.gguf",
+        "ngl": 10,
+        "ctx": 2048,
         "port": 8081,
-        "desc": "Qwen2.5-Coder-1.5B Q8 — 100% VRAM",
+        "desc": "Qwen3-1.7B Q8 (coding fallback) — ngl=10",
     },
     "reasoning": {
-        "path": MODEL_BASE / "Qwen3-1.7B" / "qwen3-1.7b-q4_k_m.gguf",
-        "ngl": 25,
-        "ctx": 8192,
+        "path": MODEL_BASE / "Qwen3-1.7B" / "Qwen3-1.7B-Q8_0.gguf",
+        "ngl": 10,
+        "ctx": 2048,
         "port": 8081,
-        "desc": "Qwen3-1.7B Q4 — thinking mode, 89% VRAM",
+        "desc": "Qwen3-1.7B Q8 — thinking mode, ngl=10",
     },
     "debug": {
         "path": MODEL_BASE / "DeepSeek-R1-1.5B" / "DeepSeek-R1-Distill-Qwen-1.5B-Q8_0.gguf",
-        "ngl": 25,
-        "ctx": 4096,
+        "ngl": 12,
+        "ctx": 2048,
         "port": 8081,
-        "desc": "DeepSeek-R1-1.5B Q8 — reasoning distill, 89% VRAM",
+        "desc": "DeepSeek-R1-1.5B Q8 — reasoning distill ngl=12",
     },
     "heavy_coding": {
         "path": MODEL_BASE / "Qwen2.5-Coder-3B" / "qwen2.5-coder-3b-instruct-q4_k_m.gguf",
@@ -161,7 +163,7 @@ class ToolSessionManager:
             "--ctx-size", str(cfg["ctx"]),
             "--threads", "2",
             "--port", str(cfg["port"]),
-            "--n-predict", "512",
+            "--n-predict", "1024",
             "--log-disable",  # reduce noise; remove to enable logprob monitor
             "--no-warmup",
         ]
@@ -191,15 +193,15 @@ class ToolSessionManager:
             return None
 
         messages = []
-        if system:
-            messages.append({"role": "system", "content": system})
+        sys_prompt = system or "/no_think"  # disable Qwen3 thinking mode for fast inference
+        messages.append({"role": "system", "content": sys_prompt})
         messages.append({"role": "user", "content": prompt})
 
-        async with httpx.AsyncClient(timeout=120) as client:
+        async with httpx.AsyncClient(timeout=180) as client:
             try:
                 r = await client.post(
                     f"http://127.0.0.1:{port}/v1/chat/completions",
-                    json={"messages": messages, "max_tokens": 512, "stream": False},
+                    json={"messages": messages, "max_tokens": 1024, "stream": False},
                 )
                 data = r.json()
                 return data["choices"][0]["message"]["content"]
