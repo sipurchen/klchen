@@ -6,6 +6,30 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![llama-server b8679](https://img.shields.io/badge/llama.cpp-b8679-green.svg)](https://github.com/ggml-org/llama.cpp)
+[![Research Paper](https://img.shields.io/badge/PhD_Thesis-Spec--Experts_LLM-purple.svg)](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf)
+
+---
+
+## Spec-Experts LLM 研究論文 / Research Paper
+
+> **博士等級研究論文** — 語義邊界偵測與動態專家路由在資源受限本地推理的應用  
+> PhD-level research on semantic boundary detection and dynamic expert routing for resource-constrained LLM inference.
+
+| 語言 | 連結 |
+|------|------|
+| 中文版論文 | [thesis_zh.md](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf#file-thesis_zh-md) |
+| English Version | [thesis_en.md](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf#file-thesis_en-md) |
+
+**論文摘要：** 本研究提出 Spec-Experts LLM 系統，透過多訊號外部監控器（注意力熵 + 困惑度尖峰 + 角色標籤解析）偵測 LLM 輸出的語義邊界，並在單一 GT 1030（2 GB VRAM）上以動態熱切換方式路由至最適專家模型，達成 5–12 tok/s 推論速度。Phase 1 全部 4 項元件通過測試（7/7 整合測試 PASS）。
+
+**主要創新：**
+- Shannon 注意力熵驟降偵測（閾值 $\theta_H = 0.35$，窗口 $W=8$）
+- 困惑度 z 分數尖峰偵測（$z_\theta = 2.0$，窗口 $W=10$）
+- 優先權加權訊號融合（role_tag(10) > entropy(5) > perplexity(3)）
+- `.kvbin` 二進位 KV 快取序列化格式（64-byte 標頭）
+- 熱切換工具會話管理器（單 VRAM 槽 + 2s 排空延遲）
+
+**Branch:** [`SpecExpertsResearch`](https://github.com/sipurchen/klchen/tree/SpecExpertsResearch) | **Phase 1 Demo:** [`tests/phase1_monitor_demo.py`](tests/phase1_monitor_demo.py)
 
 ---
 
