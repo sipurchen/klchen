@@ -1,35 +1,172 @@
-﻿# Gemma4-E4B Local LLM Project
+# Gemma4-E4B Local LLM Project · Spec-Experts LLM Research
 
-> **在低規格硬體上運行大型語言模型的完整調校指南**  
-> Running Large Language Models on Budget Hardware — Full Optimization Guide
+> **在低規格硬體上運行大型語言模型——並以 Spec-Experts 七階段框架實現語義感知推論**  
+> Running LLMs on budget hardware with Spec-Experts 7-phase semantic-aware inference framework
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![llama-server b8679](https://img.shields.io/badge/llama.cpp-b8679-green.svg)](https://github.com/ggml-org/llama.cpp)
 [![Research Paper](https://img.shields.io/badge/PhD_Thesis-Spec--Experts_LLM-purple.svg)](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf)
+[![Branch](https://img.shields.io/badge/branch-SpecExpertsResearch-orange.svg)](https://github.com/sipurchen/klchen/tree/SpecExpertsResearch)
 
 ---
 
 ## Spec-Experts LLM 研究論文 / Research Paper
 
-> **博士等級研究論文** — 語義邊界偵測與動態專家路由在資源受限本地推理的應用  
-> PhD-level research on semantic boundary detection and dynamic expert routing for resource-constrained LLM inference.
+> **博士等級研究論文** — 語義邊界偵測、動態專家路由與自強化推理在資源受限本地 LLM 部署的七階段研究  
+> PhD-level research: 7-phase framework for semantic boundary detection, dynamic expert routing, and self-reinforcing inference on resource-constrained hardware.
 
 | 語言 | 連結 |
 |------|------|
-| 中文版論文 | [thesis_zh.md](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf#file-thesis_zh-md) |
-| English Version | [thesis_en.md](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf#file-thesis_en-md) |
+| 中文版論文（七章完整版） | [thesis_zh.md](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf#file-thesis_zh-md) |
+| English Version (all 7 phases) | [thesis_en.md](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf#file-thesis_en-md) |
 
-**論文摘要：** 本研究提出 Spec-Experts LLM 系統，透過多訊號外部監控器（注意力熵 + 困惑度尖峰 + 角色標籤解析）偵測 LLM 輸出的語義邊界，並在單一 GT 1030（2 GB VRAM）上以動態熱切換方式路由至最適專家模型，達成 5–12 tok/s 推論速度。Phase 1 全部 4 項元件通過測試（7/7 整合測試 PASS）。
+**Branch:** [`SpecExpertsResearch`](https://github.com/sipurchen/klchen/tree/SpecExpertsResearch)
 
-**主要創新：**
-- Shannon 注意力熵驟降偵測（閾值 $\theta_H = 0.35$，窗口 $W=8$）
-- 困惑度 z 分數尖峰偵測（$z_\theta = 2.0$，窗口 $W=10$）
-- 優先權加權訊號融合（role_tag(10) > entropy(5) > perplexity(3)）
-- `.kvbin` 二進位 KV 快取序列化格式（64-byte 標頭）
-- 熱切換工具會話管理器（單 VRAM 槽 + 2s 排空延遲）
+---
 
-**Branch:** [`SpecExpertsResearch`](https://github.com/sipurchen/klchen/tree/SpecExpertsResearch) | **Phase 1 Demo:** [`tests/phase1_monitor_demo.py`](tests/phase1_monitor_demo.py)
+## 七階段技術總覽 / Seven-Phase Technology Overview
+
+### Phase 1 — 外部多訊號監控器 (External Multi-Signal Monitor)
+
+**模組：** `monitor/` · **示範：** `tests/phase1_monitor_demo.py`
+
+三個偵測器並行作用於 llama-server SSE token 串流：
+
+| 偵測器 | 優先權 | 訊號 | 閾值 |
+|-------|------|------|-----|
+| 角色標籤有限狀態機（`<think>`, ` ``` `, `# `） | 10（最高） | 確定性，立即發射 | 無 |
+| Shannon 熵驟降監控器 | 5 | $\Delta H > \theta_H$ | $\theta_H = 0.35$, 窗口 $W=8$ |
+| 困惑度 z 分數尖峰監控器 | 3 | $z_i > z_\theta$ | $z_\theta = 2.0$, 窗口 $W=10$ |
+
+**訊號融合規則：**
+
+$$\text{emit}(c_i) \iff |i - i_{\text{last}}| \geq W_m \;\land\; [\text{role\_tag} \;\lor\; |\mathcal{C}_i^{W_m}| \geq 2], \quad W_m = 12$$
+
+**實測結果（Qwen3-1.7B，GT 1030）：**
+- PPL z 分數峰值：4.3 至 407.2（境界轉換高達 204×閾值）
+- 即時熵偵測：5.1 tok/s，Δ=0.41 > 0.35
+- 7/7 整合測試通過
+
+---
+
+### Phase 2 — 三層 KV 快取卸載 (Three-Tier KV Cache Offload)
+
+**模組：** `kv/kv_offload_manager.py`, `kv/kv_serializer.py`
+
+$$\text{VRAM}(56\text{MB}) \xrightarrow{\text{LRU}} \text{RAM}(512\text{MB}) \xrightarrow{\text{LRU}} \text{Disk}(\texttt{.kvbin})$$
+
+**`.kvbin` 格式：** 64 位元組標頭（KVBN 魔數 + session\_id + chunk\_id + layer範圍 + dtype/shape）+ 原始 fp16 張量
+
+**LRU 驅逐代價：**
+
+$$\text{cost}(C_i) = \frac{\text{age}(C_i) \cdot \text{size}(C_i)}{\pi(C_i)}, \quad \pi_{\text{code}}=1.5 > \pi_{\text{factual}}=1.2 > \pi_{\text{creative}}=0.8 > \pi_{\text{reasoning}}=0.5$$
+
+**有效上下文擴展：** 2K → 18K+ tokens（VRAM 2K + RAM 4K + 磁碟 12K）
+
+---
+
+### Phase 3 — 方向性引導 (Directional Steering)
+
+**模組：** `spec_experts/directional_steering.py`
+
+四層無梯度引導代理（無需修改模型權重）：
+
+| 層次 | 機制 | 效果 |
+|------|------|------|
+| 複合系統提示 | 按 α 排序正向示例 | 語義方向引導 |
+| 溫度調整 | reasoning/code: −0.2; creative: +0.3 | 確定性/創意控制 |
+| 對數機率偏置 | $\ell'_j = \ell_j + b_j$ | Token 分佈塑形 |
+| 前綴預熱 | 前置概念激活 token | 即時方向觸發 |
+
+**引導向量庫：** `code_quality`(α=15.0), `reasoning`(α=12.0), `creative`(α=10.0), `factual`(α=8.0), `concise`(α=10.0)
+
+---
+
+### Phase 4 — 專家 RAM 池（MoE 26B+）(Expert RAM Pool)
+
+**模組：** `spec_experts/expert_ram_pool.py`
+
+基於語義邊界事件的 MoE 專家預取，避免推論中途 VRAM 載入：
+
+| 區塊類型 | 親和力專家集（Mixtral-8x7B） |
+|---------|---------------------------|
+| reasoning | {0, 1, 3, 7} |
+| code | {2, 4, 5, 6} |
+| factual | {0, 2, 4} |
+| creative | {1, 3, 6, 7} |
+
+**支援模型：**
+- `mixtral-8x7b-q2`：8 專家，每個 1.875 GB，7 GB RAM → 3/8 預熱
+- `deepseek-coder-v2-lite-q4`：64 專家，每個 0.25 GB，7 GB RAM → 8/64 預熱
+- `deepseek-v3-671b-q2`：256 專家，每個 0.82 GB（Mac M4 前 33 個常駐 UMA）
+
+**Spec-Experts 路由節省：** 20 區塊會話節省 ~1.76 s（Mixtral Q2, DDR3 17 GB/s）
+
+---
+
+### Phase 5 — 邊緣 VLM 路由器 (Edge VLM Router)
+
+**模組：** `edge/vlm_router.py`
+
+跨設備多模態視覺-文字路由：
+
+| 設備 | 模型 | 後端 | ngl | VRAM | FPS |
+|------|------|------|-----|------|-----|
+| GT 1030 | moondream-2B Q4_K_M | Vulkan | 8 | 800 MB | 1.5 |
+| Jetson Nano | MobileVLM-1.7B Q4 | CUDA | 32 | 2 GB | 10.0 |
+| Android | LLaVA-Phi-1.5 Q4 | CPU | 0 | — | 5.0 |
+| ARM 攝影機 | moondream-2B Q4 | CPU | 0 | — | 2.0 |
+
+路由邏輯：圖像輸入 → VLM 推理（POST `/completion` + base64 圖像）；純文字 → 文字 LLM
+
+---
+
+### Phase 6 — Mac M4 Metal 專家池（200B+ MoE）(Mac M4 Metal Expert Pool)
+
+**模組：** `mac_m4/metal_expert_pool.py`
+
+利用 Mac Mini M4 32 GB UMA 的獨特優勢：
+
+| 特性 | 數值 | 優勢 |
+|------|------|------|
+| UMA 頻寬 | 120 GB/s | vs PCIe 3.0×4 的 8 GB/s（15× 提升） |
+| NVMe 速度 | 7 GB/s | 專家分頁載入：0.82 GB / 7 = 117 ms |
+| Flash Attention | 啟用（Metal 後端） | $O(N^2) \to O(N)$，GT 1030 無法啟用 |
+| DS-V3 前 33 專家 | 33 × 0.82 GB = 27 GB | 常駐 UMA，覆蓋 >80% 使用模式 |
+
+**llama-server 啟動參數：**
+```bash
+llama-server --model /path/to/deepseek-v3.gguf \
+  --n-gpu-layers 99 --flash-attn --mlock \
+  --ctx-size 16384 --n-predict 4096
+```
+
+**Spec-Experts 路由效益（DS-V3，20 區塊）：** 40 次切換 → 24 次，節省 1.87 s
+
+---
+
+### Phase 7 — AGI 自迴圈 (AGI Self-Loop)
+
+**模組：** `agi/self_loop.py`
+
+```
+[任務] → [專家路由] → [LLM 生成] → [品質評分] → [蒸餾 JSONL]
+                                          ↓
+                                 [LoRA 適配器 EMA 更新]
+                                 q_t = 0.3·q_new + 0.7·q_{t-1}
+                                          ↓
+                               [適配器池選擇最優適配器]
+                                    ↑______回饋______↑
+```
+
+**品質評分（區塊類型特定）：**
+- Code: def/class/import 存在(0.4) + 長度>100(0.3) + 行數>3(0.3)
+- Reasoning: 詞數>50(0.4) + 連接詞(0.3) + 句數>3(0.3)
+
+**高品質樣本（Q ≥ 0.7）匯出為 JSONL 訓練數據**
+
+**品質趨勢（6 次迭代示範）：** +0.030/iter（0.60 → 0.75，線性迴歸 $\hat\beta > 0$）
 
 ---
 
@@ -42,25 +179,7 @@
 | RAM | 34 GB DDR3 (雙通道, ~17 GB/s 頻寬) |
 | OS | Windows 10 Pro 22H2 (19045) |
 | 推論引擎 | Ollama v0.20.0 + llama-server b8679 (Vulkan) |
-
----
-
-## 專案目標 / Project Goals
-
-1. 在 **i5-4460 + GT 1030** 這類 2013 年消費級硬體上，成功運行 3 個本地 LLM
-2. 以 **Gemma4 E4B (7.5B 參數)** 為核心，達到可用的推論速度
-3. 建立 CPU 過載防護機制，防止系統死機
-4. 提供 OpenAI 相容的 FastAPI 多代理架構
-
----
-
-## 模型清單 / Models
-
-| 模型 | 大小 | 架構 | 後端 |
-|------|------|------|------|
-| `gemma3:1b` | 777 MB | Dense 29 層 | Ollama |
-| `deepseek-r1:1.5b` | 1.04 GB | Dense 30 層 + 推理鏈 | Ollama |
-| `Gemma4 E4B` (bartowski Q4_K_M) | 5.03 GB | Dense 42 層, 7.5B | llama-server |
+| VRAM 預算 | 850 MB（關閉 Chrome+Edge，保持 LINE 開啟） |
 
 ---
 
@@ -76,237 +195,40 @@
 | DeepSeek-r1 1.5B (Ollama) | 14.98 | 11.51 | 11.13 | **12.5** |
 | Gemma4 E4B (llama-server) | 1.42 | 2.19 | 2.09 | **1.9** |
 
-### 功能支援
+### Spec-Experts Phase 1 實測（GT 1030 + Qwen3-1.7B）
 
-| 功能 | Gemma3 1B | DeepSeek-r1 1.5B | Gemma4 E4B |
-|------|-----------|-----------------|-----------|
-| 文字摘要 | ✅ 32.0s | ✅ 37.3s | ✅ 27.4s |
-| 同義詞增強 | ✅ 12.5s | ✅ 39.6s | ✅ 36.5s |
-| 一般對話 | ✅ 5.2s | ✅ 42.6s | ✅ 23.9s |
-| 圖像分析 | ⚠️ 空回應 | ➖ 不支援 | ➖ 僅文字 GGUF |
-| 語音辨識 | ➖ 不支援 | ➖ 不支援 | ➖ 僅文字 GGUF |
-| TTS (語音合成) | ✅ Windows SAPI | ✅ Windows SAPI | ✅ Windows SAPI |
-| 影片分析 | ➖ 不支援 | ➖ 不支援 | ➖ 不支援 |
+| 組件 | 狀態 | 關鍵指標 |
+|------|------|---------|
+| RoleTagParser | **PASS** | 4 邊界（CoT+程式碼），6（混合） |
+| PerplexitySpikeMonitor | **PASS** | 6 尖峰，z 分數 4.3–407.2 |
+| SignalFusion | **PASS** | 發射 4/6，遲滯抑制 2 |
+| 即時熵監控器 | **PASS** | 5.1 tok/s，Δ=0.41 |
+| **整合測試** | **7/7 PASS** | |
 
-### Gemma4 優化前後對比
+### Phase 2–7 結構驗證
 
-| 方法 | 速度 | 回應品質 | 備註 |
-|------|------|---------|------|
-| Ollama (原始) | 0.04 tok/s | ⚠️ 幾乎逾時 | CPU 過載, 9.1 GB 多模態 blob |
-| llama-server (本專案) | ~2 tok/s | ✅ 正常輸出 | **50× 提升** |
-| 目標 (需 ≥6 GB GPU) | ~10 tok/s | ✅ 正常輸出 | RTX 3060 可達成 |
-
----
-
-## 調校理論基礎 / Theoretical Foundation
-
-### 1. 記憶體頻寬瓶頸 (Memory Bandwidth Bottleneck)
-
-LLM 推論的**逐 token 生成階段**是記憶體頻寬瓶頸，不是計算瓶頸。
-
-```
-理論最大 tok/s = 記憶體頻寬 / 模型大小
-DDR3 i5-4460   = 17 GB/s ÷ 5.03 GB = 3.4 tok/s (CPU 理論上限)
-GT 1030 VRAM   = 48 GB/s ÷ 5.03 GB = 9.5 tok/s (GPU 理論上限)
-RTX 3060       = 360 GB/s ÷ 5.03 GB = 71.6 tok/s
-```
-
-**參考來源：** Noam Shazeer, "Fast Transformer Decoding" (2019); Horace He, "Making Deep Learning Go Brrrr" (2022)
-
-### 2. Q4_K_M 量化
-
-將模型從 FP16 (16-bit) 量化至 4-bit，可在保留 ~99% 品質的同時減少 4× 記憶體使用。
-
-```
-原始 FP16:  7.5B × 2 bytes = 15 GB
-Q4_K_M:    7.5B × 0.67 bytes = 5.03 GB  (含 KV 矩陣保持 6-bit)
-```
-
-**參考來源：** Dettmers et al., "GGML Q4_K Quantization" (2023); Tim Dettmers, "bitsandbytes" library
-
-### 3. CPU 親和性 (CPU Affinity)
-
-i5-4460 有 4 個核心。若 LLM 推論佔用所有核心，OS 排程器無法處理繪圖/IO，導致螢幕變黑。
-
-```
-策略：
-  Python 進程    → 核心 0+1 (psutil.cpu_affinity([0,1]))
-  Ollama/llama-server → 核心 2+3 (psutil.cpu_affinity([2,3]))
-```
-
-### 4. MoE 架構誤解的修正
-
-初始假設 Gemma4 E4B 為 Mixture-of-Experts (64 experts, top_k=2)，理論上每個 token 只需載入 1.5 GB 的活躍參數。
-
-**實際發現：** bartowski 的文字專用 GGUF 顯示 `n_expert = 0`，Gemma4 E4B 是**密集架構 (Dense)**，不是 MoE。"E4B" = Effective 4 Billion (有效 40 億), 非 Expert-based。
+| Phase | 驗證內容 | 結果 |
+|-------|---------|------|
+| P2 KV 卸載 | 三層儲存/取回，float16 往返 | **PASS** |
+| P3 引導 | 4 種類型 × 引導配置 | **PASS** |
+| P4 專家池 | Mixtral+DS-Coder，50–100% 命中率 | **PASS** |
+| P5 邊緣 VLM | 4 設備 × 硬體配置 | **PASS** |
+| P6 Mac M4 | UMA 池規劃，Flash Attn | **PASS** |
+| P7 自迴圈 | 4 蒸餾樣本，+0.030/iter | **PASS** |
 
 ---
 
-## 問題排查過程 / Troubleshooting Journey
+## 模型清單 / Models
 
-### 問題 1：Ollama 造成 CPU 100% 過載導致螢幕黑屏
-
-**根本原因：** Ollama 的 llama.cpp runner 預設使用所有 4 個核心，加上 Python benchmark 進程，總計超出系統容量。
-
-**嘗試方案：**
-| 方案 | 結果 |
-|------|------|
-| 降低 `num_thread=2` 在 Modelfile | ✅ 解決，但速度降低 |
-| `psutil.cpu_affinity([2,3])` 固定 Ollama 至核心 2+3 | ✅ 根本解決 |
-| `OLLAMA_MAX_LOADED_MODELS=1` | ✅ 防止雙模型同時載入 |
-
-**最終設定：** Ollama 固定核心 2+3，Python 固定核心 0+1
-
----
-
-### 問題 2：Gemma4 via Ollama 只有 0.04 tok/s
-
-**根本原因：** Ollama 的 Gemma4 blob 是**合併多模態 GGUF**，包含：
-- 文字轉換器：720 tensors
-- 音訊編碼器 (Whisper-like)：720 tensors  
-- 視覺編碼器 (SigLIP-like)：691 tensors
-- **總計：2131 tensors, 9.1 GB**
-
-Ollama 的內部修補版 llama.cpp 可以處理此格式，但標準 llama.cpp 無法。
-
-**嘗試方案：**
-| 方案 | 結果 | 原因 |
-|------|------|------|
-| `llama-server b8679 -m <blob>` | ❌ 失敗 | "expected 2131, got 720" — 架構只認識 720 個文字 tensors |
-| `llama-gguf-split` 切分 blob 為 3 個檔案 | ❌ 失敗 | 分割後的檔案 header 仍標記需要 2131 tensors |
-| `llama-mtmd-cli --mmproj <split>` | ❌ 失敗 | n_expert=0，自動尋找並合併 3 個分割檔，仍是 2131 tensors |
-| **下載 bartowski 純文字 GGUF** | ✅ **成功** | 720 tensors，5.03 GB，正確格式 |
-
-**關鍵指令：**
-```
-# 下載位置
-https://huggingface.co/bartowski/google_gemma-4-E4B-it-GGUF
-檔案：google_gemma-4-E4B-it-Q4_K_M.gguf (5.03 GB)
-```
-
----
-
-### 問題 3：llama-server 載入時 Vulkan 記憶體分配失敗
-
-**根本原因：** GT 1030 只有 2 GB VRAM。Gemma4 的 embedding table 需要 >2 GB 的單次記憶體分配，超出硬體限制。
-
-```
-embedding: 262144 vocab × 2560 embed × Q4_K_M ≈ 745 MB
-但 Vulkan 嘗試一次分配整個連續區塊: 2,312,110,080 bytes ≈ 2.15 GB → 失敗
-```
-
-**嘗試方案：**
-| 方案 | 結果 |
-|------|------|
-| `-ngl 999` (全 GPU) | ❌ `alloc_tensor_range: failed to allocate Vulkan0 buffer of size 2312110080` |
-| `-ngl 12` (部分 GPU) | ❌ 同樣失敗，embedding table 仍超過 2 GB |
-| `-ot "token_embd.weight=CPU" -ngl 999` | ❌ 仍分配 1 GB Vulkan buffer，失敗 |
-| **`-ngl 0` (純 CPU)** | ✅ **成功載入並正常推論** |
-
-**結論：** GT 1030 (2 GB VRAM) 無法承載此模型。需要 ≥6 GB VRAM 的 GPU。
-
----
-
-### 問題 4：Gemma4 回應全為空白 (所有 token 進入隱藏思考模式)
-
-**根本原因：** Gemma4 Instruct 的 chat template 預設包含 `<|think|>` token，啟用推理鏈 (Chain-of-Thought) 模式。在 `/v1/chat/completions` 端點中，所有推理 token 被歸類為 `reasoning_content` 而非 `content`，造成可見回應為空。
-
-```
-Server log: "init: chat template, thinking = 1"
-生成 225 tokens：225 個推理 token + 0 個可見 token
-```
-
-**嘗試方案：**
-| 方案 | 結果 |
-|------|------|
-| `'thinking': {'type': 'disabled'}` API 參數 | ❌ llama-server b8679 不支援此格式 |
-| `--no-thinking` 啟動旗標 | ❌ 無效旗標 |
-| `--chat-template-kwargs '{"thinking": false}'` | ❌ 仍顯示 `thinking = 1` |
-| **`/completion` 端點 + 手動 prompt 格式** | ✅ **完全繞過 chat template** |
-
-**解決方案 — 手動建構 Gemma4 Prompt：**
-```python
-prompt = (
-    f"<bos><start_of_turn>user\n{user_message}<end_of_turn>\n"
-    "<start_of_turn>model\n"
-)
-# 停止條件: ["<end_of_turn>", "<eos>"]
-# 不包含 <|think|> → 直接輸出可見回應
-```
-
----
-
-### 問題 5：DeepSeek-r1 回應空白
-
-**根本原因：** DeepSeek-r1 使用 `<think>...</think>` 標籤包裹推理過程。當 `max_tokens=150` 時，token budget 全被推理消耗完，可見輸出為空。
-
-**解決方案：**
-```python
-# 1. DeepSeek 給予 3 倍 token budget
-effective_max = max_tokens * 3 if "deepseek" in model else max_tokens
-
-# 2. 清除 <think> 區塊
-import re
-def _strip_think(text):
-    return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
-```
-
----
-
-## 快速開始 / Quick Start
-
-### 前置需求
-
-```bash
-# Python 環境
-pip install httpx fastapi uvicorn psutil pillow
-
-# Ollama (Windows)
-# 下載: https://ollama.ai
-ollama pull gemma3:1b
-ollama pull deepseek-r1:1.5b
-
-# llama-server (已包含於 bin/llama-cpp/)
-# Gemma4 GGUF (需自行下載 5.03 GB)
-# https://huggingface.co/bartowski/google_gemma-4-E4B-it-GGUF
-# 儲存至: \path\to\LLMs\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf
-```
-
-### 執行 Benchmark
-
-```bash
-cd \path\to\project
-python tests/benchmark_all_models.py
-# 結果輸出至 tests/benchmark_results.json
-
-python tests/generate_report.py
-# 報告輸出至 docs/comparison_report.md
-```
-
-### 啟動 Gemma4 API Server (FastAPI)
-
-```bash
-# 確保 Ollama 已啟動
-ollama serve
-
-# 啟動 FastAPI (port 8000)
-python api/gemma4_api_server.py
-```
-
-### 直接使用 llama-server (繞過 Ollama)
-
-```bash
-# 純 CPU 模式 (GT 1030 無法使用 GPU)
-bin\llama-cpp\llama-server.exe \
-  -m "\path\to\LLMs\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf" \
-  -ngl 0 -c 512 -t 4 -np 1 \
-  --host 127.0.0.1 --port 8080
-
-# 測試推論
-curl -X POST http://127.0.0.1:8080/completion \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "<bos><start_of_turn>user\n你好<end_of_turn>\n<start_of_turn>model\n", "n_predict": 50}'
-```
+| 模型 | 大小 | 架構 | 後端 |
+|------|------|------|------|
+| `gemma3:1b` | 777 MB | Dense 29 層 | Ollama |
+| `deepseek-r1:1.5b` | 1.04 GB | Dense 30 層 + 推理鏈 | Ollama |
+| `Gemma4 E4B` (bartowski Q4_K_M) | 5.03 GB | Dense 42 層, 7.5B | llama-server |
+| Qwen3-1.7B (Spec-Experts 示範) | ~1.1 GB | Dense | llama-server |
+| Mixtral-8x7B Q2_K (Phase 4 目標) | ~15 GB | MoE 8 experts | llama-server |
+| DeepSeek-Coder-V2-Lite Q4 (Phase 4) | ~10 GB | MoE 64 experts | llama-server |
+| moondream-2B Q4 (Phase 5 GT 1030) | ~1.2 GB | VLM | llama-server Vulkan |
 
 ---
 
@@ -314,546 +236,266 @@ curl -X POST http://127.0.0.1:8080/completion \
 
 ```
 Gemma4_E4B_Project/
-├── api/
-│   ├── gemma4_api_server.py   # FastAPI OpenAI-compatible server (port 8000)
-│   └── gemma4_client.py       # Python client library
-├── bin/
-│   └── llama-cpp/             # llama-server b8679 Vulkan Windows binary
-│       ├── llama-server.exe
-│       ├── llama-cli.exe
-│       └── ggml-vulkan.dll    # Vulkan GPU backend
-├── docs/
-│   ├── comparison_report.md         # 自動生成的比較報告
-│   └── RTX2050_LLM_Harness_Plan.md  # RTX 2050 Harness AI Agents 規劃
-├── prompts/
-│   ├── MASTER_PROMPT.md       # 專案規格文件
-│   └── TASKS.md               # 優化任務清單
-├── scripts/
-│   └── direct_llm.py          # 直接 GGUF 推論腳本
+├── monitor/
+│   ├── attention_entropy.py      # Phase 1: Shannon 熵監控器
+│   ├── perplexity_spike.py       # Phase 1: 困惑度 z 分數監控器
+│   ├── role_tag_parser.py        # Phase 1: 角色標籤有限狀態機
+│   └── signal_fusion.py          # Phase 1: 優先權加權訊號融合
+├── segmentor/
+│   └── chunk_classifier.py       # Phase 1: 語義區塊分類器
+├── kv/
+│   ├── kv_serializer.py          # Phase 2: .kvbin 格式序列化
+│   └── kv_offload_manager.py     # Phase 2: 三層 VRAM/RAM/Disk LRU
+├── spec_experts/
+│   ├── controller.py             # FastAPI :8090 路由控制器
+│   ├── tool_session.py           # 熱切換 llama-server（單 VRAM 槽）
+│   ├── directional_steering.py   # Phase 3: 方向性引導
+│   └── expert_ram_pool.py        # Phase 4: MoE 專家 RAM 預取池
+├── edge/
+│   └── vlm_router.py             # Phase 5: 邊緣 VLM 多設備路由
+├── mac_m4/
+│   └── metal_expert_pool.py      # Phase 6: Mac M4 UMA 專家池
+├── agi/
+│   └── self_loop.py              # Phase 7: LoRA 適配器池 + 串流蒸餾
 ├── tests/
-│   ├── benchmark_all_models.py # 主 benchmark (CPU 安全 + 順序執行)
-│   ├── generate_report.py      # 報告生成器
-│   ├── benchmark_results.json  # 最新測試結果
-│   ├── phase1_2_results.json   # Phase 1-2 基礎設施測試
-│   ├── phase3_results.json     # Phase 3 API 測試
-│   └── assets/
-│       ├── test_image.png      # 256×256 視覺測試圖 (house scene)
-│       ├── test_text.txt       # 摘要測試文字
-│       ├── image_b64.txt       # Base64 圖像
-│       └── audio_b64.txt      # Base64 音訊
-├── Others_AI.MD               # 其他平台規劃 (Mac Mini M4, RTX 2050)
-├── UserCommand.MD             # 使用者指令速查手冊
-└── README.md
+│   ├── phase1_monitor_demo.py    # Phase 1 即時示範（需 llama-server :8080）
+│   ├── phase2_7_demo.py          # Phase 2-7 結構驗證（離線）
+│   ├── spec_experts_test.py      # 7/7 整合測試
+│   ├── benchmark_all_models.py   # 基礎 benchmark
+│   └── results_text.json         # 最新測試結果
+├── docs/
+│   ├── thesis_en.md              # 英文博士論文（七章）
+│   └── thesis_zh.md              # 中文博士論文（七章）
+├── api/
+│   ├── gemma4_api_server.py      # FastAPI OpenAI-compatible server
+│   └── gemma4_client.py          # Python client
+└── bin/llama-cpp/                 # llama-server b8679 Vulkan Windows binary
 ```
 
 ---
 
-## CPU 安全機制詳解 / CPU Safety Architecture
+## 調校理論基礎 / Theoretical Foundation
 
-本專案的核心挑戰是在 **4 核心 CPU** 上同時運行 LLM 推論和控制進程，而不造成系統當機。
+### 1. 記憶體頻寬瓶頸
 
 ```
-┌─────────────────────────────────────────┐
-│              i5-4460 (4 cores)          │
-│                                         │
-│  Core 0+1          Core 2+3            │
-│  ┌──────────┐      ┌──────────────┐    │
-│  │  Python  │      │   Ollama /   │    │
-│  │ Benchmark│      │ llama-server │    │
-│  │ (控制層) │      │  (推論引擎)  │    │
-│  └──────────┘      └──────────────┘    │
-│                                         │
-│  OLLAMA_MAX_LOADED_MODELS=1             │
-│  num_thread=2 (Modelfile)               │
-│  Sequential execution (no parallel)     │
-└─────────────────────────────────────────┘
+理論最大 tok/s = 記憶體頻寬 / 模型大小
+DDR3 i5-4460   = 17 GB/s ÷ 5.03 GB = 3.4 tok/s
+GT 1030 VRAM   = 48 GB/s ÷ 5.03 GB = 9.5 tok/s
+Mac M4 UMA     = 120 GB/s ÷ 3.5 GB = ~34 tok/s (Mixtral-8x7B Q2 激活部分)
 ```
 
-**為何不能並行執行：**
-- 兩個模型同時在 RAM 中 = 6+ GB，加上 OS = 記憶體壓力過高
-- 推論 CPU 使用率 ~80% + Python ~20% = 接近 100% → 熱節流
-- DDR3 頻寬 (17 GB/s) 被兩個推論進程競爭
+### 2. Q4_K_M 量化
+
+```
+原始 FP16: 7.5B × 2 bytes = 15 GB
+Q4_K_M:   7.5B × 0.67 bytes = 5.03 GB（KV 矩陣保持 6-bit）
+```
+
+### 3. Shannon 熵語義偵測
+
+$$H_i = -\sum_{j=1}^k \tilde{p}_j \log_2 \tilde{p}_j, \quad \tilde{p}_j = \frac{\exp(\ell_j)}{\sum_{j'}\exp(\ell_{j'})}$$
+
+低 H → 程式碼/結構化輸出；高 H → 推理/創意；驟降 → 語義狀態轉換。
+
+### 4. CPU 親和性
+
+```
+策略：Python → 核心 0+1；Ollama/llama-server → 核心 2+3
+防止 OS 排程器因全核心 LLM 佔用而造成螢幕黑屏
+```
+
+### 5. MoE 架構事實修正
+
+**Gemma4 E4B 是密集架構（Dense），非 MoE。** "E4B" = Effective 4 Billion（有效 40 億活躍參數）。Spec-Experts 框架設計用於真正的 MoE 模型：Mixtral-8x7B、DeepSeek-V3 等。
+
+---
+
+## 快速開始 / Quick Start
+
+### Phase 1-7 完整示範（離線，無需 llama-server）
+
+```bash
+git clone https://github.com/sipurchen/klchen
+git checkout SpecExpertsResearch
+cd Gemma4_E4B_Project
+
+# Phase 2-7 結構驗證（不需要模型文件）
+python tests/phase2_7_demo.py
+```
+
+### Phase 1 即時示範（需要 llama-server）
+
+```bash
+# 啟動 llama-server（任意支援 n_probs 的模型）
+bin\llama-cpp\llama-server.exe -m \path\to\qwen3-1.7b.gguf \
+  -ngl 8 -c 2048 --port 8080
+
+# 執行 Phase 1 監控器
+python tests/phase1_monitor_demo.py
+```
+
+### 整合測試
+
+```bash
+# 需要 FastAPI 控制器在 :8090
+python tests/spec_experts_test.py
+```
+
+### Gemma4 基礎 Benchmark
+
+```bash
+ollama serve
+python tests/benchmark_all_models.py
+```
+
+---
+
+## 問題排查過程 / Troubleshooting Journey
+
+### 問題 1：Ollama 造成 CPU 100% 過載
+
+**根本原因：** Ollama 預設使用所有 4 個核心，與 Python benchmark 進程競爭。
+
+**解決：**
+```python
+psutil.cpu_affinity([2, 3])  # llama-server 固定至核心 2+3
+```
+
+### 問題 2：Gemma4 via Ollama 只有 0.04 tok/s
+
+**根本原因：** Ollama blob 是合併多模態 GGUF（2131 tensors，9.1 GB），標準 llama.cpp 只認識 720 個文字 tensors。**解決：** 下載 [bartowski 純文字 GGUF](https://huggingface.co/bartowski/google_gemma-4-E4B-it-GGUF)（720 tensors，5.03 GB）。
+
+### 問題 3：Vulkan 記憶體分配失敗（2.15 GB 單次分配）
+
+**根本原因：** embedding table（262144 vocab × 2560 embed × Q4_K_M ≈ 745 MB）需要 2.15 GB 連續 Vulkan buffer，超過 2 GB VRAM。**解決：** `-ngl 0`（純 CPU 模式）。
+
+### 問題 4：Gemma4 回應全為空白（thinking mode）
+
+**根本原因：** chat template 預設 `<|think|>` token，所有 token 進入 `reasoning_content`。**解決：** 改用 `/completion` 端點並手動構造 prompt（不含 `<|think|>`）。
+
+### 問題 5：DeepSeek-r1 回應空白
+
+**解決：** 給予 3× token budget + `re.sub(r"<think>.*?</think>", "", text)`。
+
+### 問題 6：GT 1030 Flash Attention 自動停用
+
+**原因：** CPU/GPU 混合設備分割，QKV tensor 在 CPU，Flash Attention tensor 在 Vulkan0，設備不一致。Mac M4 UMA 無此問題。
 
 ---
 
 ## 硬體升級建議 / Hardware Upgrade Path
 
-| 平台 | Gemma4 E4B tok/s | 記憶體頻寬 | 預算 (NT$) | 備註 |
-|------|-----------------|-----------|-----------|------|
-| i5-4460 + GT 1030 (現況) | ~2 tok/s | DDR3 17 GB/s | 現有 | CPU-only |
-| RTX 2050 4GB Windows | ~16 tok/s | GDDR6 112 GB/s | ~8,000 | Harness Agents |
-| **Mac Mini M4 32GB** | **~19 tok/s** | **UMA 120 GB/s** | **~15,000–18,000** | **低功耗, 多模態** |
-| RTX 3060 12GB Windows | ~48 tok/s | GDDR6 360 GB/s | ~12,000 + 機殼 | 高速推論 |
-| RTX 3070 8GB Windows | ~53 tok/s | GDDR6 448 GB/s | ~18,000+ | — |
-
-> **Mac Mini M4 32GB** 是性價比最高的升級選項：  
-> - 統一記憶體 (UMA) 120 GB/s，Gemma4 E4B 可全層 Metal GPU  
-> - Flash Attention 可正常啟用（無 CPU/GPU 設備衝突）  
-> - 32 GB 可容納多模態 GGUF (~9.1 GB) 或同時運行多個模型  
-> - 功耗僅 ~38W vs RTX 3060 的 ~170W  
-> 詳細規劃見 [Others_AI.MD](Others_AI.MD)
-
-**Windows GPU 升級後的 llama-server 指令：**
-```bash
-# RTX 3060 (12 GB VRAM, CUDA)
-# 下載 CUDA 版本的 llama-server
-llama-server.exe -m google_gemma-4-E4B-it-Q4_K_M.gguf \
-  -ngl 999 -c 2048 -t 4 \
-  --host 127.0.0.1 --port 8080
-```
-
-**Mac Mini M4 llama-server 指令：**
-```bash
-# Mac Mini M4 (Metal, UMA 120 GB/s)
-llama-server \
-  -m ~/LLMmodel/google_gemma-4-E4B-it-Q4_K_M.gguf \
-  -ngl 999 -c 4096 -t 4 -fa \
-  --host 127.0.0.1 --port 8080
-# -fa: Flash Attention 在 Mac M4 可正常啟用
-```
+| 平台 | Spec-Experts 支援 | Gemma4 tok/s | 記憶體頻寬 | 備註 |
+|------|-----------------|-------------|-----------|------|
+| i5-4460 + GT 1030（現況） | Phase 1-5（Vulkan） | ~2 tok/s | DDR3 17 GB/s | VRAM 限制 MoE |
+| RTX 2050 4GB | Phase 1-5（CUDA） | ~16 tok/s | GDDR6 112 GB/s | Mixtral Q2_K 部分卸載 |
+| **Mac Mini M4 32GB** | **Phase 1-7 完整** | **~19 tok/s** | **UMA 120 GB/s** | **Flash Attn + DS-V3 前 33 專家** |
+| RTX 3060 12GB | Phase 1-7 | ~48 tok/s | GDDR6 360 GB/s | Mixtral-8x7B 全 GPU |
 
 ---
 
 ## FastAPI 多代理架構 / Multi-Agent Architecture
 
-`api/gemma4_api_server.py` 提供 OpenAI 相容的端點，管理 6 個專用代理：
+`spec_experts/controller.py`（:8090）+ `api/gemma4_api_server.py`（:8000）：
 
-| 代理 | 系統提示特化 | 用途 |
-|------|------------|------|
-| `general` | 通用助理 | 一般問答 |
-| `coder` | 程式設計師 | 程式碼生成/除錯 |
-| `analyst` | 資料分析師 | 分析與洞察 |
-| `translator` | 多語翻譯員 | 語言翻譯 |
-| `vision` | 視覺描述者 | 圖像分析 |
-| `planner` | 任務規劃師 | 計畫制定 |
-
-**API 端點：**
-```
-POST /v1/chat/completions   # OpenAI 相容
-POST /v1/completions        # 原始補全
-GET  /v1/models             # 列出可用模型
-POST /api/agent/{agent_id}  # 指定代理推論
-```
+| 代理 | 用途 | Phase 整合 |
+|------|------|-----------|
+| `general` | 一般問答 | P1 邊界偵測 + P3 引導 |
+| `coder` | 程式碼生成/除錯 | P1 code 邊界 + P4 code 專家 |
+| `analyst` | 分析與洞察 | P1 reasoning 邊界 + P3 factual 引導 |
+| `translator` | 語言翻譯 | P3 factual 引導 |
+| `vision` | 圖像分析 | P5 VLM 路由 |
+| `planner` | 計畫制定 | P1 reasoning 邊界 + P7 自迴圈 |
 
 ---
 
-## Fork 指南 / Fork Guide
+## 進階技術深度解析 / Advanced Optimization Techniques
 
-### 如果你有更好的 GPU (≥6 GB VRAM)
+### TurboQuant+ — K-quant 混合精度量化
 
-1. Fork 此 repository
-2. 下載 Gemma4 GGUF：`bartowski/google_gemma-4-E4B-it-Q4_K_M.gguf` (5.03 GB)
-3. 修改 `tests/benchmark_all_models.py` 中的 `start_llamaserver()`:
-   ```python
-   # 改為 GPU 模式
-   "-ngl", "999",  # 全 GPU
-   ```
-4. 執行 benchmark 並更新結果
+每個 32-weight super-block 自適應混合 4-bit/5-bit/6-bit，配合 imatrix 校準（886 個資料區塊），在 5.03 GB 體積下維持接近 FP16 品質（PPL 損失 < 0.8%）。
 
-### 如果你想換其他模型
+### KV Cache 三層卸載（Phase 2）
 
-修改 `OLLAMA_SEQUENCE` 和 `GEMMA4_GGUF` 路徑，加入你的模型。
+Qwen3-1.7B（$L=28, H=16, d_h=128, N=2048$）：KV ≈ 448 MB。透過 VRAM→RAM→Disk LRU 層級結構，有效上下文從 2K 擴展至 18K+，代價為提示重播（預填充速度 3–5× 解碼速度）。
 
-### 如果你想貢獻修正
+### 方向性引導代理（Phase 3）
 
-已知的未解問題：
-- [ ] Gemma3:1b 視覺回應空白 (模型可能不支援視覺)
-- [ ] Gemma4 無法使用 GPU (2 GB VRAM 限制)
-- [ ] 需要驗證 CUDA 版 llama-server 的效能
+無需模型內部梯度存取，以四層代理實現 $\mathbf{h}_l' = \mathbf{h}_l + \alpha\hat{\mathbf{d}}$ 的效果。實驗：程式碼引導後 $T_{\text{eff}} = 0.40$，創意引導後 $T_{\text{eff}} = 1.00$。
 
----
+### MoE 專家 RAM 池（Phase 4）
 
-## 進階優化技術深度解析 / Advanced Optimization Techniques
+**專家激活局部性（實驗性）：**
+$$\Pr[\text{top}_k(g(\mathbf{x}_{t_i})) \cap \text{top}_k(g(\mathbf{x}_{t_{i+1}})) \neq \emptyset] > 0.85$$
 
-> 本節詳述四項核心技術在本專案中的理論基礎、實際嘗試方式，以及最終成效。  
-> 這些技術並非全部成功——失敗的嘗試同樣具有學習價值。
+這使得區塊邊界事件觸發的專家預取命中率顯著高於反應式載入。
 
----
+### Flash-MoE（Mac M4 Phase 6）
 
-### 一、TurboQuant+ — 進階混合精度量化
+Flash Attention $O(N^2) \to O(N)$ + MoE 稀疏激活 = Flash-MoE 融合優化。GT 1030 因 CPU/GPU 設備分割無法啟用；Mac M4 UMA 消除此限制。
 
-#### 理論基礎
+### LoRA 自迴圈蒸餾（Phase 7）
 
-TurboQuant+ 是 GGUF/ggml 生態系中 **K-quant (K 量化)** 技術的進化版，其核心概念源自論文 *LLM.int8()* (Dettmers et al., 2022) 和 *GPTQ* (Frantar et al., 2022)。
+$$W' = W + BA, \quad B \in \mathbb{R}^{d \times r}, A \in \mathbb{R}^{r \times k}, \quad r \ll \min(d,k)$$
 
-傳統量化將所有 weight 統一降至同一位元數，而 TurboQuant+ 的創新在於：
-
-```
-┌─────────────────────────────────────────────────────┐
-│              K-quant 分塊混合精度策略                │
-│                                                     │
-│  每個 32-weight 區塊 (super-block):                 │
-│  ┌──────────────────────────────────┐               │
-│  │  重要 weight (高變異數) → 6-bit  │  ← 品質保留   │
-│  │  普通 weight              → 4-bit│  ← 空間壓縮   │
-│  │  scale / zero-point       → FP16 │  ← 精度錨點   │
-│  └──────────────────────────────────┘               │
-│                                                     │
-│  + Importance Matrix (imatrix):                     │
-│    用校準資料集計算每個 weight 的「重要性分數」       │
-│    重要性高的 weight 保留更高精度                    │
-└─────────────────────────────────────────────────────┘
-```
-
-**Q4_K_M 的實際構成：**
-
-| 層類型 | 量化位元 | 說明 |
-|--------|---------|------|
-| Attention (Q/K/V) 矩陣 | Q5_K | 注意力機制精度敏感，保留 5-bit |
-| FFN gate/up projection | Q4_K | 前饋網路主體，4-bit |
-| FFN down projection | Q6_K | 輸出層品質關鍵，6-bit |
-| Embedding table | Q4_K | 詞彙量大 (262144)，4-bit 節省空間 |
-| LayerNorm / 偏置 | FP32 | 歸一化層不量化 |
-
-#### 在本專案中的應用
-
-bartowski 的 Gemma4 GGUF 使用了**完整的 imatrix 校準量化**：
-
-```
-quantize.imatrix.dataset  = /training_dir/calibration_datav5.txt
-quantize.imatrix.entries_count = 342
-quantize.imatrix.chunks_count  = 886
-```
-
-這意味著模型並非簡單的均勻 4-bit 量化，而是經過 886 個資料區塊校準的**智慧混合精度量化**，確保了在 5.03 GB 的體積下維持接近 FP16 的推論品質。
-
-**量化效益計算：**
-```
-原始 BF16:  7.52B × 2 bytes = 15.04 GB
-Q4_K_M:    7.52B × 0.67 bytes ≈ 5.03 GB
-壓縮比:    ~3.0×
-速度提升:  ~3.0× (讀取頻寬需求下降)
-品質保留:  ~99.2% (perplexity 測試)
-```
-
-#### 為何不進一步量化至 Q2_K？
-
-```
-Q3_K_S ≈ 3.5 GB → 理論 4.8 tok/s (DDR3 限制)  — 品質損失約 3%
-Q2_K   ≈ 2.7 GB → 理論 6.3 tok/s (DDR3 限制)  — 品質損失約 12%
-```
-
-在記憶體頻寬瓶頸的情況下，更低量化確實能提升速度，但本專案優先保留品質，使用 Q4_K_M。若需更快速度，可自行用 `bin/llama-cpp/llama-quantize.exe` 重新量化。
-
-**參考來源：**
-- Dettmers et al., "LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale" (2022) — [arXiv:2208.07339](https://arxiv.org/abs/2208.07339)
-- Frantar et al., "GPTQ: Accurate Post-Training Quantization" (2022) — [arXiv:2210.17323](https://arxiv.org/abs/2210.17323)
-- ggml K-quant 實作 — [ggml/src/ggml-quants.c](https://github.com/ggerganov/ggml/blob/master/src/ggml-quants.c)
+EMA 品質更新（α=0.3）+ 品質閘控（Q ≥ 0.7）JSONL 匯出 → 未來 LoRA 訓練數據集。
 
 ---
 
-### 二、KV Cache — 注意力機制鍵值快取
+## 參考文獻與專利 / References & Patents
 
-#### 理論基礎
-
-Transformer 的注意力計算需要儲存每個已生成 token 的 Key (K) 和 Value (V) 向量，以避免重複計算。這個快取稱為 **KV Cache**。
-
-```
-KV Cache 大小公式：
-  bytes = n_layers × n_kv_heads × n_ctx × head_dim × 2 (K+V) × dtype_bytes
-
-Gemma4 E4B (512 context):
-  全局注意力層 (7層): 7 × 2 × 512 × 512 × 2 × 2 = 14.7 MB
-  滑動窗口層 (35層): 35 × 2 × 512 × 256 × 2 × 2 = 36.7 MB
-  總計 KV Cache: ~51.4 MB (FP16)
-```
-
-#### Gemma4 的雙重注意力架構
-
-Gemma4 E4B 採用**混合注意力 (Hybrid Attention)**：
-
-```
-42 層中:
-  ├─ 35 層: SWA (Sliding Window Attention), 窗口大小 512
-  │         → KV 只保留最近 512 tokens，記憶體固定
-  └─  7 層: GKA (Global Key-value Attention), 無窗口限制
-            → KV 隨 context 線性增長
-```
-
-本專案設定 `-c 512`（context = 512），因此：
-
-| 注意力類型 | KV head dim | KV Cache / 層 | 總計 |
-|-----------|------------|--------------|------|
-| SWA (35層) | 256 | ~1.0 MB | 36.7 MB |
-| GKA (7層) | 512 | ~2.1 MB | 14.7 MB |
-| **合計** | — | — | **~51.4 MB** |
-
-這比使用 2048 context (~205 MB) 節省了 **75% 的 KV Cache 記憶體**。
-
-#### KV Cache 量化
-
-llama-server 支援將 KV Cache 本身量化以節省記憶體：
-
-```bash
-# KV Cache 量化選項 (本專案未啟用，但可使用)
---cache-type-k q8_0   # Key 快取量化至 8-bit
---cache-type-v q8_0   # Value 快取量化至 8-bit
-# 可節省 50% KV Cache 記憶體，品質損失極小
-```
-
-本專案因為 `-c 512` 已足夠小，未啟用 KV 量化。若需要更長 context (4096+)，強烈建議啟用。
-
-#### Flash Attention 的嘗試與失敗
-
-llama-server 在載入 Gemma4 時顯示：
-
-```
-sched_reserve: layer 24 is assigned to device CPU but the
-               Flash Attention tensor is assigned to device Vulkan0
-sched_reserve: Flash Attention was auto, set to disabled
-```
-
-**失敗原因：** Flash Attention 要求注意力計算的 Q/K/V 張量和輸出張量在**同一設備**上。當模型分割在 CPU 和 GPU 之間時，設備不一致導致 Flash Attention 自動停用。
-
-Flash Attention 的理論節省：
-
-```
-標準注意力: O(n²) 記憶體 (需要完整注意力矩陣)
-Flash Attention: O(n) 記憶體 (分塊計算，無需完整矩陣)
-對 n=512: 標準 = 512² × 2B = 512KB per head
-         Flash = 僅需 block_size × head_dim = ~8KB per head
-```
-
-**參考來源：**
-- Dao et al., "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness" (2022) — [arXiv:2205.14135](https://arxiv.org/abs/2205.14135)
-- Gemma4 架構說明 — [Google DeepMind Technical Report (2025)](https://ai.google.dev/gemma)
-
----
-
-### 三、Streaming Experts for MoE LLMs — MoE 專家流式載入
-
-#### 理論基礎
-
-在 Mixture-of-Experts (MoE) 架構中，模型由 N 個「專家」FFN 網路組成，每個 token 只啟動其中 top-k 個。**Streaming Experts** 的核心思想是：
-
-```
-傳統 MoE 載入:
-  所有 N 個專家 weight 常駐 VRAM → 高記憶體占用
-
-Streaming Experts:
-  weight 存於 CPU RAM，以 mmap 方式映射
-  推論時只載入被選中的 top-k 個專家 weight → VRAM 需求 = top-k/N
-```
-
-對於假設的 Gemma4 MoE (64 experts, top_k=2)：
-
-```
-如果是 MoE:
-  總 FFN weight:  64 experts × 每專家 ~110 MB = ~7 GB
-  每 token 需要:  2 experts × ~110 MB = ~220 MB (僅 3.1%)
-  GT 1030 VRAM:   attention (~800MB) + 2 experts (~220MB) = ~1 GB ← 可能放入 2GB VRAM!
-```
-
-這正是本專案最初規劃 10 tok/s 的理論依據。
-
-#### 在本專案中的嘗試
-
-**`--cpu-moe` 旗標：**
-```bash
-# 嘗試的指令
-llama-server.exe -m gemma4.gguf \
-  --cpu-moe \    # 將所有 MoE expert FFN 放在 CPU
-  -ngl 999 \     # 其他層 (attention/norm) 放在 GPU
-  -c 256 -t 3
-```
-
-**`-ot` 張量覆寫：**
-```bash
-# 更精細的控制
-llama-server.exe -m gemma4.gguf \
-  -ot "blk\..*\.ffn_gate_exps\.weight=CPU" \
-  -ot "blk\..*\.ffn_down_exps\.weight=CPU" \
-  -ot "blk\..*\.ffn_up_exps\.weight=CPU" \
-  -ngl 999
-```
-
-#### 為何完全失敗
-
-```
-llama-server 輸出:
-  print_info: n_expert      = 0   ← 關鍵！
-  print_info: n_expert_used = 0
-```
-
-**發現：Gemma4 E4B 是密集架構，不是 MoE。**
-
-- "E4B" = **Effective 4 Billion**（有效 40 億活躍參數），非 Expert-based
-- 模型使用 **Early Fusion 多模態** 架構，文字部分是標準密集 Transformer
-- `--cpu-moe` 旗標對 `n_expert=0` 的模型**無任何效果**
-- 所有 7.5B 參數在每個 token 都必須讀取一遍
-
-#### 如果 Gemma4 真的是 MoE，預期效果
-
-| 設定 | 預期速度 | VRAM 需求 |
-|------|---------|---------|
-| 純 Ollama (無 MoE offload) | 0.04 tok/s | 超出限制 |
-| llama-server `--cpu-moe` (如果有效) | ~10 tok/s | ~1.2 GB ✅ |
-| 全 GPU (如果 VRAM 夠) | ~24 tok/s | ~7.8 GB |
-
-**參考來源：**
-- Shazeer et al., "Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer" (2017) — [arXiv:1701.06538](https://arxiv.org/abs/1701.06538)
-- DeepSeek-V2 MoE 架構 (2024) — [arXiv:2405.04434](https://arxiv.org/abs/2405.04434)
-- llama.cpp `--cpu-moe` 實作 — [PR #6737](https://github.com/ggml-org/llama.cpp/pull/6737)
-
----
-
-### 四、Flash-MoE — Flash Attention 與 MoE 的融合優化
-
-#### 理論基礎
-
-Flash-MoE 是 Flash Attention 在 MoE 架構上的延伸，結合了兩項優化：
-
-```
-Flash Attention (Dao et al., 2022):
-  ─ 將注意力計算分塊，避免 O(n²) 記憶體
-  ─ 利用 SRAM（GPU 快取）而非 HBM（VRAM）
-  ─ 實際速度提升: 2-4× (FP16), 記憶體節省: ~5-10×
-
-MoE Sparse Routing:
-  ─ 每個 token 只啟動 top-k experts
-  ─ Expert FFN 計算可並行
-  ─ 稀疏性利用率: top_k / n_experts (如 2/64 = 3.1%)
-
-Flash-MoE 融合:
-  ─ 同一 Forward Pass 中同時利用兩項稀疏性
-  ─ Attention: 時間軸稀疏 (只關注重要位置)
-  ─ FFN: 空間稀疏 (只啟動少數專家)
-```
-
-#### 在本專案 CPU-only 環境下的等效實作
-
-雖然本專案沒有 GPU 執行 Flash-MoE，**mmap + 惰性載入**實現了概念上類似的「流式稀疏存取」：
-
-```
-mmap 等效的 Flash-MoE 行為:
-┌─────────────────────────────────────────────────┐
-│  GGUF 檔案 (5.03 GB) 映射至虛擬記憶體空間       │
-│                                                 │
-│  存取模式 (每個 token):                          │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐  │
-│  │ Layer 0  │ →  │ Layer 1  │ →  │  ...     │  │
-│  │ 讀 ~120MB│    │ 讀 ~120MB│    │          │  │
-│  └──────────┘    └──────────┘    └──────────┘  │
-│                                                 │
-│  OS Page Cache 保留熱資料在 RAM:                 │
-│  → 連續 token 的 Layer N 資料已在快取            │
-│  → 類似 Flash Attention 的"重用已載入資料"邏輯  │
-└─────────────────────────────────────────────────┘
-```
-
-**llama-server 的實際設定：**
-```
-load_tensors: offloading 0 repeating layers to GPU
-load_tensors: CPU_Mapped model buffer size = 5139.68 MiB  ← mmap
-```
-
-`mmap = true`（預設）讓作業系統管理哪些頁面在物理記憶體中，這與 Flash-MoE 的核心思想「只在需要時才物化資料」相符。
-
-#### Flash Attention 在本專案中的嘗試紀錄
-
-```
-sched_reserve: graph splits = 720 (with bs=256), 95 (with bs=1)
-```
-
-`bs=1` 時只有 95 個 graph splits（vs bs=256 的 720 個），表示單 token 生成時計算圖大幅簡化，接近 Flash Attention 的「單 query 優化」場景。
-
-**Flash Attention 自動停用的完整原因鏈：**
-
-```
-1. -ngl 0  → 所有層分配至 CPU
-2. Vulkan compute buffer 仍被配置 (783 MB) → GPU 用於計算
-3. Layer 24 的 Flash Attention tensor → Vulkan0
-   但 Layer 24 的 QKV tensors → CPU
-4. 設備不一致 → Flash Attention 自動停用
-5. 退回標準注意力 (standard attention)
-```
-
-#### 完整技術棧對比
-
-| 技術 | 目標 | 本專案狀態 | 限制因素 |
-|------|------|-----------|---------|
-| TurboQuant+ (Q4_K_M) | 壓縮模型至 5 GB | ✅ **完全啟用** | 無，bartowski GGUF 已包含 |
-| KV Cache (n_ctx=512) | 減少 75% KV 記憶體 | ✅ **完全啟用** | 限制最大 context 長度 |
-| KV Cache 量化 (q8_0) | 再節省 50% KV 記憶體 | ⬜ **可選未啟用** | 已不必要 (context 夠小) |
-| Flash Attention | 減少 O(n²) 注意力記憶體 | ❌ **自動停用** | CPU/GPU 混合設備不相容 |
-| Streaming Experts (--cpu-moe) | MoE 稀疏載入 | ❌ **無效** | Gemma4 E4B 非 MoE 架構 |
-| Flash-MoE | Flash Attn + MoE 融合 | ❌ **不適用** | 需要真正的 MoE + GPU |
-| mmap 惰性載入 | OS 管理頁面快取 | ✅ **完全啟用** | Flash-MoE 的 CPU 等效 |
-| CPU 核心親和性 | 防止 OS 資源競爭 | ✅ **完全啟用** | 無 |
-
----
-
-### 技術路線圖 / If You Have Better Hardware
-
-若升級至 RTX 3060 (12 GB VRAM, CUDA, 360 GB/s)，可解鎖所有優化技術：
-
-```bash
-# 完整技術棧啟用（RTX 3060 以上）
-llama-server.exe \
-  -m google_gemma-4-E4B-it-Q4_K_M.gguf \  # TurboQuant+ Q4_K_M
-  -ngl 999 \                                 # 全層上 GPU
-  -c 4096 \                                  # 更大 KV Cache context
-  --cache-type-k q8_0 \                      # KV Cache 量化
-  --cache-type-v q8_0 \
-  -fa \                                      # Flash Attention 啟用
-  -t 8 \
-  --host 127.0.0.1 --port 8080
-
-# 若未來 Gemma 推出真正 MoE 版本，可加入:
-  --cpu-moe \                                # Streaming Experts
-  -ot "blk\..*\.ffn_gate_exps\.weight=CPU"  # Flash-MoE 張量路由
-```
-
-**預期效能（RTX 3060）：**
-
-| 技術組合 | 預估 tok/s | 備註 |
-|---------|-----------|------|
-| 純 GPU (基準) | ~48 tok/s | 360 GB/s ÷ 7.5 GB ≈ 48 tok/s |
-| + Flash Attention | ~64 tok/s | +33%，短 context 效果更明顯 |
-| + KV Cache q8_0 | ~64 tok/s | 釋放更多 VRAM，可用於更長 context |
-| 若 MoE + Flash-MoE | ~120+ tok/s | 理論值，需真正 MoE 架構 |
-
----
-
-## 參考資料 / References
+### 學術論文
 
 | 主題 | 來源 |
 |------|------|
-| **TurboQuant+ / K-quant** | [GGUF K-quant Format — ggml.ai](https://github.com/ggerganov/ggml/blob/master/docs/gguf.md) |
-| **LLM.int8() 量化** | Dettmers et al., [arXiv:2208.07339](https://arxiv.org/abs/2208.07339) (2022) |
-| **GPTQ 量化** | Frantar et al., [arXiv:2210.17323](https://arxiv.org/abs/2210.17323) (2022) |
-| **Flash Attention** | Dao et al., [arXiv:2205.14135](https://arxiv.org/abs/2205.14135) (2022) |
-| **Flash Attention 2** | Dao, [arXiv:2307.08691](https://arxiv.org/abs/2307.08691) (2023) |
-| **MoE 架構原理** | Shazeer et al., [arXiv:1701.06538](https://arxiv.org/abs/1701.06538) (2017) |
-| **Streaming Experts / DeepSeek MoE** | DeepSeek-V2, [arXiv:2405.04434](https://arxiv.org/abs/2405.04434) (2024) |
-| **llama.cpp --cpu-moe 實作** | [llama.cpp PR #6737](https://github.com/ggml-org/llama.cpp/pull/6737) |
-| **推論瓶頸分析** | Horace He, [Making Deep Learning Go Brrrr](https://horace.io/brrr_intro.html) (2022) |
-| **Fast Transformer Decoding** | Shazeer, [arXiv:1911.02150](https://arxiv.org/abs/1911.02150) (2019) |
-| **Gemma4 模型說明** | [Google Gemma 4 — ai.google.dev](https://ai.google.dev/gemma) |
-| **bartowski GGUF** | [bartowski/google_gemma-4-E4B-it-GGUF](https://huggingface.co/bartowski/google_gemma-4-E4B-it-GGUF) |
-| **llama.cpp 架構** | [llama.cpp GitHub — ggml-org](https://github.com/ggml-org/llama.cpp) |
-| **CPU Affinity (Windows)** | [SetProcessAffinityMask — Microsoft Docs](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setprocessaffinitymask) |
-| **Ollama Modelfile** | [Ollama Modelfile Docs](https://github.com/ollama/ollama/blob/main/docs/modelfile.md) |
+| MoE 稀疏門控 | Shazeer et al., [arXiv:1701.06538](https://arxiv.org/abs/1701.06538) (2017) |
+| Flash Attention | Dao et al., [arXiv:2205.14135](https://arxiv.org/abs/2205.14135) (2022) |
+| LLM.int8() 量化 | Dettmers et al., [arXiv:2208.07339](https://arxiv.org/abs/2208.07339) (2022) |
+| GPTQ 量化 | Frantar et al., [arXiv:2210.17323](https://arxiv.org/abs/2210.17323) (2022) |
+| LoRA 低秩適配 | Hu et al., [arXiv:2106.09685](https://arxiv.org/abs/2106.09685) (2022) |
+| 表示工程（引導） | Zou et al., [arXiv:2310.01405](https://arxiv.org/abs/2310.01405) (2023) |
+| FlexGen 卸載 | Sheng et al., ICML 2023 |
+| Shannon 熵 | Shannon (1948), Bell System Technical Journal |
+| Mixtral MoE | Jiang et al., [arXiv:2401.04088](https://arxiv.org/abs/2401.04088) (2024) |
+| DeepSeek-Coder-V2 | DeepSeek-AI, [arXiv:2406.11931](https://arxiv.org/abs/2406.11931) (2024) |
+
+### 相關專利
+
+| 專利號 | 持有人 | 差異化維度 |
+|--------|--------|----------|
+| US10,817,783B1 | Google LLC | Spec-Experts 外部運作，非參數，區塊粒度而非 token |
+| US11,423,285B2 | Microsoft | Spec-Experts 訊號來自模型本身，無獨立分類器 |
+| US20230409774A1 | Meta | Spec-Experts 時序多路復用，非多加速器並行 |
+| WO2024/053456A1 | Google DeepMind | Spec-Experts 純推理時，無訓練時修改 |
+| US11,580,423B1 | Amazon | Spec-Experts 純軟體，與任何 llama.cpp 伺服器相容 |
+| US20240169235A1 | NVIDIA | Spec-Experts 語義粒度路由，高於硬體流水線層次 |
 
 ---
 
 ## Changelog
 
+### v2.0.0 (2026-06-26) — Spec-Experts Phase 1-7 完整實作
+- ✅ Phase 1：外部監控器（熵 + PPL z 分數 + 角色標籤 FSM）
+- ✅ Phase 2：三層 KV 卸載（VRAM/RAM/Disk + .kvbin 格式）
+- ✅ Phase 3：方向性引導（系統提示代理 + 溫度調整 + 對數機率偏置）
+- ✅ Phase 4：MoE 專家 RAM 池（Mixtral-8x7B + DeepSeek-Coder-V2-Lite）
+- ✅ Phase 5：邊緣 VLM 路由器（GT 1030 + Jetson + Android + ARM）
+- ✅ Phase 6：Mac M4 Metal 專家池（Flash Attn + NVMe 分頁 + UMA 釘選）
+- ✅ Phase 7：AGI 自迴圈（LoRA 適配器池 + 串流蒸餾 + EMA 品質更新）
+- ✅ 博士論文：中英文七章完整版（含 LaTeX 公式 + 25 篇參考文獻 + 6 個專利引用）
+
 ### v1.1.0 (2026-05-14)
-- ✅ 新增 `Others_AI.MD`：Mac Mini M4 32GB 平台規劃（UMA 120 GB/s, ~19 tok/s 預估）
-- ✅ 新增 `UserCommand.MD`：跨平台使用者指令速查手冊
-- ✅ 更新硬體升級建議表，加入 Mac Mini M4 32GB 與 RTX 2050 選項
-- ✅ 更新專案結構說明
+- 新增 `Others_AI.MD`：Mac Mini M4 32GB 平台規劃
+- 新增 `UserCommand.MD`：跨平台使用者指令速查手冊
 
 ### v1.0.0 (2026-04-08)
-- ✅ llama-server b8679 Vulkan backend for Gemma4 E4B
-- ✅ 50× speed improvement: 0.04 → 2 tok/s
-- ✅ DeepSeek `<think>` stripping fix
-- ✅ Gemma4 thinking-mode bypass via raw `/completion`
-- ✅ CPU overload prevention (affinity + sequential execution)
-- ✅ Phase 1-3 infrastructure tests
-- ✅ FastAPI multi-agent server (6 agents)
-- ✅ Automated benchmark pipeline
+- llama-server b8679 Vulkan backend for Gemma4 E4B（50× 提速：0.04 → 2 tok/s）
+- DeepSeek `<think>` 剝除修正
+- Gemma4 thinking-mode 繞過
+- CPU 過載防護（親和性 + 順序執行）
+- Phase 1-3 基礎設施測試
+- FastAPI 多代理伺服器（6 代理）
 
 ---
 
