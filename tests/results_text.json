@@ -1,0 +1,18 @@
+{
+  "gemma4_summarize": {
+    "ok": false,
+    "resp": "timed out",
+    "time": 1302.7,
+    "tps": 0,
+    "tokens": 0,
+    "load": 0
+  },
+  "gemma4_synonym": {
+    "ok": false,
+    "resp": "timed out",
+    "time": 1432.3,
+    "tps": 0,
+    "tokens": 0,
+    "load": 0
+  }
+}
