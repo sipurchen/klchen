@@ -1,16 +1,18 @@
 # Others AI 平台規劃 / Other AI Platforms Planning
 
 > 本文件記錄在**非主力硬體（i5-4460 + GT 1030）**以外，其他平台上部署本地 LLM 的規劃與分析。  
-> 主力平台請參閱 [README.md](README.md) 及 [docs/RTX2050_LLM_Harness_Plan.md](docs/RTX2050_LLM_Harness_Plan.md)
+> 主力平台請參閱 [README.md](README.md) 及 [docs/RTX2050_LLM_Harness_Plan.md](docs/RTX2050_LLM_Harness_Plan.md)  
+> **Spec-Experts LLM 論文：** [GitHub Gist（中/英）](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf)
 
 ---
 
 ## 平台清單 / Platform Index
 
-| 平台 | 硬體 | 狀態 | 重點 |
-|------|------|------|------|
-| [Mac Mini M4 32GB](#mac-mini-m4-32gb) | Apple M4, 32 GB 統一記憶體 | 📋 規劃中 | Apple Silicon UMA, llama.cpp Metal |
-| [RTX 2050 Windows](#rtx-2050-windows-ref) | RTX 2050 4 GB, i-series | 🔗 見獨立文件 | Harness AI Agents, Flash-Load |
+| 平台 | 硬體 | 狀態 | Spec-Experts 支援 |
+|------|------|------|-----------------|
+| [Mac Mini M4 32GB](#mac-mini-m4-32gb) | Apple M4, 32 GB 統一記憶體 | 📋 規劃中 | Phase 1-7 完整（Flash Attn + DS-V3 前 33 專家） |
+| [RTX 2050 Windows](#rtx-2050-windows-ref) | RTX 2050 4 GB, i-series | 🔗 見獨立文件 | Phase 1-5（CUDA + Mixtral Q2_K 部分卸載） |
+| [邊緣設備路由](#edge-vlm-routing) | Jetson Nano / Android / ARM | 📋 Phase 5 路由目標 | moondream-2B / MobileVLM-1.7B |
 
 ---
 
@@ -92,6 +94,45 @@ Apple M4 UMA:
 | Qwen3-14B Q4_K_M | ~9.5 GB | ~12 tok/s | 更強推理 | ⭐⭐ |
 | Gemma3 4B Q4_K_M | ~2.8 GB | ~32 tok/s | 快速回應 | ⭐⭐ |
 | Whisper Large v3 | ~1.5 GB | 即時 | 語音辨識 (ASR) | ⭐⭐⭐ |
+
+---
+
+### Spec-Experts Phase 1-7 在 Mac M4 的應用 / Spec-Experts on Mac M4
+
+Mac Mini M4 是 Spec-Experts 七階段架構的**最完整部署目標**，每個 Phase 均可充分發揮：
+
+| Phase | 功能 | Mac M4 特有優勢 |
+|-------|------|---------------|
+| P1 外部監控器 | Shannon 熵 + PPL z 分數 + 角色標籤 FSM | 10 核心 CPU 監控不搶推論資源 |
+| P2 KV 卸載 | VRAM→RAM→Disk LRU | UMA 120 GB/s，RAM 層等同 GPU 層速度 |
+| P3 方向性引導 | 系統提示 + 溫度 + 對數機率偏置 | Flash Attention 啟用，推論品質更穩定 |
+| P4 專家 RAM 池 | MoE 區塊邊界預取 | **27 GB 可釘選 DS-V3 前 33 專家** |
+| P5 邊緣 VLM | 多設備路由 | Mac 作為邊緣設備的 VLM 協調器 |
+| P6 Metal 專家池 | Flash Attn + NVMe 分頁 | **本 Phase 的主要目標硬體** |
+| P7 AGI 自迴圈 | LoRA 池 + 蒸餾 | 足夠 RAM 在本機執行 LoRA 梯度更新 |
+
+#### Phase 4 + Phase 6 聯合優化：DeepSeek-V3 671B Q2
+
+```
+DS-V3 671B Q2: 256 個專家，每個 0.82 GB，總計 210 GB
+Mac Mini M4 策略:
+  - 前 33 個熱門專家 → 常駐 32 GB UMA（27 GB，>80% 使用覆蓋率）
+  - 其餘 223 個冷門專家 → NVMe SSD（7 GB/s 分頁，117 ms/專家）
+  - Spec-Experts 路由：40 次切換 → 24 次（節省 1.87 s / 20 區塊）
+```
+
+$$t_{\text{load}}(e) = \frac{0.82\text{ GB}}{7.0\text{ GB/s}} \approx 117\text{ ms}$$
+
+#### Phase 2 KV 卸載在 Mac M4 的優勢
+
+```
+GT 1030（DDR3 17 GB/s）:
+  KV 從 RAM 讀回 = 448 MB / 17 GB/s = 26 ms（慢）
+
+Mac M4（UMA 120 GB/s）:
+  KV 從 RAM 讀回 = 448 MB / 120 GB/s = 3.7 ms（快 7×）
+  → .kvbin 磁碟層幾乎不需要，RAM 層即可提供 16K+ context
+```
 
 ---
 
@@ -250,19 +291,105 @@ Mac Mini M4 32GB Gemma4 E4B 預期:
 
 **摘要：** RTX 2050 4 GB VRAM + Harness AI Agents 框架，使用 Flash-Load 動態管理多 expert，搭配 Runtime Directional Steering。Gemma4 E4B 預計 ~15–18 tok/s。
 
+**Spec-Experts Phase 1-5 支援：**
+
+| Phase | 狀態 | 備註 |
+|-------|------|------|
+| P1 外部監控器 | ✅ 完整支援 | CUDA 後端，n_probs 端點相同 |
+| P2 KV 卸載 | ✅ 完整支援 | GDDR6 112 GB/s，RAM 層更快 |
+| P3 方向性引導 | ✅ 完整支援 | Flash Attention 可啟用（純 GPU） |
+| P4 專家 RAM 池 | ⚠️ 部分支援 | 4 GB VRAM 限制，Mixtral Q2_K 需 CPU 卸載 |
+| P5 邊緣 VLM | ✅ 完整支援 | moondream-2B Q4 可在 4 GB VRAM 運行 |
+| P6 Mac M4 Metal | ➖ 不適用 | 需 Apple Silicon |
+| P7 AGI 自迴圈 | ⚠️ 品質評分+匯出可用 | 實際 LoRA 訓練需更多 VRAM |
+
+---
+
+## 邊緣設備路由 / Edge VLM Routing (Phase 5)
+
+**模組：** `edge/vlm_router.py`
+
+Spec-Experts Phase 5 支援跨設備多模態路由，以下為各目標設備的部署規格：
+
+### Jetson Nano (CUDA, 4 GB LPDDR4)
+
+```bash
+# MobileVLM-1.7B Q4 — CUDA ngl=32，10 FPS
+llama-server -m MobileVLM-1.7B-Q4_K_M.gguf \
+  -ngl 32 --host 0.0.0.0 --port 8082
+```
+
+| 參數 | 值 |
+|------|---|
+| 模型 | MobileVLM-1.7B Q4_K_M |
+| 後端 | CUDA (Jetson) |
+| ngl | 32 |
+| VRAM | 2 GB |
+| FPS（視覺） | ~10 |
+
+### Android (CPU, 6–8 GB RAM)
+
+```bash
+# LLaVA-Phi-1.5 Q4 — CPU only（通過 llama.cpp Android build）
+llama-server -m llava-phi-1.5-q4.gguf \
+  -ngl 0 -t 4 --host 127.0.0.1 --port 8083
+```
+
+### ARM 攝影機 / ARM Camera (aarch64)
+
+```bash
+# moondream-2B Q4 — 輕量 CPU 推論，低功耗即時偵測
+llama-server -m moondream-2b-q4.gguf \
+  -ngl 0 -t 2 --host 0.0.0.0 --port 8084
+```
+
+### 路由決策邏輯
+
+```python
+# edge/vlm_router.py 路由優先順序
+if has_gpu and fps_required > 5:
+    → jetson_nano (CUDA, 10 FPS)
+elif is_android:
+    → android (CPU, 5 FPS)
+elif is_arm_cam:
+    → arm_cam (CPU, 2 FPS, 低功耗)
+else:
+    → gt1030 (Vulkan, 1.5 FPS, 高品質)
+```
+
 ---
 
 ## 平台對比總覽 / Full Platform Comparison
 
-| 平台 | Gemma4 E4B | 最大模型 | 功耗 | 預算 (NT$) | 適用場景 |
-|------|-----------|---------|------|-----------|---------|
-| i5-4460 + GT 1030 | 2 tok/s | ~5 GB | ~65W | 現有 | 基礎實驗 |
-| RTX 2050 Win | ~16 tok/s | ~4 GB VRAM | ~45W + CPU | ~8,000 | Harness Agents |
-| **Mac Mini M4 32GB** | **~19 tok/s** | **~22 GB** | **~38W** | **~15,000–18,000** | **多模態, 日常使用** |
-| RTX 3060 Win | ~48 tok/s | ~12 GB | ~170W | ~12,000 + build | 高速推論 |
-| RTX 4090 Win | ~200 tok/s | ~24 GB | ~450W | ~50,000+ | 專業研究 |
+| 平台 | Gemma4 E4B | Spec-Experts Phase | 最大模型 | 功耗 | 預算 (NT$) | 適用場景 |
+|------|-----------|-------------------|---------|------|-----------|---------|
+| i5-4460 + GT 1030 | 2 tok/s | P1–5（Vulkan） | ~5 GB | ~65W | 現有 | 基礎實驗 + 研究框架 |
+| Jetson Nano | — | P5 邊緣 VLM | 2 GB | ~5W | — | 10 FPS 視覺推論 |
+| Android / ARM | — | P5 邊緣 VLM | — | 電池 | — | 行動端 VLM 路由 |
+| RTX 2050 Win | ~16 tok/s | P1–5（CUDA） | ~4 GB VRAM | ~45W | ~8,000 | Harness Agents |
+| **Mac Mini M4 32GB** | **~19 tok/s** | **P1–7 完整** | **~22 GB** | **~38W** | **~15,000–18,000** | **DS-V3 MoE + AGI 自迴圈** |
+| RTX 3060 Win | ~48 tok/s | P1–7 | ~12 GB | ~170W | ~12,000 + 機殼 | 高速推論 |
+| RTX 4090 Win | ~200 tok/s | P1–7 | ~24 GB | ~450W | ~50,000+ | 專業研究 |
+
+### Spec-Experts 跨平台架構圖
+
+```
+[GT 1030: P1 監控 + P2 KV + P3 引導 + P4 Mixtral Q2]
+           ↓ Phase 5 VLM 路由
+    ┌──────┼──────────┬────────┐
+    ↓      ↓          ↓        ↓
+[GT 1030]  [Jetson Nano] [Android] [ARM Camera]
+ 1.5 FPS   10 FPS        5 FPS     2 FPS
+    └──────────────────────────────┘
+           ↓ 文字推論回到主機
+[Mac M4: P6 Metal 池 + P7 AGI 自迴圈]
+  DS-V3 前 33 專家常駐 UMA (27 GB)
+  Flash Attention + NVMe 分頁
+  LoRA 梯度更新 + 蒸餾 JSONL 匯出
+```
 
 ---
 
-*最後更新: 2026-05-14*  
-*維護: LocalDeploy*
+*最後更新: 2026-06-26*  
+*維護: LocalDeploy*  
+*相關研究：[Spec-Experts LLM PhD Thesis (EN+ZH)](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf)*
