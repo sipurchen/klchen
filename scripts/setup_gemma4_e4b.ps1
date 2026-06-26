@@ -1,14 +1,18 @@
-# ============================================================================
+﻿# ============================================================================
 # Gemma 4 E4B - Automated Setup Script for Windows
 # Modified by ClaudeO - Complete download, Ollama integration, and API setup
 # ============================================================================
 # Purpose: Downloads Gemma 4 E4B (instruction-tuned, Q4_K_M GGUF quantized)
-#          to E:\Gemma4_E4B, configures Ollama, and starts the API server.
+#          to $env:LLMS_DIR\Gemma4_E4B (set LLMS_DIR or see config\paths.example.ps1).
 # Requirements: Windows 10/11, PowerShell 5.1+, ~3GB disk space
 # ============================================================================
 
+$_pathsCfg = Join-Path (Split-Path $PSScriptRoot -Parent) "config\paths.ps1"
+if (Test-Path $_pathsCfg) { . $_pathsCfg }
+$_LLMsDir = if ($env:LLMS_DIR) { $env:LLMS_DIR } else { Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) "LLMmodel" }
+
 param(
-    [string]$InstallDir = "E:\Gemma4_E4B",
+    [string]$InstallDir = "$_LLMsDir\Gemma4_E4B",
     [string]$OllamaModel = "gemma4:e4b",
     [string]$QuantType = "Q4_K_M",           # Balance of quality and memory
     [int]$ApiPort = 8000,

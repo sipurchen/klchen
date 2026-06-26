@@ -26,3 +26,11 @@ tests/assets/tts_direct_out.wav
 .env
 *.env
 secrets.*
+
+# Local machine paths (gitignored; copy from *.example.* and fill in)
+config/paths.ps1
+config/paths.py
+config/paths.sh
+
+# Claude Code local settings (machine-specific)
+.claude/settings.local.json

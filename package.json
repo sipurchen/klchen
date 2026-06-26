@@ -1,0 +1,12 @@
+{
+  "name": "gemma4-e4b-agents",
+  "version": "1.0.0",
+  "description": "Gemma 4 E4B AI Agent Framework - Modified by ClaudeO",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.21.0",
+    "axios": "^1.7.0",
+    "ws": "^8.18.0",
+    "node-fetch": "^3.3.0"
+  }
+}

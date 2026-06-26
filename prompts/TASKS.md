@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 # TASKS for Claude Sonnet 4.6 — Gemma4 E4B Project Gap Fixes
 # Created by: Claude Opus 4.6 after audit review (2026-04-06)
 # Priority: Fix gaps identified in comparison_report.md vs MASTER_PROMPT.md
@@ -10,8 +10,8 @@
 
 硬體：i5-4460 (4C/4T Haswell AVX2) | GT 1030 2GB GDDR5 (48 GB/s, sm_61) | 34GB DDR3
 系統：Windows 10 Pro | CUDA driver 13.0 (581.29) | Ollama v0.20.0
-模型庫路徑：`E:\LLMmodel\blobs` (Ollama GGUF blob 格式)
-專案路徑：`E:\Gemma4_E4B_Project`
+模型庫路徑：`\path\to\LLMs\blobs` (Ollama GGUF blob 格式)
+專案路徑：`\path\to\project`
 Git remote：`https://github.com/sipurchen/klchen.git` branch `BestSetupLLMs`
 
 ### 已完成
@@ -89,8 +89,8 @@ img.save("tests/assets/test_image.png")
 | Architecture | Dense with PLE | MoE 43-layer, 64 experts | 更新為 MoE |
 | RAM 需求 | ~3.3 GB | ~12+ GB | 更新 Memory 段落 |
 | Effective params | 4.5B | 8B (MoE total, ~2.7B active/token) | 更新 |
-| 專案路徑 | E:\Gemma4_E4B | E:\Gemma4_E4B_Project | 更新全文 |
-| 模型路徑 | E:\Gemma4_E4B\ollama_models | E:\LLMmodel | 更新 |
+| 專案路徑 | \path\to\LLMs\Gemma4_E4B | \path\to\project | 更新全文 |
+| 模型路徑 | \path\to\LLMs\Gemma4_E4B\ollama_models | \path\to\LLMs | 更新 |
 
 直接編輯 `prompts/MASTER_PROMPT.md`，修正上述所有數值。
 
@@ -182,7 +182,7 @@ Ollama 的 `n_gpu_layers=12` 是 **layer-level** 分割，不是 **tensor-level*
 ```powershell
 # 在 GitHub Releases 找到最新版 llama.cpp Windows + CUDA 12 binary
 # 檔名類似: llama-bXXXX-bin-win-cuda-cu12.4-x64.zip
-# 解壓到 E:\Gemma4_E4B_Project\bin\llama-cpp\
+# 解壓到 \path\to\project\bin\llama-cpp\
 
 # 驗證:
 .\bin\llama-cpp\llama-cli.exe --version
@@ -195,7 +195,7 @@ Ollama 的 `n_gpu_layers=12` 是 **layer-level** 分割，不是 **tensor-level*
 
 ```powershell
 # GGUF blob 路徑（直接用 Ollama 的 blob，它就是 GGUF）
-$GGUF = "E:\LLMmodel\blobs\sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a"
+$GGUF = "\path\to\LLMs\blobs\sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a"
 
 # 核心指令：expert FFN 放 CPU，其餘放 GPU
 .\bin\llama-cpp\llama-server.exe `
@@ -227,7 +227,7 @@ $GGUF = "E:\LLMmodel\blobs\sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c
 
 ```powershell
 # 用 llama-quantize 將 Q4_K_M 轉為 Q3_K_S（更小，更快）
-.\bin\llama-cpp\llama-quantize.exe $GGUF E:\LLMmodel\gemma4-e4b-q3ks.gguf Q3_K_S
+.\bin\llama-cpp\llama-quantize.exe $GGUF \path\to\LLMs\gemma4-e4b-q3ks.gguf Q3_K_S
 
 # 新模型大約 6-7 GB（vs 9.1GB）
 # Attention layers at Q3: ~0.9GB → 完全 fit 進 2GB VRAM
@@ -296,7 +296,7 @@ Ollama（服務 Gemma3 / DeepSeek）用 cores [2,3]，llama-server 用 cores [1,
 2. `python tests/generate_report.py` → 更新 comparison_report.md
 3. Git commit + push：
 ```bash
-cd E:\Gemma4_E4B_Project
+cd \path\to\project
 git add -A
 git commit -m "Fix empty responses, 10tok/s Gemma4 via llama-server -ot expert offloading"
 git push origin BestSetupLLMs
