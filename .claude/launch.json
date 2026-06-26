@@ -12,7 +12,7 @@
       "name": "llama-server (Gemma4 CPU-only)",
       "runtimeExecutable": "bin/llama-cpp/llama-server.exe",
       "runtimeArgs": [
-        "-m", "E:/LLMmodel/gemma4_textonly/google_gemma-4-E4B-it-Q4_K_M.gguf",
+        "-m", "/path/to/LLMs/gemma4_textonly/google_gemma-4-E4B-it-Q4_K_M.gguf",
         "-ngl", "0",
         "-c", "512",
         "-t", "4",

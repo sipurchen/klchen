@@ -103,7 +103,7 @@
       "Bash(timeout 25 python -c \":*)",
       "Read(//e/Ollama/**)",
       "Bash(1 ls:*)",
-      "Bash(\"E:/Ollama/ollama.exe\" runner:*)",
+      "Bash(\"ollama.exe\" runner:*)",
       "Bash(powershell -Command \"Get-Item ''\\path\\to\\LLMs\\\\gemma4_textonly\\\\google_gemma-4-E4B-it-Q4_K_M.gguf'' | Select-Object Length\")",
       "Bash(powershell -Command \"ollama show gemma4-e4b-opt --modelfile\")",
       "Bash(python -c ':*)",
