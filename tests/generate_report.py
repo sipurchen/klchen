@@ -184,7 +184,7 @@ def main():
     a(f"Ollama:        v0.20.0  (Gemma3 1B, DeepSeek-r1 1.5B)")
     a(f"llama-server:  b8679 Vulkan/CPU  (Gemma4 E4B text-only)")
     a(f"Gemma4 GGUF:   bartowski/google_gemma-4-E4B-it-Q4_K_M.gguf (5.03 GB)")
-    a(f"Ollama blobs:  E:\\LLMmodel\\blobs")
+    a(f"Ollama blobs:  \\path\\to\\LLMs\\blobs")
     a(f"```")
     a(f"")
 

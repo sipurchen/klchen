@@ -1,4 +1,4 @@
-"""
+﻿"""
 direct_llm.py — Flash-MoE style direct GGUF inference (no Ollama)
 
 Key techniques:
@@ -34,7 +34,7 @@ except ImportError:
     HAS_LLAMA_CPP = False
 
 # ─── GGUF blob paths (Ollama stores as raw GGUF with sha256 names) ─────────
-BLOB_DIR = Path("E:/LLMmodel/blobs")
+BLOB_DIR = Path("/path/to/LLMs/blobs")
 MODELS = {
     "gemma4-e4b": {
         "blob": "sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a",

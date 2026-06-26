@@ -1,4 +1,4 @@
-# Gemma4-E4B Local LLM Project
+﻿# Gemma4-E4B Local LLM Project
 
 > **在低規格硬體上運行大型語言模型的完整調校指南**  
 > Running Large Language Models on Budget Hardware — Full Optimization Guide
@@ -245,13 +245,13 @@ ollama pull deepseek-r1:1.5b
 # llama-server (已包含於 bin/llama-cpp/)
 # Gemma4 GGUF (需自行下載 5.03 GB)
 # https://huggingface.co/bartowski/google_gemma-4-E4B-it-GGUF
-# 儲存至: E:\LLMmodel\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf
+# 儲存至: \path\to\LLMs\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf
 ```
 
 ### 執行 Benchmark
 
 ```bash
-cd E:\Gemma4_E4B_Project
+cd \path\to\project
 python tests/benchmark_all_models.py
 # 結果輸出至 tests/benchmark_results.json
 
@@ -274,7 +274,7 @@ python api/gemma4_api_server.py
 ```bash
 # 純 CPU 模式 (GT 1030 無法使用 GPU)
 bin\llama-cpp\llama-server.exe \
-  -m "E:\LLMmodel\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf" \
+  -m "\path\to\LLMs\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf" \
   -ngl 0 -c 512 -t 4 -np 1 \
   --host 127.0.0.1 --port 8080
 

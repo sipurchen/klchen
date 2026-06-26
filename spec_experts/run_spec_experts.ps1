@@ -1,4 +1,4 @@
-# run_spec_experts.ps1
+﻿# run_spec_experts.ps1
 # Start Spec-Experts controller session
 # Standard env: Chrome+Edge closed, LINE open
 # Auto-shuts down after 2 hours idle (or via /shutdown endpoint)
@@ -10,7 +10,7 @@ param(
 
 chcp 65001 | Out-Null
 $ErrorActionPreference = "Stop"
-$ProjectDir = "E:\Gemma4_E4B_Project"
+$ProjectDir = "\path\to\project"
 $PythonExe  = "python"
 
 function Write-Step { param($n, $msg) Write-Host "[$n] $msg" -ForegroundColor Cyan }
@@ -40,11 +40,11 @@ Write-OK "Environment acceptable"
 # ── Step 2: verify models ─────────────────────────────────────────────────────
 Write-Step 2 "Checking available models"
 $models = @{
-    "Qwen3-1.7B"         = "E:\LLMmodel\Qwen3-1.7B"
-    "Qwen2.5-Coder-1.5B" = "E:\LLMmodel\Qwen2.5-Coder-1.5B"
-    "DeepSeek-R1-1.5B"   = "E:\LLMmodel\DeepSeek-R1-1.5B"
-    "Qwen2.5-Coder-3B"   = "E:\LLMmodel\Qwen2.5-Coder-3B"
-    "DS-Coder-V2-Lite"   = "E:\LLMmodel\DeepSeek-Coder-V2-Lite"
+    "Qwen3-1.7B"         = "\path\to\LLMs\Qwen3-1.7B"
+    "Qwen2.5-Coder-1.5B" = "\path\to\LLMs\Qwen2.5-Coder-1.5B"
+    "DeepSeek-R1-1.5B"   = "\path\to\LLMs\DeepSeek-R1-1.5B"
+    "Qwen2.5-Coder-3B"   = "\path\to\LLMs\Qwen2.5-Coder-3B"
+    "DS-Coder-V2-Lite"   = "\path\to\LLMs\DeepSeek-Coder-V2-Lite"
 }
 $missingModels = @()
 foreach ($name in $models.Keys) {
@@ -114,5 +114,5 @@ Write-Host "  Infer:     POST http://127.0.0.1:8090/infer"
 Write-Host "  Shutdown:  POST http://127.0.0.1:8090/shutdown"
 Write-Host "  Auto-off:  2 hours idle"
 Write-Host ""
-Write-Host "Run tests: python E:\Gemma4_E4B_Project\tests\spec_experts_test.py" -ForegroundColor Yellow
-Write-Host "Cleanup:   E:\Gemma4_E4B_Project\spec_experts\cleanup.ps1" -ForegroundColor Yellow
+Write-Host "Run tests: python \path\to\project\tests\spec_experts_test.py" -ForegroundColor Yellow
+Write-Host "Cleanup:   \path\to\project\spec_experts\cleanup.ps1" -ForegroundColor Yellow

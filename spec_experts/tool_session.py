@@ -1,4 +1,4 @@
-"""
+﻿"""
 Tool Session Manager
 Manages a single llama-server.exe instance at a time (hot-swap by chunk_type).
 GT 1030 850MB: can't run multiple servers simultaneously.
@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 LLAMA_SERVER = Path(__file__).parent.parent / "bin" / "llama-cpp" / "llama-server.exe"
-MODEL_BASE    = Path("E:/LLMmodel")
+MODEL_BASE    = Path("/path/to/LLMs")
 
 # Per-model configs (path, ngl) at 850MB standard baseline
 TOOL_MODELS = {

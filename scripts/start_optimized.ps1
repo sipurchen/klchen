@@ -1,4 +1,4 @@
-# Gemma 4 E4B - Optimized Startup Script (PowerShell)
+﻿# Gemma 4 E4B - Optimized Startup Script (PowerShell)
 # CPU-safe: Ollama locked to cores 2+3, num_thread=2 in Modelfile
 # Prevents 100% CPU saturation on i5-4460 (4-core)
 
@@ -14,7 +14,7 @@ Get-Process | Where-Object { $_.Name -like "*ollama*" } | Stop-Process -Force -E
 Start-Sleep 3
 
 # Environment variables
-$env:OLLAMA_MODELS           = "E:\LLMmodel"
+$env:OLLAMA_MODELS           = "\path\to\LLMs"
 $env:OLLAMA_HOST             = "0.0.0.0:11434"
 $env:OLLAMA_LOAD_TIMEOUT     = "20m"          # 9.6GB model needs >5min cold start
 $env:OLLAMA_KEEP_ALIVE       = $KeepAlive
@@ -32,7 +32,7 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  KV Cache Type    : $KvCacheType"       -ForegroundColor Green
 Write-Host "  Keep Alive       : $KeepAlive"          -ForegroundColor Green
 Write-Host "  Max loaded models: 1"                   -ForegroundColor Green
-Write-Host "  Models Path      : E:\LLMmodel"         -ForegroundColor Green
+Write-Host "  Models Path      : \path\to\LLMs"         -ForegroundColor Green
 Write-Host "  CPU affinity     : cores 2+3 (set below)" -ForegroundColor Yellow
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""

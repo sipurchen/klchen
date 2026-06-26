@@ -1,4 +1,4 @@
-{
+﻿{
   "permissions": {
     "allow": [
       "Bash(ollama --version)",
@@ -56,7 +56,7 @@
       "Bash(python -c \"import torch; print\\(''''CUDA:'''', torch.cuda.is_available\\(\\), torch.version.cuda\\)\")",
       "Bash(nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader)",
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(l[''''digest''''], l[''''mediaType''''], l.get\\(''''size'''',0\\)//1024//1024,''''MB''''\\) for l in d.get\\(''''layers'''',[]\\)]\")",
-      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(l[''''digest''''], l[''''mediaType''''], l.get\\(''''size'''',0\\)//1024//1024,''''MB''''\\) for l in d.get\\(''''layers'''',[]\\)]\" cat \"E:/LLMmodel/manifests/registry.ollama.ai/library/deepseek-r1/1.5b\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(l[''''digest''''], l[''''mediaType''''], l.get\\(''''size'''',0\\)//1024//1024,''''MB''''\\) for l in d.get\\(''''layers'''',[]\\)]\" cat \"/path/to/LLMs/manifests/registry.ollama.ai/library/deepseek-r1/1.5b\")",
       "Bash(where llama-cli:*)",
       "Bash(where llama.exe)",
       "Read(//c/Program Files/**)",
@@ -78,12 +78,12 @@
       "Bash(curl -s http://localhost:8000/v1/models)",
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(''''Agents:'''', len\\(d\\) if isinstance\\(d,list\\) else len\\(d.get\\(''''agents'''',[]\\)\\)\\)\")",
       "Bash(curl -s http://localhost:8080/health)",
-      "Bash(E:/Gemma4_E4B_Project/bin/llama-cpp/llama-server.exe --version)",
-      "Bash(E:/Gemma4_E4B_Project/bin/llama-cpp/llama-server.exe --help)",
-      "Bash(GGUF=\"E:/LLMmodel/blobs/sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a\" E:/Gemma4_E4B_Project/bin/llama-cpp/llama-server.exe -m \"$GGUF\" -ngl 999 --cpu-moe -c 512 -b 128 -t 3 --host 0.0.0.0 --port 8080)",
-      "Bash(GGUF=\"E:/LLMmodel/blobs/sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a\" E:/Gemma4_E4B_Project/bin/llama-cpp/llama-server.exe -m \"$GGUF\" -ngl 999 --cpu-moe -c 512 -b 128 -t 3 -fit off --host 0.0.0.0 --port 8080)",
-      "Bash(GGUF=\"E:/LLMmodel/blobs/sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a\" E:/Gemma4_E4B_Project/bin/llama-cpp/llama-mtmd-cli.exe -m \"$GGUF\" -ngl 999 --cpu-moe -c 512 -t 3 -p \"Say hello in one word.\" -n 5)",
-      "Bash(\"bin/llama-cpp/llama-mtmd-cli.exe\" -m \"E:/LLMmodel/gemma4_split/gemma4-e4b-00001-of-00003.gguf\" --mmproj \"E:/LLMmodel/gemma4_split/gemma4-e4b-00002-of-00003.gguf\" --cpu-moe -ngl 999 -c 256 -t 3 -p \"Say hello in one word.\" -n 5)",
+      "Bash(/path/to/project/bin/llama-cpp/llama-server.exe --version)",
+      "Bash(/path/to/project/bin/llama-cpp/llama-server.exe --help)",
+      "Bash(GGUF=\"/path/to/LLMs/blobs/sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a\" /path/to/project/bin/llama-cpp/llama-server.exe -m \"$GGUF\" -ngl 999 --cpu-moe -c 512 -b 128 -t 3 --host 0.0.0.0 --port 8080)",
+      "Bash(GGUF=\"/path/to/LLMs/blobs/sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a\" /path/to/project/bin/llama-cpp/llama-server.exe -m \"$GGUF\" -ngl 999 --cpu-moe -c 512 -b 128 -t 3 -fit off --host 0.0.0.0 --port 8080)",
+      "Bash(GGUF=\"/path/to/LLMs/blobs/sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a\" /path/to/project/bin/llama-cpp/llama-mtmd-cli.exe -m \"$GGUF\" -ngl 999 --cpu-moe -c 512 -t 3 -p \"Say hello in one word.\" -n 5)",
+      "Bash(\"bin/llama-cpp/llama-mtmd-cli.exe\" -m \"/path/to/LLMs/gemma4_split/gemma4-e4b-00001-of-00003.gguf\" --mmproj \"/path/to/LLMs/gemma4_split/gemma4-e4b-00002-of-00003.gguf\" --cpu-moe -ngl 999 -c 256 -t 3 -p \"Say hello in one word.\" -n 5)",
       "Bash(curl -s \"https://huggingface.co/api/models?search=gemma-4-e4b&limit=5\")",
       "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); [print\\(m[''''modelId'''']\\) for m in data]\")",
       "Bash(curl -s \"https://huggingface.co/api/models?search=gemma-4-e4b-it-GGUF&limit=10\")",
@@ -104,7 +104,7 @@
       "Read(//e/Ollama/**)",
       "Bash(1 ls:*)",
       "Bash(\"E:/Ollama/ollama.exe\" runner:*)",
-      "Bash(powershell -Command \"Get-Item ''E:\\\\LLMmodel\\\\gemma4_textonly\\\\google_gemma-4-E4B-it-Q4_K_M.gguf'' | Select-Object Length\")",
+      "Bash(powershell -Command \"Get-Item ''\\path\\to\\LLMs\\\\gemma4_textonly\\\\google_gemma-4-E4B-it-Q4_K_M.gguf'' | Select-Object Length\")",
       "Bash(powershell -Command \"ollama show gemma4-e4b-opt --modelfile\")",
       "Bash(python -c ':*)",
       "Bash(gh pr create --title 'Gemma4 E4B: llama-server backend + full benchmark pipeline' --body ':*)",

@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 # LLM Benchmark — CPU-Safe Sequential Runner
 # i5-4460 / GT 1030 / 34GB RAM
 #
@@ -31,7 +31,7 @@ except Exception:
 OLLAMA        = "http://localhost:11434"
 LLAMASERVER   = "http://localhost:8080"
 LLAMASERVER_EXE = Path(__file__).parent.parent / "bin/llama-cpp/llama-server.exe"
-GEMMA4_GGUF   = Path("E:/LLMmodel/gemma4_textonly/google_gemma-4-E4B-it-Q4_K_M.gguf")
+GEMMA4_GGUF   = Path("/path/to/LLMs/gemma4_textonly/google_gemma-4-E4B-it-Q4_K_M.gguf")
 ASSET_DIR     = Path(__file__).parent / "assets"
 OUT_FILE      = Path(__file__).parent / "benchmark_results.json"
 RESULTS       = {}
