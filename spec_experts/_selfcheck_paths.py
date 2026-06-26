@@ -25,6 +25,11 @@ ALLOWED_RE = re.compile(
 
 TEXT_EXTS = {'.py', '.ps1', '.sh', '.md', '.mjs', '.txt', '.json', '.yaml', '.yml'}
 SKIP_DIRS = {'.git', 'node_modules', '__pycache__', 'ollama_models', 'blobs'}
+# JSON/config files that intentionally use ${VAR} env-var syntax (not real paths)
+SKIP_FILES = {'.claude/launch.json', '.claude/settings.local.json',
+              'config/direct_inference.json', 'config/paths.example.ps1',
+              'config/paths.example.py',
+              'spec_experts/_selfcheck_paths.py'}  # selfcheck itself has regex literals
 
 def get_tracked_files():
     out = subprocess.check_output(['git', 'ls-files'], cwd=ROOT, text=True)
@@ -35,6 +40,9 @@ checked = 0
 
 for path in get_tracked_files():
     if any(part in SKIP_DIRS for part in path.parts):
+        continue
+    rel = str(path.relative_to(ROOT)).replace("\\", "/")
+    if rel in SKIP_FILES:
         continue
     if path.suffix.lower() not in TEXT_EXTS:
         continue

@@ -12,8 +12,32 @@ import httpx
 from dataclasses import dataclass
 from pathlib import Path
 
+import os as _os
+
 LLAMA_SERVER = Path(__file__).parent.parent / "bin" / "llama-cpp" / "llama-server.exe"
-MODEL_BASE    = Path("/path/to/LLMs")
+
+def _resolve_llms_dir() -> Path:
+    # 1. Explicit env var
+    if _os.environ.get("LLMS_DIR"):
+        return Path(_os.environ["LLMS_DIR"])
+    # 2. config/paths.py next to project root
+    try:
+        import importlib.util, sys as _sys
+        _cfg = Path(__file__).parent.parent / "config" / "paths.py"
+        if _cfg.exists():
+            _spec = importlib.util.spec_from_file_location("_local_paths", _cfg)
+            _mod  = importlib.util.module_from_spec(_spec)
+            _spec.loader.exec_module(_mod)
+            return Path(_mod.LLMS_DIR)
+    except Exception:
+        pass
+    # 3. Sibling dir heuristic (project/../LLMmodel)
+    _sibling = Path(__file__).parent.parent.parent / "LLMmodel"
+    if _sibling.exists():
+        return _sibling
+    raise RuntimeError("Cannot find LLMs directory. Set LLMS_DIR env var or create config/paths.py")
+
+MODEL_BASE = _resolve_llms_dir()
 
 # Per-model configs (path, ngl) at 850MB standard baseline
 TOOL_MODELS = {

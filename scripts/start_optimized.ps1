@@ -13,8 +13,13 @@ if ($AggressiveQuant) { $KvCacheType = "q4_0" }
 Get-Process | Where-Object { $_.Name -like "*ollama*" } | Stop-Process -Force -ErrorAction SilentlyContinue
 Start-Sleep 3
 
+# Load local paths config (gitignored) if present
+$_pathsCfg = Join-Path (Split-Path $PSScriptRoot -Parent) "config\paths.ps1"
+if (Test-Path $_pathsCfg) { . $_pathsCfg }
+$_LLMsDir = if ($env:LLMS_DIR) { $env:LLMS_DIR } else { Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) "LLMmodel" }
+
 # Environment variables
-$env:OLLAMA_MODELS           = "\path\to\LLMs"
+$env:OLLAMA_MODELS           = $_LLMsDir
 $env:OLLAMA_HOST             = "0.0.0.0:11434"
 $env:OLLAMA_LOAD_TIMEOUT     = "20m"          # 9.6GB model needs >5min cold start
 $env:OLLAMA_KEEP_ALIVE       = $KeepAlive
@@ -32,7 +37,7 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  KV Cache Type    : $KvCacheType"       -ForegroundColor Green
 Write-Host "  Keep Alive       : $KeepAlive"          -ForegroundColor Green
 Write-Host "  Max loaded models: 1"                   -ForegroundColor Green
-Write-Host "  Models Path      : \path\to\LLMs"         -ForegroundColor Green
+Write-Host "  Models Path      : $_LLMsDir"              -ForegroundColor Green
 Write-Host "  CPU affinity     : cores 2+3 (set below)" -ForegroundColor Yellow
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""

@@ -10,7 +10,15 @@ param(
 
 chcp 65001 | Out-Null
 $ErrorActionPreference = "Stop"
-$ProjectDir = "\path\to\project"
+
+# Derive project root from this script's own location (spec_experts/ -> parent)
+$ProjectDir = Split-Path $PSScriptRoot -Parent
+
+# Load local paths config if present (gitignored), else fall back to env vars
+$_pathsCfg = Join-Path $ProjectDir "config\paths.ps1"
+if (Test-Path $_pathsCfg) { . $_pathsCfg }
+$LLMsDir = if ($env:LLMS_DIR) { $env:LLMS_DIR } else { Join-Path (Split-Path $ProjectDir -Parent) "LLMmodel" }
+
 $PythonExe  = "python"
 
 function Write-Step { param($n, $msg) Write-Host "[$n] $msg" -ForegroundColor Cyan }
@@ -40,11 +48,11 @@ Write-OK "Environment acceptable"
 # ── Step 2: verify models ─────────────────────────────────────────────────────
 Write-Step 2 "Checking available models"
 $models = @{
-    "Qwen3-1.7B"         = "\path\to\LLMs\Qwen3-1.7B"
-    "Qwen2.5-Coder-1.5B" = "\path\to\LLMs\Qwen2.5-Coder-1.5B"
-    "DeepSeek-R1-1.5B"   = "\path\to\LLMs\DeepSeek-R1-1.5B"
-    "Qwen2.5-Coder-3B"   = "\path\to\LLMs\Qwen2.5-Coder-3B"
-    "DS-Coder-V2-Lite"   = "\path\to\LLMs\DeepSeek-Coder-V2-Lite"
+    "Qwen3-1.7B"         = "$LLMsDir\Qwen3-1.7B"
+    "Qwen2.5-Coder-1.5B" = "$LLMsDir\Qwen2.5-Coder-1.5B"
+    "DeepSeek-R1-1.5B"   = "$LLMsDir\DeepSeek-R1-1.5B"
+    "Qwen2.5-Coder-3B"   = "$LLMsDir\Qwen2.5-Coder-3B"
+    "DS-Coder-V2-Lite"   = "$LLMsDir\DeepSeek-Coder-V2-Lite"
 }
 $missingModels = @()
 foreach ($name in $models.Keys) {
@@ -114,5 +122,5 @@ Write-Host "  Infer:     POST http://127.0.0.1:8090/infer"
 Write-Host "  Shutdown:  POST http://127.0.0.1:8090/shutdown"
 Write-Host "  Auto-off:  2 hours idle"
 Write-Host ""
-Write-Host "Run tests: python \path\to\project\tests\spec_experts_test.py" -ForegroundColor Yellow
-Write-Host "Cleanup:   \path\to\project\spec_experts\cleanup.ps1" -ForegroundColor Yellow
+Write-Host "Run tests: python $ProjectDir\tests\spec_experts_test.py" -ForegroundColor Yellow
+Write-Host "Cleanup:   $ProjectDir\spec_experts\cleanup.ps1" -ForegroundColor Yellow

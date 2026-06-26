@@ -31,7 +31,14 @@ except Exception:
 OLLAMA        = "http://localhost:11434"
 LLAMASERVER   = "http://localhost:8080"
 LLAMASERVER_EXE = Path(__file__).parent.parent / "bin/llama-cpp/llama-server.exe"
-GEMMA4_GGUF   = Path("/path/to/LLMs/gemma4_textonly/google_gemma-4-E4B-it-Q4_K_M.gguf")
+def _llms_dir() -> Path:
+    import os
+    if os.environ.get("LLMS_DIR"):
+        return Path(os.environ["LLMS_DIR"])
+    s = Path(__file__).parent.parent.parent / "LLMmodel"
+    return s if s.exists() else Path(__file__).parent.parent / "LLMmodel"
+
+GEMMA4_GGUF   = _llms_dir() / "gemma4_textonly" / "google_gemma-4-E4B-it-Q4_K_M.gguf"
 ASSET_DIR     = Path(__file__).parent / "assets"
 OUT_FILE      = Path(__file__).parent / "benchmark_results.json"
 RESULTS       = {}

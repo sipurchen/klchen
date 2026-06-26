@@ -6,7 +6,8 @@
   "cuda_version": "11.8",
   "gpu": "NVIDIA GeForce GT 1030 (sm_61, 2GB VRAM)",
 
-  "blob_root": "/path/to/LLMs/blobs",
+  "_blob_root_note": "Resolved at runtime from LLMS_DIR env var or config/paths.py. Do not hardcode.",
+  "blob_root": "${LLMS_DIR}/blobs",
 
   "models": {
     "gemma4-e4b": {

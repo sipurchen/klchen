@@ -34,7 +34,16 @@ except ImportError:
     HAS_LLAMA_CPP = False
 
 # ─── GGUF blob paths (Ollama stores as raw GGUF with sha256 names) ─────────
-BLOB_DIR = Path("/path/to/LLMs/blobs")
+def _llms_dir() -> Path:
+    import os
+    if os.environ.get("LLMS_DIR"):
+        return Path(os.environ["LLMS_DIR"])
+    sibling = Path(__file__).parent.parent.parent / "LLMmodel"
+    if sibling.exists():
+        return sibling
+    raise RuntimeError("Set LLMS_DIR env var or create config/paths.py")
+
+BLOB_DIR = _llms_dir() / "blobs"
 MODELS = {
     "gemma4-e4b": {
         "blob": "sha256-4c27e0f5b5adf02ac956c7322bd2ee7636fe3f45a8512c9aba5385242cb6e09a",
