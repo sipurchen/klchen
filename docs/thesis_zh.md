@@ -85,7 +85,7 @@ Token 困惑度及滑動窗口 z 分數：
 
 $$\text{PPL}_i = \exp(-\text{logprob}_i), \quad z_i = \frac{\text{PPL}_i - \hat{\mu}_{W}}{\hat{\sigma}_{W} + \varepsilon}$$
 
-GT 1030 實測邊界訊號強度（Qwen3-1.7B，$z_\theta = 2.0$）：
+GT 1030 實測邊界訊號強度（Qwen3-1.7B，$z_{\theta} = 2.0$）：
 
 | 轉換 | z 分數 | 超閾值倍數 |
 |------|--------|----------|
