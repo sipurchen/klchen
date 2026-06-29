@@ -85,7 +85,7 @@ Token perplexity and sliding-window z-score:
 
 $$\text{PPL}_i = \exp(-\text{logprob}_i), \quad z_i = \frac{\text{PPL}_i - \hat{\mu}_{W}}{\hat{\sigma}_{W} + \varepsilon}$$
 
-Observed boundary magnitudes (GT 1030, Qwen3-1.7B, $z_\theta = 2.0$):
+Observed boundary magnitudes (GT 1030, Qwen3-1.7B, $z_{\theta} = 2.0$):
 
 | Transition | z-score | Ratio to threshold |
 |------------|---------|-------------------|
