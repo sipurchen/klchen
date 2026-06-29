@@ -165,7 +165,7 @@ llama-server :8080 SSE
 
 $$\text{boundary-entropy}(i) = \mathbb{1}\!\left[\bar{H}_{i-W:i} - H_i > \theta_H\right], \quad W=8,\; \theta_H=0.35$$
 
-即時實驗：tok 45 處偵測到邊界，$\Delta H = 0.41 > 0.35$；吞吐量 5.1 tok/s。
+即時實驗：tok 45 處偵測到邊界，$\Delta H = 0.41 > \theta_H = 0.35$；吞吐量 5.1 tok/s。
 
 ### 3.4 困惑度尖峰監控器（priority=3）
 
