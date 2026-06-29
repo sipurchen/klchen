@@ -83,7 +83,7 @@ where $\ell_j$ are top-$k$ logprobs from llama-server's `n_probs` endpoint.
 
 Token perplexity and sliding-window z-score:
 
-$$\text{PPL}_i = \exp(-\text{logprob}_i), \quad z_i = \frac{\text{PPL}_i - \hat\mu_W}{\hat\sigma_W + \varepsilon}$$
+$$\text{PPL}_i = \exp(-\text{logprob}_i), \quad z_i = \frac{\text{PPL}_i - \hat{\mu}_{W}}{\hat{\sigma}_{W} + \varepsilon}$$
 
 Observed boundary magnitudes (GT 1030, Qwen3-1.7B, $z_\theta = 2.0$):
 
@@ -163,23 +163,23 @@ Results: 4 boundaries (CoT+code sample); 6 boundaries (mixed sample). 100% recal
 
 ### 3.3 Entropy Monitor (priority = 5)
 
-$$\text{boundary\_entropy}(i) = \mathbb{1}\!\left[\bar H_{i-W:i} - H_i > \theta_H\right], \quad W=8, \theta_H=0.35$$
+$$\text{boundary-entropy}(i) = \mathbb{1}\!\left[\bar{H}_{i-W:i} - H_i > \theta_H\right], \quad W=8,\; \theta_H=0.35$$
 
 Live experiment: boundary at tok 45, $\Delta H = 0.41 > 0.35$. Throughput 5.1 tok/s.
 
 ### 3.4 Perplexity Spike Monitor (priority = 3)
 
-$$\text{boundary\_ppl}(i) = \mathbb{1}[z_i > z_\theta], \quad z_\theta = 2.0, W=10$$
+$$\text{boundary-ppl}(i) = \mathbb{1}[z_i > z_{\theta}], \quad z_{\theta} = 2.0,\; W=10$$
 
 6 spike events detected; both semantic transitions captured.
 
 ### 3.5 Signal Fusion
 
 Priority ordering:
-$$\text{role\_tag}(10) \succ \text{entropy\_drop}(5) \succ \text{perplexity\_spike}(3)$$
+$$\text{role-tag}(10) \succ \text{entropy-drop}(5) \succ \text{perplexity-spike}(3)$$
 
 Hysteresis:
-$$\text{emit}(c_i) \iff \left|i - i_{\text{last}}\right| \geq W_m \;\land\; \left[\text{role\_tag} \;\lor\; \left|\mathcal{C}_i^{W_m}\right| \geq 2\right], \quad W_m = 12$$
+$$\text{emit}(c_i) \iff \left|i - i_{\text{last}}\right| \geq W_m \;\land\; \left[\text{role-tag} \;\lor\; \left|\mathcal{C}_i^{W_m}\right| \geq 2\right], \quad W_m = 12$$
 
 Experiment (P1.3): 4 boundaries from 6 candidates; role\_tag boundaries at tok 52 and 150 bypassed hysteresis and emitted immediately; entropy+perplexity cluster at tok 45 and 90 met the $\geq 2$ cluster vote condition.
 
@@ -399,13 +399,13 @@ High-quality samples exported as training-ready JSONL:
 
 $$q_t^{(a)} = \alpha \cdot q_{\text{new}} + (1-\alpha) \cdot q_{t-1}^{(a)}, \quad \alpha = 0.3$$
 
-Experiment: quality trend slope $\hat\beta = +0.030/\text{iter}$ over 6 iterations (0.60 → 0.75).
+Experiment: quality trend slope $\hat{\beta} = +0.030/\text{iter}$ over 6 iterations (0.60 → 0.75).
 
 ### 9.5 Quality Trend (Linear Regression)
 
-$$\hat\beta = \frac{\sum_i (i-\bar i)(q_i-\bar q)}{\sum_i (i-\bar i)^2}$$
+$$\hat{\beta} = \frac{\sum_i (i-\bar{i})(q_i-\bar{q})}{\sum_i (i-\bar{i})^2}$$
 
-Positive $\hat\beta$ confirms self-improvement; negative triggers adapter pool refresh.
+Positive $\hat{\beta}$ confirms self-improvement; negative triggers adapter pool refresh.
 
 ---
 
