@@ -165,7 +165,7 @@ Results: 4 boundaries (CoT+code sample); 6 boundaries (mixed sample). 100% recal
 
 $$\text{boundary\_entropy}(i) = \mathbb{1}\!\left[\bar H_{i-W:i} - H_i > \theta_H\right], \quad W=8, \theta_H=0.35$$
 
-Live experiment: boundary at tok 45, $\Delta H = 0.41 > 0.35$. Throughput 5.1 tok/s.
+Live experiment: boundary at tok 45, $\Delta H = 0.41 > \theta_H = 0.35$. Throughput 5.1 tok/s.
 
 ### 3.4 Perplexity Spike Monitor (priority = 3)
 
