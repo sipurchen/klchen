@@ -166,18 +166,53 @@ class ExpertRAMPool:
 
     def advise_prefetch(self, model_path: Path, expert_ids: list[int]):
         """
-        Issue madvise(MADV_WILLNEED) for expert weight pages.
-        Requires the GGUF file to be mmap'd; approximates offset via
-        expert_id * expert_size_bytes.
+        Issue OS-level prefetch hints for expert weight pages.
+        Approximates byte offsets via expert_id * expert_size_bytes.
+        Returns list of (offset, size) tuples that were targeted.
         """
         if not model_path.exists():
-            return
+            raise FileNotFoundError(f"Model not found: {model_path}")
         expert_bytes = int(self.cfg.expert_size_mb * 1024 * 1024)
         offsets = [(eid * expert_bytes, expert_bytes) for eid in expert_ids]
-        # On Windows, use PrefetchVirtualMemory or CreateFile+ReadFile hints
-        # On Linux: madvise with MADV_WILLNEED
-        # Here we just log the intent (actual madvise requires ctypes on Linux)
-        return [(off, size) for off, size in offsets]
+        import sys, ctypes
+        if sys.platform == "win32":
+            self._prefetch_windows(model_path, offsets)
+        elif sys.platform.startswith("linux"):
+            self._prefetch_linux(model_path, offsets)
+        return offsets
+
+    def _prefetch_windows(self, model_path: Path, offsets: list[tuple[int, int]]):
+        """ReadFile hint via overlapped I/O on Windows."""
+        import ctypes, ctypes.wintypes
+        GENERIC_READ = 0x80000000
+        FILE_SHARE_READ = 0x00000001
+        OPEN_EXISTING = 3
+        FILE_FLAG_SEQUENTIAL_SCAN = 0x08000000
+        kernel32 = ctypes.windll.kernel32
+        h = kernel32.CreateFileW(
+            str(model_path), GENERIC_READ, FILE_SHARE_READ,
+            None, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, None
+        )
+        if h == ctypes.wintypes.HANDLE(-1).value:
+            return  # can't open; skip
+        buf = ctypes.create_string_buffer(65536)
+        read = ctypes.wintypes.DWORD(0)
+        for off, size in offsets:
+            kernel32.SetFilePointerEx(h, off, None, 0)
+            kernel32.ReadFile(h, buf, min(size, 65536), ctypes.byref(read), None)
+        kernel32.CloseHandle(h)
+
+    def _prefetch_linux(self, model_path: Path, offsets: list[tuple[int, int]]):
+        """madvise(MADV_WILLNEED) on Linux via mmap + ctypes."""
+        import mmap, ctypes
+        MADV_WILLNEED = 3
+        libc = ctypes.CDLL("libc.so.6", use_errno=True)
+        with open(model_path, "rb") as f:
+            with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+                addr = ctypes.c_char_p(mm).value
+                for off, size in offsets:
+                    if off + size <= len(mm):
+                        libc.madvise(ctypes.c_char_p(mm[off:off+1]), size, MADV_WILLNEED)
 
     def stats(self) -> dict:
         with self._lock:

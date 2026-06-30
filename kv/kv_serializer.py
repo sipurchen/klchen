@@ -64,8 +64,14 @@ def load_kv_chunk(session_id: str, chunk_id: int, role: str) -> np.ndarray | Non
         f.read(16)  # session_id
         f.read(4)   # chunk_id
         f.read(2); f.read(2)  # layer_start, layer_end
-        dtype_code, shape_len = struct.unpack("<HH", f.read(4))
-        shape = struct.unpack(f"<{shape_len}I", f.read(shape_len * 4))
+        hdr = f.read(4)
+        if len(hdr) < 4:
+            raise ValueError(f"Truncated .kvbin header in {path}")
+        dtype_code, shape_len = struct.unpack("<HH", hdr)
+        shape_bytes = f.read(shape_len * 4)
+        if len(shape_bytes) < shape_len * 4:
+            raise ValueError(f"Truncated shape data in {path}")
+        shape = struct.unpack(f"<{shape_len}I", shape_bytes)
         dtype = np.float16 if dtype_code == 1 else np.float32
         data = np.frombuffer(f.read(), dtype=dtype).reshape(shape)
     return data
