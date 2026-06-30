@@ -83,9 +83,9 @@ $$H(\mathbf{p}) = -\sum_{j=1}^k \tilde{p}_j \log_2 \tilde{p}_j, \quad \tilde{p}_
 
 Token 困惑度及滑動窗口 z 分數：
 
-$$\text{PPL}_i = \exp(-\text{logprob}_i), \quad z_i = \frac{\text{PPL}_i - \hat\mu_W}{\hat\sigma_W + \varepsilon}$$
+$$\text{PPL}_i = \exp(-\text{logprob}_i), \quad z_i = \frac{\text{PPL}_i - \hat{\mu}_{W}}{\hat{\sigma}_{W} + \varepsilon}$$
 
-GT 1030 實測邊界訊號強度（Qwen3-1.7B，$z_\theta = 2.0$）：
+GT 1030 實測邊界訊號強度（Qwen3-1.7B，$z_{\theta} = 2.0$）：
 
 | 轉換 | z 分數 | 超閾值倍數 |
 |------|--------|----------|
@@ -163,13 +163,13 @@ llama-server :8080 SSE
 
 ### 3.3 熵監控器（priority=5）
 
-$$\text{boundary\_entropy}(i) = \mathbb{1}\!\left[\bar H_{i-W:i} - H_i > \theta_H\right], \quad W=8, \theta_H=0.35$$
+$$\text{boundary-entropy}(i) = \mathbb{1}\!\left[\bar{H}_{i-W:i} - H_i > \theta_H\right], \quad W=8,\; \theta_H=0.35$$
 
 即時實驗：tok 45 處偵測到邊界，ΔH = 0.41 > θ_H = 0.35；吞吐量 5.1 tok/s。
 
 ### 3.4 困惑度尖峰監控器（priority=3）
 
-$$\text{boundary\_ppl}(i) = \mathbb{1}[z_i > z_\theta], \quad z_\theta = 2.0, W=10$$
+$$\text{boundary-ppl}(i) = \mathbb{1}[z_i > z_{\theta}], \quad z_{\theta} = 2.0,\; W=10$$
 
 偵測到 6 個尖峰事件；捕捉到兩個語義轉換點。
 
@@ -177,11 +177,11 @@ $$\text{boundary\_ppl}(i) = \mathbb{1}[z_i > z_\theta], \quad z_\theta = 2.0, W=
 
 優先權排序：
 
-$$\text{role\_tag}(10) \succ \text{entropy\_drop}(5) \succ \text{perplexity\_spike}(3)$$
+$$\text{role-tag}(10) \succ \text{entropy-drop}(5) \succ \text{perplexity-spike}(3)$$
 
 遲滯發射規則：
 
-$$\text{emit}(c_i) \iff \left|i - i_{\text{last}}\right| \geq W_m \;\land\; \left[\text{role\_tag} \;\lor\; \left|\mathcal{C}_i^{W_m}\right| \geq 2\right], \quad W_m = 12$$
+$$\text{emit}(c_i) \iff \left|i - i_{\text{last}}\right| \geq W_m \;\land\; \left[\text{role-tag} \;\lor\; \left|\mathcal{C}_i^{W_m}\right| \geq 2\right], \quad W_m = 12$$
 
 實驗（P1.3）：從 6 個候選項發射 4 個邊界；tok 52 和 150 的 role\_tag 邊界繞過遲滯立即發射；tok 45 和 90 的熵+困惑度群集滿足 ≥2 投票條件。
 
@@ -405,9 +405,9 @@ $$q_t^{(a)} = \alpha \cdot q_{\text{new}} + (1-\alpha) \cdot q_{t-1}^{(a)}, \qua
 
 ### 9.5 品質趨勢檢測（線性迴歸）
 
-$$\hat\beta = \frac{\sum_i (i-\bar i)(q_i-\bar q)}{\sum_i (i-\bar i)^2}$$
+$$\hat{\beta} = \frac{\sum_i (i-\bar{i})(q_i-\bar{q})}{\sum_i (i-\bar{i})^2}$$
 
-實驗結果：P7 示範中，$\hat\beta = +0.030/\text{iter}$（改善中），6 次迭代品質從 0.60 提升至 0.75。
+實驗結果：P7 示範中，$\hat{\beta} = +0.030/\text{iter}$（改善中），6 次迭代品質從 0.60 提升至 0.75。
 
 ---
 
