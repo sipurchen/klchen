@@ -204,7 +204,10 @@ class ToolSessionManager:
                     json={"messages": messages, "max_tokens": 1024, "stream": False},
                 )
                 data = r.json()
-                return data["choices"][0]["message"]["content"]
+                choices = data.get("choices", [])
+                if not choices:
+                    return None
+                return choices[0].get("message", {}).get("content", "")
             except Exception as e:
                 print(f"[ToolSession] infer error: {e}")
                 return None
