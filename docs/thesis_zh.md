@@ -1,8 +1,11 @@
 # Spec-Experts LLM：七階段語義邊界偵測、動態專家路由與自強化推理架構——資源受限硬體上的大型語言模型本地部署研究
 
-**作者：** LocalDeploy  
+**主要作者：** LocalDeploy  
+**AI 協同作者：** Claude Sonnet（Anthropic）· OpenAI Codex · Google Gemini Flash  
 **研究庫：** https://github.com/sipurchen/klchen · 分支：`SpecExpertsResearch`  
 **日期：** 2026-06-26  
+
+> *本研究透過人機迭代協作開發完成。LocalDeploy 主導所有研究目標、硬體實驗及架構決策。Claude Sonnet（Anthropic）參與系統設計、程式實作、論文撰寫及專利起草。OpenAI Codex 協助程式碼生成與重構。Google Gemini Flash 提供快速原型驗證支援。*  
 
 ---
 
