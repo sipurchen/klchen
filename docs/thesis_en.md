@@ -77,7 +77,7 @@ where $\ell_j$ are top-$k$ logprobs from llama-server's `n_probs` endpoint.
 
 - **Low $H$:** deterministic → code, structured output
 - **High $H$:** diffuse → reasoning, creative
-- **Drop $\Delta H > \theta_H$:** semantic state transition
+- **Drop ΔH > θ_H:** semantic state transition
 
 ### 2.3 Perplexity Z-score
 
@@ -165,7 +165,7 @@ Results: 4 boundaries (CoT+code sample); 6 boundaries (mixed sample). 100% recal
 
 $$\text{boundary\_entropy}(i) = \mathbb{1}\!\left[\bar H_{i-W:i} - H_i > \theta_H\right], \quad W=8, \theta_H=0.35$$
 
-Live experiment: boundary at tok 45, $\Delta H = 0.41 > \theta_H = 0.35$. Throughput 5.1 tok/s.
+Live experiment: boundary at tok 45, ΔH = 0.41 > θ_H = 0.35. Throughput 5.1 tok/s.
 
 ### 3.4 Perplexity Spike Monitor (priority = 3)
 
@@ -198,7 +198,7 @@ $$\text{ctx}_{\text{eff}} = N_{\text{VRAM}} + N_{\text{RAM}} + N_{\text{disk}} \
 
 $$\text{cost}_{\text{evict}}(C_i) = \frac{\text{age}(C_i) \cdot \text{size}(C_i)}{\pi(C_i)}$$
 
-Priority weights: $\pi(\text{code})=1.5 > \pi(\text{factual})=1.2 > \pi(\text{creative})=0.8 > \pi(\text{reasoning})=0.5$.
+Priority weights: π(code)=1.5 > π(factual)=1.2 > π(creative)=0.8 > π(reasoning)=0.5.
 
 Code chunks are retained longest (high re-access probability); reasoning chunks are evicted first.
 
