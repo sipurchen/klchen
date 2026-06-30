@@ -225,7 +225,8 @@ class AGISelfLoop:
                     json=payload,
                 )
                 data = r.json()
-            content = data["choices"][0]["message"].get("content", "")
+            choices = data.get("choices", [])
+            content = choices[0].get("message", {}).get("content", "") if choices else ""
             elapsed = time.time() - t0
             tokens = len(content.split())
             tok_s = tokens / elapsed if elapsed > 0 else 0

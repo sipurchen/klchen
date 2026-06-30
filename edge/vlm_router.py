@@ -90,7 +90,10 @@ class VLMRouter:
 
     def encode_image(self, image_path: str) -> str:
         """Encode image to base64 for llama.cpp /completion with image."""
-        with open(image_path, "rb") as f:
+        p = Path(image_path)
+        if not p.exists():
+            raise FileNotFoundError(f"Image not found: {image_path}")
+        with open(p, "rb") as f:
             return base64.b64encode(f.read()).decode()
 
     async def vision_infer(

@@ -77,11 +77,11 @@ class EntropyMonitor:
                         continue
 
                     token_probs = data.get("completion_probabilities", [])
-                    if not token_probs:
+                    if not token_probs or not isinstance(token_probs[0], dict):
                         self._token_index += 1
                         continue
 
-                    logprobs = [p["logprob"] for p in token_probs[0].get("probs", [])]
+                    logprobs = [p["logprob"] for p in token_probs[0].get("probs", []) if isinstance(p, dict) and "logprob" in p]
                     if not logprobs:
                         self._token_index += 1
                         continue
