@@ -1,8 +1,11 @@
 # Spec-Experts LLM: A Seven-Phase Architecture for Semantic Boundary Detection, Dynamic Expert Routing, and Self-Reinforcing Inference on Resource-Constrained Hardware
 
-**Author:** LocalDeploy  
+**Lead Author:** LocalDeploy  
+**AI Co-Authors:** Claude Sonnet (Anthropic) · OpenAI Codex · Google Gemini Flash  
 **Repository:** https://github.com/sipurchen/klchen · Branch: `SpecExpertsResearch`  
 **Date:** 2026-06-26  
+
+> *This work was developed through iterative human–AI collaboration. LocalDeploy directed all research objectives, hardware experiments, and architectural decisions. Claude Sonnet (Anthropic) contributed to system design, implementation, thesis writing, and patent drafting. OpenAI Codex assisted with code generation and refactoring. Google Gemini Flash provided rapid prototyping and validation support.*  
 
 ---
 
