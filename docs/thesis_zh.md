@@ -77,7 +77,7 @@ $$H(\mathbf{p}) = -\sum_{j=1}^k \tilde{p}_j \log_2 \tilde{p}_j, \quad \tilde{p}_
 
 - **低 $H$：** 確定性生成 → 程式碼、結構化輸出
 - **高 $H$：** 擴散性生成 → 推理、創意
-- **驟降 $\Delta H > \theta_H$：** 語義狀態轉換
+- **驟降 ΔH > θ_H：** 語義狀態轉換
 
 ### 2.3 困惑度 Z 分數
 
@@ -165,7 +165,7 @@ llama-server :8080 SSE
 
 $$\text{boundary-entropy}(i) = \mathbb{1}\!\left[\bar{H}_{i-W:i} - H_i > \theta_H\right], \quad W=8,\; \theta_H=0.35$$
 
-即時實驗：tok 45 處偵測到邊界，$\Delta H = 0.41 > \theta_H = 0.35$；吞吐量 5.1 tok/s。
+即時實驗：tok 45 處偵測到邊界，ΔH = 0.41 > θ_H = 0.35；吞吐量 5.1 tok/s。
 
 ### 3.4 困惑度尖峰監控器（priority=3）
 
@@ -201,7 +201,7 @@ $$\text{ctx}_{\text{eff}} = N_{\text{VRAM}} + N_{\text{RAM}} + N_{\text{disk}} \
 
 $$\text{cost}_{\text{evict}}(C_i) = \frac{\text{age}(C_i) \cdot \text{size}(C_i)}{\pi(C_i)}$$
 
-優先權權重：$\pi(\text{code})=1.5 > \pi(\text{factual})=1.2 > \pi(\text{creative})=0.8 > \pi(\text{reasoning})=0.5$
+優先權權重：π(code)=1.5 > π(factual)=1.2 > π(creative)=0.8 > π(reasoning)=0.5
 
 程式碼區塊保留最長（重存取機率高）；推理區塊最先驅逐。
 
