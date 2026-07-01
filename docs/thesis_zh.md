@@ -5,7 +5,7 @@
 **研究庫：** https://github.com/sipurchen/klchen · 分支：`SpecExpertsResearch`  
 **日期：** 2026-06-26  
 
-> *本研究透過人機迭代協作開發完成。LocalDeploy 主導所有研究目標、硬體實驗及架構決策。Claude Sonnet（Anthropic）參與系統設計、程式實作、論文撰寫及專利起草。OpenAI Codex 協助程式碼生成與重構。Google Gemini Flash 提供快速原型驗證支援。*  
+> *本研究透過人機迭代協作開發完成。SipurChen 主導所有研究目標、硬體實驗及架構決策。Claude Sonnet（Anthropic）參與系統設計、程式實作、論文撰寫及專利起草。OpenAI Codex 協助程式碼生成與重構。Google Gemini Flash 提供快速原型驗證支援。*  
 
 ---
 
