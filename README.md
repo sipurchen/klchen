@@ -36,12 +36,12 @@
 | 偵測器 | 優先權 | 訊號 | 閾值 |
 |-------|------|------|-----|
 | 角色標籤有限狀態機（`<think>`, ` ``` `, `# `） | 10（最高） | 確定性，立即發射 | 無 |
-| Shannon 熵驟降監控器 | 5 | $\Delta H > \theta_H$ | $\theta_H = 0.35$, 窗口 $W=8$ |
-| 困惑度 z 分數尖峰監控器 | 3 | $z_i > z_\theta$ | $z_\theta = 2.0$, 窗口 $W=10$ |
+| Shannon 熵驟降監控器 | 5 | ΔH > θ_H | θ_H = 0.35, 窗口 W=8 |
+| 困惑度 z 分數尖峰監控器 | 3 | z_i > z_θ | z_θ = 2.0, 窗口 W=10 |
 
 **訊號融合規則：**
 
-$$\text{emit}(c_i) \iff |i - i_{\text{last}}| \geq W_m \;\land\; [\text{role\_tag} \;\lor\; |\mathcal{C}_i^{W_m}| \geq 2], \quad W_m = 12$$
+$$\text{emit}(c_i) \iff |i - i_{\text{last}}| \geq W_m \;\land\; [\text{role-tag} \;\lor\; |\mathcal{C}_i^{W_m}| \geq 2], \quad W_m = 12$$
 
 **實測結果（Qwen3-1.7B，GT 1030）：**
 - PPL z 分數峰值：4.3 至 407.2（境界轉換高達 204×閾值）
@@ -166,7 +166,7 @@ llama-server --model /path/to/deepseek-v3.gguf \
 
 **高品質樣本（Q ≥ 0.7）匯出為 JSONL 訓練數據**
 
-**品質趨勢（6 次迭代示範）：** +0.030/iter（0.60 → 0.75，線性迴歸 $\hat\beta > 0$）
+**品質趨勢（6 次迭代示範）：** +0.030/iter（0.60 → 0.75，線性迴歸 β̂ > 0）
 
 ---
 
