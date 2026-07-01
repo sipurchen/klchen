@@ -391,5 +391,5 @@ else:
 ---
 
 *最後更新: 2026-06-26*  
-*維護: LocalDeploy*  
+*維護: SipurChen*  
 *相關研究：[Spec-Experts LLM PhD Thesis (EN+ZH)](https://gist.github.com/sipurchen/53f3a0908e6ff6bd2c05fbb1bfd04adf)*

@@ -347,4 +347,4 @@ Mac Mini M4 32GB:
 ---
 
 *最後更新: 2026-05-14*  
-*維護: LocalDeploy*
+*維護: SipurChen*
