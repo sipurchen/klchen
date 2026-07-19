@@ -269,7 +269,7 @@ Gemma4_E4B_Project/
 ├── api/
 │   ├── gemma4_api_server.py      # FastAPI OpenAI-compatible server
 │   └── gemma4_client.py          # Python client
-└── bin/llama-cpp/                 # llama-server b8679 Vulkan Windows binary
+└── bin/llama-cpp/                 # llama-server b8679 Vulkan Windows binary (download: bin/README.md)
 ```
 
 ---

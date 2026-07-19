@@ -34,3 +34,8 @@ config/paths.sh
 
 # Claude Code local settings (machine-specific)
 .claude/settings.local.json
+
+# llama.cpp prebuilt binaries (56MB+, unmodified upstream release) —
+# download via bin/README.md instead of tracking in git
+bin/*.zip
+bin/llama-cpp/
