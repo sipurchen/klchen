@@ -26,3 +26,9 @@ tests/assets/tts_direct_out.wav
 .env
 *.env
 secrets.*
+
+# Machine-local real paths — never commit (see BestSetupLLMs d2d08a1)
+config/paths.ps1
+config/paths.py
+config/paths.sh
+.claude/settings.local.json
