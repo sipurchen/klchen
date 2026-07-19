@@ -1,4 +1,4 @@
-﻿# RTX 2050 4GB VRAM — Harness AI Agents 初始規劃
+# RTX 2050 4GB VRAM — Harness AI Agents 初始規劃
 <!-- Claude Cowork BEGIN: RTX2050 Harness AI Agents Plan -->
 <!-- Encoding: UTF-8 -->
 
@@ -279,6 +279,6 @@ Phase 3 (未來 Mac Mini M4):
 - klchen project: https://github.com/sipurchen/klchen
 - bartowski GGUF: https://huggingface.co/bartowski
 - llama.cpp: https://github.com/ggml-org/llama.cpp
-- 詳細 Suggestions: `\path\to\project\CC_For_Codex_Suggestions.MD`
+- 詳細 Suggestions: `<PROJECT_ROOT>\CC_For_Codex_Suggestions.MD`
 
 <!-- Claude Cowork END: RTX2050 Harness AI Agents Plan -->

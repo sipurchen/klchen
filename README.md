@@ -137,7 +137,7 @@ $$\text{cost}(C_i) = \frac{\text{age}(C_i) \cdot \text{size}(C_i)}{\pi(C_i)}, \q
 
 **llama-server 啟動參數：**
 ```bash
-llama-server --model /path/to/deepseek-v3.gguf \
+llama-server --model <GGUF_PATH>/deepseek-v3.gguf \
   --n-gpu-layers 99 --flash-attn --mlock \
   --ctx-size 16384 --n-predict 4096
 ```
@@ -328,7 +328,7 @@ python tests/phase2_7_demo.py
 
 ```bash
 # 啟動 llama-server（任意支援 n_probs 的模型）
-bin\llama-cpp\llama-server.exe -m \path\to\qwen3-1.7b.gguf \
+bin\llama-cpp\llama-server.exe -m <GGUF_PATH>\qwen3-1.7b.gguf \
   -ngl 8 -c 2048 --port 8080
 
 # 執行 Phase 1 監控器
