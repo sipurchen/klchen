@@ -33,6 +33,8 @@ ollama pull deepseek-r1:1.5b
 
 ### 1.2 啟動 llama-server (Gemma4 E4B)
 
+> 首次使用需先下載 `bin\llama-cpp\` 二進制，見 [bin/README.md](bin/README.md)。
+
 ```powershell
 # 純 CPU 模式 (GT 1030 VRAM 不足)
 bin\llama-cpp\llama-server.exe `
