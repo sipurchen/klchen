@@ -1,4 +1,4 @@
-﻿# 使用者指令手冊 / User Command Reference
+# 使用者指令手冊 / User Command Reference
 
 > 本專案在各硬體平台上的常用指令速查表。  
 > 主力平台: **Windows i5-4460 + GT 1030**  
@@ -36,7 +36,7 @@ ollama pull deepseek-r1:1.5b
 ```powershell
 # 純 CPU 模式 (GT 1030 VRAM 不足)
 bin\llama-cpp\llama-server.exe `
-  -m "\path\to\LLMs\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf" `
+  -m "<LLMS_DIR>\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf" `
   -ngl 0 -c 512 -t 4 -np 1 `
   --host 127.0.0.1 --port 8080
 
@@ -48,7 +48,7 @@ curl http://127.0.0.1:8080/health
 
 ```powershell
 # 完整 benchmark (順序執行, CPU 安全)
-cd \path\to\project
+cd <PROJECT_ROOT>
 python tests/benchmark_all_models.py
 
 # 生成比較報告
