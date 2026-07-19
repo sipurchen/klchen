@@ -177,19 +177,16 @@ Ollama 的 `n_gpu_layers=12` 是 **layer-level** 分割，不是 **tensor-level*
 
 ### 執行步驟
 
-#### Step 5.1: 下載 llama.cpp 預編譯 Windows CUDA 二進制
+#### Step 5.1: 下載 llama.cpp 預編譯 Windows 二進制
+
+下載步驟與版本升級方式見 [bin/README.md](../bin/README.md)（不隨 repo 提交，200MB+ 上游 build 產物）。
+GT 1030 (Pascal, sm_61) 實際採用 Vulkan backend；CUDA 二進制僅適用於 CUDA 顯卡。
 
 ```powershell
-# 在 GitHub Releases 找到最新版 llama.cpp Windows + CUDA 12 binary
-# 檔名類似: llama-bXXXX-bin-win-cuda-cu12.4-x64.zip
-# 解壓到 E:\Gemma4_E4B_Project\bin\llama-cpp\
-
 # 驗證:
 .\bin\llama-cpp\llama-cli.exe --version
 .\bin\llama-cpp\llama-server.exe --version
 ```
-
-> CUDA driver 581.29 支援 CUDA 13.0，所以 cu12.x 二進制完全相容。
 
 #### Step 5.2: MoE Expert Offloading 啟動 llama-server
 
