@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 # Gemma 4 E4B - Optimized Startup Script
 # Applies: TurboQuant+ KV Cache + Flash Attention + MoE Streaming Experts
 
@@ -27,8 +27,9 @@ export OLLAMA_NUM_PARALLEL=1
 export OLLAMA_LOAD_TIMEOUT=20m        # KEY: allow 9.6GB model to fully load (was 5m)
 export OLLAMA_GPU_OVERHEAD=134217728  # 128MB reserved (reduced to allow 12 GPU layers)
 
-# Models path
-export OLLAMA_MODELS="E:/LLMmodel"
+# Models path — use LLMS_DIR env var or sibling-dir heuristic
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+export OLLAMA_MODELS="${LLMS_DIR:-$(dirname "$SCRIPT_DIR")/LLMmodel}"
 
 echo "[INFO] Starting Ollama with TurboQuant+ optimizations..."
 echo "  Flash Attention : $OLLAMA_FLASH_ATTENTION"

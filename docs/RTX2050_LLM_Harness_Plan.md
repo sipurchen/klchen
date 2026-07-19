@@ -279,6 +279,6 @@ Phase 3 (未來 Mac Mini M4):
 - klchen project: https://github.com/sipurchen/klchen
 - bartowski GGUF: https://huggingface.co/bartowski
 - llama.cpp: https://github.com/ggml-org/llama.cpp
-- 詳細 Suggestions: `E:\Gemma4_E4B_Project\CC_For_Codex_Suggestions.MD`
+- 詳細 Suggestions: `<PROJECT_ROOT>\CC_For_Codex_Suggestions.MD`
 
 <!-- Claude Cowork END: RTX2050 Harness AI Agents Plan -->

@@ -99,15 +99,15 @@ audreyt 使用 `IQ2XXS-w2Q2K imatrix`（類似規模模型 ~87 GB，但這是 28
 # Step 1: 生成 imatrix 校準資料
 # 使用 bartowski GGUF + 代表性繁體中文+英文資料集
 .\bin\llama-cpp\llama-imatrix.exe `
-  -m "E:\LLMmodel\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf" `
+  -m "<LLMS_DIR>\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf" `
   -f scripts\calibration_dataset_zh_en.txt `
   -o bin\gemma4_e4b_imatrix.dat `
   -ngl 0 -t 3
 
 # Step 2: 使用 imatrix 重新量化為 Q3_K_M
 .\bin\llama-cpp\llama-quantize.exe `
-  "E:\LLMmodel\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf" `
-  "E:\LLMmodel\gemma4_textonly\google_gemma-4-E4B-it-Q3_K_M_imatrix.gguf" `
+  "<LLMS_DIR>\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf" `
+  "<LLMS_DIR>\gemma4_textonly\google_gemma-4-E4B-it-Q3_K_M_imatrix.gguf" `
   Q3_K_M `
   --imatrix bin\gemma4_e4b_imatrix.dat
 ```
@@ -138,7 +138,7 @@ klchen 的 `api/gemma4_api_server.py` 啟動 llama-server 後沒有資源回收�
 import threading, time, psutil
 from pathlib import Path
 
-LEASE_DIR = Path("E:/Gemma4_E4B_Project/.leases")
+LEASE_DIR = Path("<PROJECT_ROOT>/.leases")
 LEASE_DIR.mkdir(exist_ok=True)
 WATCHDOG_TIMEOUT = 300  # 5 分鐘無請求後停止 server
 
@@ -195,12 +195,12 @@ klchen 的設定分散在多個檔案（`config/direct_inference.json`, `scripts
 # config/.env (加入 .gitignore)
 
 # llama-server 路徑
-LLAMA_SERVER_BIN=E:\Gemma4_E4B_Project\bin\llama-cpp\llama-server.exe
+LLAMA_SERVER_BIN=<PROJECT_ROOT>\bin\llama-cpp\llama-server.exe
 LLAMA_SERVER_HOST=127.0.0.1
 LLAMA_SERVER_PORT=8080
 
 # 模型路徑
-GEMMA4_GGUF=E:\LLMmodel\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf
+GEMMA4_GGUF=<LLMS_DIR>\gemma4_textonly\google_gemma-4-E4B-it-Q4_K_M.gguf
 
 # Ollama 設定
 OLLAMA_HOST=http://localhost:11434

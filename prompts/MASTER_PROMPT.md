@@ -52,7 +52,7 @@ Per-Layer Embeddings (PLE) 技術，有效參數 4.5B，原生支援音訊+視�
            │  Gemma 4 E4B    │
            │  GGUF Model     │
            │  (Q4_K_M ~3GB)  │
-           │  E:\Gemma4_E4B  │
+           │  <LLMS_DIR>\Gemma4_E4B  │
            └─────────────────┘
 ```
 
@@ -61,7 +61,7 @@ Per-Layer Embeddings (PLE) 技術，有效參數 4.5B，原生支援音訊+視�
 ## 📁 FILE STRUCTURE / 檔案結構
 
 ```
-E:\Gemma4_E4B_Project\
+<PROJECT_ROOT>\
 ├── scripts/
 │   └── setup_gemma4_e4b.ps1      # PowerShell setup: download + Ollama + deps
 ├── api/
@@ -93,7 +93,7 @@ You are setting up a Gemma 4 E4B local AI deployment on Windows.
 
 Execute the following steps in order:
 1. Open PowerShell as Administrator
-2. Navigate to E:\Gemma4_E4B_Project\scripts\
+2. Navigate to <PROJECT_ROOT>\scripts\
 3. Run: .\setup_gemma4_e4b.ps1
 4. Verify: ollama list (should show gemma4:e4b and gemma4-e4b-opt)
 5. Test:  ollama run gemma4:e4b "Hello, respond briefly."
@@ -107,7 +107,7 @@ If the model pull fails:
 你正在 Windows 上設置 Gemma 4 E4B 本地 AI 部署。
 按順序執行以下步驟：
 1. 以管理員身份開啟 PowerShell
-2. 切換到 E:\Gemma4_E4B_Project\scripts\
+2. 切換到 <PROJECT_ROOT>\scripts\
 3. 執行：.\setup_gemma4_e4b.ps1
 4. 驗證：ollama list（應顯示 gemma4:e4b 和 gemma4-e4b-opt）
 5. 測試：ollama run gemma4:e4b "你好，簡短回覆。"
@@ -124,11 +124,11 @@ Terminal 1 (Ollama):
   ollama serve
 
 Terminal 2 (Python API):
-  cd E:\Gemma4_E4B
+  cd <LLMS_DIR>\Gemma4_E4B
   python api/gemma4_api_server.py
 
 Terminal 3 (Node.js Agents - optional):
-  cd E:\Gemma4_E4B
+  cd <LLMS_DIR>\Gemma4_E4B
   node agents/gemma4_agent_node.mjs
 
 Verify all services:
@@ -150,7 +150,7 @@ Verify all services:
 PROMPT FOR CLAUDE CODE:
 
 Run the comprehensive test suite:
-  cd E:\Gemma4_E4B
+  cd <LLMS_DIR>\Gemma4_E4B
   python tests/test_gemma4_full.py
 
 Expected: 5 phases, 15+ tests, all PASS.
@@ -537,7 +537,7 @@ E4B 模型原生支援：
 SYSTEM CONTEXT FOR CLAUDE CODE:
 
 Project: Gemma 4 E4B Local AI Deployment
-Location: E:\Gemma4_E4B
+Location: <LLMS_DIR>\Gemma4_E4B
 Tech Stack: Ollama + FastAPI (Python) + Express (Node.js)
 Model: gemma4:e4b (base) / gemma4-e4b-opt (memory-optimized)
 
@@ -574,7 +574,7 @@ Memory Optimization Levers (ordered by impact):
 
 ---
 專案：Gemma 4 E4B 本地 AI 部署
-位置：E:\Gemma4_E4B
+位置：<LLMS_DIR>\Gemma4_E4B
 技術棧：Ollama + FastAPI (Python) + Express (Node.js)
 
 編碼規範：
@@ -625,7 +625,7 @@ winget upgrade Ollama.Ollama
 ollama pull gemma4:e4b
 
 # Rebuild optimized variant / 重建優化變體
-ollama create gemma4-e4b-opt -f E:\Gemma4_E4B_Project\Modelfile.gemma4-e4b-optimized
+ollama create gemma4-e4b-opt -f <PROJECT_ROOT>\Modelfile.gemma4-e4b-optimized
 
 # Check memory usage / 檢查記憶體使用
 tasklist /fi "imagename eq ollama*"

@@ -16,7 +16,7 @@
 
 ### Session 1（初始設定）
 
-**U1:** `@E:\Gemma4_E4B_Project\prompts\MASTER_PROMPT.md 請照著這個檔案進行`
+**U1:** `@<PROJECT_ROOT>\prompts\MASTER_PROMPT.md 請照著這個檔案進行`
 > 指示 Claude 按照 MASTER_PROMPT.md 開始整個專案部署流程。
 
 **U2:** `直接進行下一步操作`
@@ -109,7 +109,7 @@
 |------|------|------|
 | Ollama CPU 100% 過載 | ✅ 已修 | psutil affinity [2,3] + num_thread=2 |
 | Claude Code 空白 | ✅ 已修 | Incremental save (每測試後存檔) |
-| OLLAMA_MODELS 路徑錯 | ✅ 已修 | 改為 E:\LLMmodel |
+| OLLAMA_MODELS 路徑錯 | ✅ 已修 | 改為 <LLMS_DIR> |
 | OLLAMA_LOAD_TIMEOUT 5m 殺掉 cold start | ✅ 已修 | 改為 20m |
 | llama-cpp-python 編譯失敗 (MSVC jinja) | ❌ 未解 | 改用預編譯 llama-server 二進制 |
 | Gemma4 0.04 tok/s | ❌ 未解 | Task 5: llama-server -ot expert offloading |
