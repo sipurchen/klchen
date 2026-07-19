@@ -580,7 +580,7 @@ Tests  tests/spec_experts_test.py          7/7 integration tests
 ```bash
 git clone https://github.com/sipurchen/klchen
 git checkout SpecExpertsResearch
-set LLMS_DIR=E:\LLMmodel
+set LLMS_DIR=<LLMS_DIR>
 
 # Phase 1 live (requires llama-server on :8080)
 python tests/phase1_monitor_demo.py

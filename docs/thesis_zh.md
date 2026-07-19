@@ -582,7 +582,7 @@ P1-4   spec_experts/tool_session.py           熱切換 llama-server
 ```bash
 git clone https://github.com/sipurchen/klchen
 git checkout SpecExpertsResearch
-set LLMS_DIR=E:\LLMmodel
+set LLMS_DIR=<LLMS_DIR>
 
 # Phase 1 即時示範（需要 llama-server 在 :8080）
 python tests/phase1_monitor_demo.py
