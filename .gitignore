@@ -39,3 +39,6 @@ config/paths.sh
 # download via bin/README.md instead of tracking in git
 bin/*.zip
 bin/llama-cpp/
+
+# Runtime benchmark/probe logs (generated, machine-specific)
+logs/

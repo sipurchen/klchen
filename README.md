@@ -103,6 +103,10 @@ $$\text{cost}(C_i) = \frac{\text{age}(C_i) \cdot \text{size}(C_i)}{\pi(C_i)}, \q
 
 **Spec-Experts 路由節省：** 20 區塊會話節省 ~1.76 s（Mixtral Q2, DDR3 17 GB/s）
 
+**實測（Gemma4 26B-A4B，128 experts/8 active，GT 1030）：** `-ngl 10 -c 16384` 實測 1682 MiB VRAM（<1.7GB 目標內），但 decode 僅 **4.22 tok/s**（CPU 跑 expert FFN 的硬頻寬上限，非配置問題）。完整方法論與 ngl/ctx 對照表見 [docs/gemma4_26b_a4b_vram_benchmark.md](docs/gemma4_26b_a4b_vram_benchmark.md)。
+
+**LocalAI 借鏡：** `--override-tensor` 策略對應 LocalAI 的 `cpu_moe`/`override_tensor` 慣例（見 [docs/localai_comparison.md](docs/localai_comparison.md)）；本專案的語義感知 expert prefetch（本 Phase）在 LocalAI 中不存在，屬本專案獨有貢獻。
+
 ---
 
 ### Phase 5 — 邊緣 VLM 路由器 (Edge VLM Router)

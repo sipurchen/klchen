@@ -31,9 +31,10 @@ ollama pull gemma3:1b
 ollama pull deepseek-r1:1.5b
 ```
 
-### 1.2 啟動 llama-server (Gemma4 E4B)
+### 1.2 啟動 llama-server (Gemma4 E4B / Dense, 舊版)
 
 > 首次使用需先下載 `bin\llama-cpp\` 二進制，見 [bin/README.md](bin/README.md)。
+> ⚠️ 這是**稠密(dense)** 7.5B 版本(`expert_count=0`)，非 MoE。實測僅 2 tok/s，10 tok/s 已證實不可行，詳見 [docs/gemma4_26b_a4b_vram_benchmark.md](docs/gemma4_26b_a4b_vram_benchmark.md)。
 
 ```powershell
 # 純 CPU 模式 (GT 1030 VRAM 不足)
@@ -45,6 +46,32 @@ bin\llama-cpp\llama-server.exe `
 # 確認載入成功
 curl http://127.0.0.1:8080/health
 ```
+
+### 1.2b 啟動 llama-server (Gemma4 26B-A4B, 真 MoE — 目前主力)
+
+> 真正 MoE 模型 (128 experts, 8 active/token)。實測數據見 [docs/gemma4_26b_a4b_vram_benchmark.md](docs/gemma4_26b_a4b_vram_benchmark.md)。
+> 策略：attention 層上 GPU，全部 128 個 expert FFN 張量強制留在 CPU/RAM (`--override-tensor`)。
+
+```powershell
+# ctx=16384 版本 — ngl=10 實測 1682 MiB (<1.7GB), 4.22 tok/s decode
+bin\llama-cpp\llama-server.exe `
+  -m "<LLMS_DIR>\gemma4-26B-A4B-it-GGUF\google_gemma-4-26B-A4B-it-Q4_K_M.gguf" `
+  -ngl 10 --override-tensor "\.ffn_.*_exps\.=CPU" `
+  -c 16384 -t 4 -np 1 --no-warmup `
+  --host 127.0.0.1 --port 8080
+
+# ctx=8192 版本 — ngl=11 實測 1672 MiB (<1.7GB)
+bin\llama-cpp\llama-server.exe `
+  -m "<LLMS_DIR>\gemma4-26B-A4B-it-GGUF\google_gemma-4-26B-A4B-it-Q4_K_M.gguf" `
+  -ngl 11 --override-tensor "\.ffn_.*_exps\.=CPU" `
+  -c 8192 -t 4 -np 1 --no-warmup `
+  --host 127.0.0.1 --port 8080
+
+# 確認載入成功
+curl http://127.0.0.1:8080/health
+```
+
+**注意：** `-np 1` 必加 — 預設 4 個並行 slot 會讓 KV cache 變 4 倍，單人使用完全浪費。`-ngl` 超過 11(ctx=8192) / 10(ctx=16384) 實測會 OOM，此為此硬體(GT1030 2GB)的實測上限，非估算值。
 
 ### 1.3 執行 Benchmark
 
