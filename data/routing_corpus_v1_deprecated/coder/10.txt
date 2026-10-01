@@ -1,0 +1,27 @@
+﻿<bos><start_of_turn>user
+Design a Python dataclass for a User with id, name, email, and a default empty list of roles.<end_of_turn>
+<start_of_turn>model
+<|channel>---
+<|channel>thought
+<channel|>To design this dataclass correctly, it is important to use `field(default_factory=list)` for the `roles` attribute. 
+
+In Python, you should **never** use a mutable default value like `roles: list = []` directly in a class definition, as that list would be shared across all instances of the class. Using `default_factory` ensures that every new `User` object gets its own unique list.
+
+Here is the implementation:
+
+```python
+from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class User:
+    id: int
+    name: str
+    email: str
+    # We use default_factory to ensure each instance gets a NEW list object
+    roles: List[str] = field(default_factory=list)
+
+# --- Testing the implementation ---
+
+# 1. Create a user with default empty roles
+user1 =<end_of_turn>

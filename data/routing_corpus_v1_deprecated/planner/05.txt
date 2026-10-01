@@ -1,0 +1,15 @@
+﻿<bos><start_of_turn>user
+A train leaves city A at 60 km/h. Two hours later a car leaves city A at 90 km/h on the same route. When does the car catch the train? Show your reasoning step by step.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>To find out when the car catches the train, we can follow these step-by-step calculations:
+
+### Step 1: Determine the head start distance
+The train leaves 2 hours before the car. During those 2 hours, the train is traveling at 60 km/h.
+$$\text{Distance} = \text{Speed} \times \text{Time}$$
+$$\text{Distance} = 60\text{ km/h} \times 2\text{ hours} = 120\text{ km}$$
+When the car starts its journey, the train is already **120 km** ahead.
+
+### Step 2: Determine the relative speed
+Since both vehicles are moving in the same direction, the car is "closing the gap" at a rate equal to the difference between their speeds.
+$$\text{Relative Speed} = \text{Car Speed} - \text{Train Speed<end_of_turn>

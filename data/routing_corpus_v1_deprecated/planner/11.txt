@@ -1,0 +1,20 @@
+﻿<bos><start_of_turn>user
+Draft a meeting agenda for a 30-minute planning session whose goal is to decide next quarter's top 3 priorities.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>Since you only have 30 minutes to decide on three major priorities, this meeting must be highly structured. This agenda assumes that participants have been asked to come prepared with potential ideas beforehand to avoid starting from zero.
+
+---
+
+# Meeting Agenda: Q[X] Priority Setting
+**Goal:** To align on and finalize the top 3 strategic priorities for the upcoming quarter.
+**Duration:** 30 Minutes
+**Facilitator:** [Name]
+**Attendees:** [List Names]
+**Pre-work:** Please review the [Link to Draft Proposal/Data] and come prepared with 1–2 suggested priorities.
+
+---
+
+### 1. Objective & Ground Rules (3 Minutes)
+*   **Goal Alignment:** Reiterate the high-level company/department goals for the year to ensure priorities are relevant.
+*   **The Constraint:** Remind the group that we are selecting **only three** priorities to ensure focus and resource availability<end_of_turn>

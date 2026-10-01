@@ -1,0 +1,15 @@
+﻿<bos><start_of_turn>user
+Plan a benchmark to compare the decode speed of two LLM inference configurations on the same hardware, listing the steps in order.<end_of_turn>
+<start_of_turn>model
+<|channel>thought<channel|>To ensure a scientifically valid comparison of decode speed (tokens per second), you must isolate the variable of the **inference configuration** while keeping all other factors (hardware, model weights, and input distribution) constant.
+
+Here is a step-by-step plan to execute this benchmark.
+
+### Phase 1: Preparation & Environment Setup
+**1. Define the Configurations**
+*   **Config A (Baseline):** e.g., FP16 precision, standard attention.
+*   **Config B (Experimental):** e.g., INT8 quantization, FlashAttention, or a different KV cache management strategy (e.g., PagedAttention).
+
+**2. Standardize the Hardware Environment**
+*   Ensure the GPU/CPU is running on the same driver version and CUDA version.
+*   **Disable Hardware Throttling:** Set the GPU to a fixed clock speed (using `nvidia-smi -lgc`) to prevent thermal throttling from<end_of_turn>

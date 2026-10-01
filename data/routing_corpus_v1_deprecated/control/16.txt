@@ -1,0 +1,5 @@
+﻿<bos><start_of_turn>user
+Which ocean is the largest on Earth?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>The **Pacific Ocean** is the largest and deepest ocean on Earth. It covers about one-third of the planet's surface and is larger than all of Earth's landmasses combined.<end_of_turn>

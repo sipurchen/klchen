@@ -1,0 +1,32 @@
+{
+  "family": "planner",
+  "session": "pilot",
+  "seed": 3001,
+  "system": null,
+  "turns": [
+    {
+      "label": "reasoning",
+      "user": "Break down, step by step, everything that needs to happen to migrate a production database from MySQL to PostgreSQL with minimal downtime. Don't write code, just the plan."
+    },
+    {
+      "label": "reasoning",
+      "user": "Given the steps you just listed, which ones depend on which others? Give a valid execution order and call out anything that could run in parallel."
+    },
+    {
+      "label": "reasoning",
+      "user": "Estimate how many hours or days each major step would take for a small team (2-3 people), and explain your reasoning for the biggest ones."
+    },
+    {
+      "label": "factual",
+      "user": "Build a simple trade-off table comparing two possible approaches to the riskiest step, with at least 3 comparison criteria."
+    },
+    {
+      "label": "reasoning",
+      "user": "The constraint just changed: you now have half the time you estimated. Re-plan — what gets cut, deferred, or simplified, and why?"
+    },
+    {
+      "label": "reasoning",
+      "user": "Write a short risk register: top 4 risks, their likelihood/impact, and one mitigation each."
+    }
+  ]
+}

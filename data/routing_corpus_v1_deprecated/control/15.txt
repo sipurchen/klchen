@@ -1,0 +1,6 @@
+﻿<bos><start_of_turn>user
+What is the freezing point of water in Fahrenheit?<end_of_turn>
+<start_of_turn>model
+model
+<|channel>thought
+<channel|>The freezing point of water is **32°F**.<end_of_turn>

@@ -1,0 +1,19 @@
+﻿<bos><start_of_turn>user
+Given limited engineering time this sprint, how would you prioritize: a security patch, a UI polish request, and a performance optimization?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>When engineering time is limited, prioritization should be driven by **Risk vs. Value**. In a professional software development lifecycle, the standard hierarchy of priority is:
+
+### 1. The Priority Order
+1.  **Security Patch** (Critical/Immediate)
+2.  **Performance Optimization** (High/Strategic)
+3.  **UI Polish** (Low/Cosmetic)
+
+---
+
+### 2. Detailed Justification
+
+#### **Priority 1: The Security Patch (The "Must-Do")**
+*   **Reasoning:** Security is a non-negotiable foundation. A security vulnerability represents an existential threat to the product, the users, and the company (legal liability, data breaches, loss of trust).
+*   **Impact of Neglect:** A breach can cost significantly more in recovery, legal fees, and reputation than the cost of any feature or optimization.
+*   **Decision Rule:** If the patch addresses a "<end_of_turn>

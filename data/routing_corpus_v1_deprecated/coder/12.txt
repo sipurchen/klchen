@@ -1,0 +1,28 @@
+﻿<bos><start_of_turn>user
+Implement a two-pointer algorithm in Python to check if a sorted array has two numbers that sum to a target.<end_of_turn>
+<start_of_turn>model
+<|channel>in_thought
+<channel|>To solve this problem using the two-pointer technique, we place one pointer at the beginning of the sorted array and one at the end. We then move the pointers toward each other based on whether the current sum is too small or too large.
+
+Here is the implementation:
+
+```python
+def has_two_sum(nums, target):
+    """
+    Checks if there are two numbers in a sorted array that sum to the target.
+    
+    Args:
+        nums (list[int]): A sorted list of integers.
+        target (int): The target sum.
+        
+    Returns:
+        bool: True if two numbers exist, False otherwise.
+    """
+    # Initialize two pointers
+    left = 0
+    right = len(nums) - 1
+
+    while left < right:
+        current_sum = nums[left] + nums[right]
+
+        if current_sum<end_of_turn>

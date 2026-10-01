@@ -42,3 +42,10 @@ bin/llama-cpp/
 
 # Runtime benchmark/probe logs (generated, machine-specific)
 logs/
+
+# Expert-affinity v2 corpus: regeneratable intermediate files (D×3 imatrix input files, job lists).
+# Keep turns/*.json (scripted prompts), sessions/*.{body.txt,turns.jsonl,spans.json} (real generated
+# content), and exports/ (human-readable span dumps) — those are the actual corpus, not derived.
+data/routing_corpus_v2/imatrix_inputs/
+data/routing_corpus_v2/jobs.json
+data/routing_corpus_v2/jobs_summary.json

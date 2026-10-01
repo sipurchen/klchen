@@ -1,0 +1,5 @@
+﻿<bos><start_of_turn>user
+What is the chemical symbol for gold?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>The chemical symbol for gold is **Au**.<end_of_turn>

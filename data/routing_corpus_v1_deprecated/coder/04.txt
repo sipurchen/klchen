@@ -1,0 +1,32 @@
+﻿<bos><start_of_turn>user
+Write a unit test (pytest) for a function add(a, b) that returns the sum of two numbers.<end_of_turn>
+<start_of_turn>model
+<|channel> of course! Here is a unit test using `pytest` for a function `add(a, b)`.
+
+First, let's define the function we want to test.
+
+### 1. The Code to be Tested (`math_utils.py`)
+
+```python
+# math_utils.py
+
+def add(a, b):
+    """Returns the sum of two numbers."""
+    return a + b
+```
+
+### 2. The Unit Test (`test_math_utils.py`)
+
+To run this, you will need to have `pytest` installed (`pip install pytest`).
+
+```python
+# test_math_utils.py
+import pytest
+from math_utils import add
+
+def test_add_positive_numbers():
+    """Test adding two positive integers."""
+    assert add(2, 3) == 5
+
+def test_add_negative_numbers():
+    """Test adding two negative integers."""<end_of_turn>

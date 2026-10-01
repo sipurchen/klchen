@@ -1,0 +1,14 @@
+﻿<bos><start_of_turn>user
+Build a simple decision matrix (criteria x options) to choose between three cloud providers for hosting a small app.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>To choose the right cloud provider for a small app, you should focus on **cost, ease of use, and scalability**. For a small project, you want to avoid "over-engineering" and high complexity.
+
+Below is a decision matrix comparing the three most common choices for small apps: **AWS** (The Industry Giant), **Google Cloud (GCP)** (The Data/Dev-Friendly choice), and **DigitalOcean** (The Developer-Friendly/Simple choice).
+
+### Decision Matrix: Cloud Provider Selection
+
+| Criteria | Weight (1-5) | AWS | GCP | DigitalOcean |
+| :--- | :---: | :---: | :---: | :---: |
+| **Cost Predictability** (Low surprise bills) | 5 | 2 | 3 | 5 |
+| **Ease of Use** (Setup speed/UI simplicity) | 4 | 2 | 4 | 5 |<end_of_turn>

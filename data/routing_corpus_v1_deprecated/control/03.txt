@@ -1,0 +1,5 @@
+﻿<bos><start_of_turn>user
+Who wrote the play Romeo and Juliet?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>William Shakespeare wrote the play *Romeo and Juliet*.<end_of_turn>

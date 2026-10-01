@@ -1,0 +1,7 @@
+﻿<bos><start_of_turn>user
+How many bones are in the adult human body?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>An adult human body typically has **206 bones**.
+
+At birth, humans have approximately 270 to 300 bones. As a person grows, many of these bones (such as those in the skull and spine) fuse together, resulting in the lower number found in adulthood.<end_of_turn>

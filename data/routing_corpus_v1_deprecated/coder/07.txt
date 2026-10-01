@@ -1,0 +1,33 @@
+﻿<bos><start_of_turn>user
+Write a small Python CLI argument parser using argparse that accepts --input and --output file paths.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>Here is a clean, professional implementation of a CLI argument parser using Python's built-in `argparse` library.
+
+```python
+import argparse
+import sys
+
+def parse_arguments():
+    """
+    Defines and parses the command-line arguments.
+    """
+    parser = argparse.ArgumentParser(
+        description="A simple CLI tool to process input and output files."
+    )
+
+    # Add --input argument
+    # 'help' provides the description when running --help
+    # 'required=True' ensures the script won't run without this flag
+    parser.add_argument(
+        "-i", "--input",
+        type=str,
+        required=True,
+        help="Path to the input file."
+    )
+
+    # Add --output argument
+    parser.add_argument(
+        "-o", "--output",
+        type=str,
+        required=<end_of_turn>

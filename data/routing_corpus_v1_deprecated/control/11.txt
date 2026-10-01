@@ -1,0 +1,6 @@
+﻿<bos><start_of_turn>user
+What is the currency used in Japan?<end_of_turn>
+<start_of_turn>model
+---
+<|channel>thought
+<channel|>The currency used in Japan is the **Japanese Yen**, which is symbolized by **¥** and abbreviated as **JPY**.<end_of_turn>

@@ -1,0 +1,16 @@
+﻿<bos><start_of_turn>user
+Break down the steps needed to migrate a production database from MySQL to PostgreSQL with zero downtime.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>Migrating from MySQL to PostgreSQL with **zero downtime** is one of the most complex operations in database engineering. Because the two engines use different SQL dialects, data types, and replication protocols, you cannot use standard built-in replication.
+
+To achieve zero downtime, you must use a **Change Data Capture (CDC)** pattern. This allows the new database to "catch up" with the old one while the application is still writing to the original.
+
+Here is the professional architectural breakdown of the migration process.
+
+---
+
+### Phase 1: Schema Conversion (The Foundation)
+You cannot simply dump a MySQL file and import it into Postgres. The schemas are structurally different.
+
+1.  **Schema Mapping:** Use tools like **ora2pg** (which supports MySQL) or **AWS Schema Conversion Tool (SCT)** to map MySQL data types to PostgreSQL equivalents (e.g., `TINYINT` $\to$ `SMALLINT`, `DATETIME`<end_of_turn>

@@ -1,0 +1,8 @@
+﻿<bos><start_of_turn>user
+A store had 120 items. It sold 25% on Monday and 30% of the remainder on Tuesday. How many items are left? Show step-by-step reasoning.<end_of_turn>
+<start_of_turn>model
+To find out how many items are left, we can follow these steps:
+
+**Step 1: Calculate the number of items sold on Monday.**
+The store had  120 items.
+25% of glowing-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-edge-<end_of_turn>

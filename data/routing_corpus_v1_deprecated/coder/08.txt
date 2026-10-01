@@ -1,0 +1,25 @@
+﻿<bos><start_of_turn>user
+Write a SQL query that selects the top 5 customers by total order amount, from a table orders with columns customer_id and amount.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>To select the top 5 customers by their total order amount, you need to group the records by `customer_id`, sum the `amount` for each group, sort them in descending order, and then limit the results to 5.
+
+Here is the SQL query:
+
+```sql
+SELECT 
+    customer_id, 
+    SUM(amount) AS total_order_amount
+FROM 
+    orders
+GROUP BY 
+    customer_id
+ORDER BY 
+    total_order_amount DESC
+LIMIT 5;
+```
+
+### Explanation:
+1.  **`SELECT customer_id, SUM(amount)`**: This selects the customer identifier and calculates the sum of all their individual order amounts.
+2.  **`AS total_order_amount`**: This gives the calculated sum a descriptive alias, making it easier to reference in the `ORDER BY` clause.
+3.  **`FROM orders`<end_of_turn>

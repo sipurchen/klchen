@@ -1,0 +1,96 @@
+{
+  "session": "planner_pilot",
+  "n_tokens": 6634,
+  "spans": [
+    {
+      "start": 0,
+      "end": 10,
+      "type": "control"
+    },
+    {
+      "start": 10,
+      "end": 45,
+      "type": "user_prompt"
+    },
+    {
+      "start": 45,
+      "end": 50,
+      "type": "control"
+    },
+    {
+      "start": 50,
+      "end": 2056,
+      "type": "reasoning"
+    },
+    {
+      "start": 2056,
+      "end": 2060,
+      "type": "control"
+    },
+    {
+      "start": 2060,
+      "end": 2089,
+      "type": "user_prompt"
+    },
+    {
+      "start": 2089,
+      "end": 2094,
+      "type": "control"
+    },
+    {
+      "start": 2094,
+      "end": 3825,
+      "type": "reasoning"
+    },
+    {
+      "start": 3825,
+      "end": 3829,
+      "type": "control"
+    },
+    {
+      "start": 3829,
+      "end": 3859,
+      "type": "user_prompt"
+    },
+    {
+      "start": 3859,
+      "end": 3864,
+      "type": "control"
+    },
+    {
+      "start": 3864,
+      "end": 5356,
+      "type": "reasoning"
+    },
+    {
+      "start": 5356,
+      "end": 5360,
+      "type": "control"
+    },
+    {
+      "start": 5360,
+      "end": 5386,
+      "type": "user_prompt"
+    },
+    {
+      "start": 5386,
+      "end": 5391,
+      "type": "control"
+    },
+    {
+      "start": 5391,
+      "end": 6000,
+      "type": "reasoning"
+    },
+    {
+      "start": 6000,
+      "end": 6633,
+      "type": "factual"
+    },
+    {
+      "start": 6633,
+      "end": 6634,
+      "type": "control"
+    }
+  ]
+}

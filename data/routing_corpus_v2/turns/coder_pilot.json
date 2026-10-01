@@ -1,0 +1,32 @@
+{
+  "family": "coder",
+  "session": "pilot",
+  "seed": 1001,
+  "system": null,
+  "turns": [
+    {
+      "label": "code",
+      "user": "I'm starting a small Python project: a CSV-to-JSON converter that validates column types. Write a short spec (goals, main functions, inputs/outputs) before any code."
+    },
+    {
+      "label": "code",
+      "user": "Now implement the module based on that spec."
+    },
+    {
+      "label": "code",
+      "user": "Add unit tests (pytest) covering the normal case and at least two edge cases."
+    },
+    {
+      "label": "reasoning",
+      "user": "Here is a failing test output:\n```\nFAILED test_edge_case - AssertionError: expected 0 got None\n```\nWalk through why this might be happening before fixing it, then fix it."
+    },
+    {
+      "label": "code",
+      "user": "Refactor the module to be cleaner — extract any repeated logic into a helper function, and add type hints throughout."
+    },
+    {
+      "label": "code",
+      "user": "Add a small CLI (argparse) so this module can be run from the command line."
+    }
+  ]
+}

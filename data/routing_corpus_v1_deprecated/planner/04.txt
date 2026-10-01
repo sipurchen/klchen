@@ -1,0 +1,19 @@
+﻿<bos><start_of_turn>user
+Estimate how many engineer-days it would take to build a basic REST API with auth, CRUD, and tests, and explain your reasoning.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>Estimating software development time is notoriously difficult because "basic" is subjective. However, for a professional-grade, production-ready (not just a prototype) REST API, a realistic estimate for a single senior engineer is **5 to 10 engineer-days.**
+
+Here is the breakdown of the estimation based on a standard lifecycle: **Design $\rightarrow$ Implementation $\rightarrow$ Testing $\rightarrow$ Deployment/Documentation.**
+
+---
+
+### 1. The Breakdown of Tasks
+
+#### Phase 1: Architecture & Schema Design (1 Day)
+Before writing code, you must define the "contract."
+*   **Data Modeling:** Designing the database schema (SQL tables or NoSQL collections).
+*   **API Contract:** Defining endpoints, request/response bodies, and status codes (OpenAPI/Swagger spec).
+*   **Tech Stack Setup:** Initializing the repository, setting up linting, pre-commit hooks, and CI/CD pipelines.
+
+<end_of_turn>

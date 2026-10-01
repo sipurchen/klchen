@@ -1,0 +1,18 @@
+﻿<bos><start_of_turn>user
+Translate this Python function into equivalent JavaScript: def greet(name): return f'Hello, {name}!'<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>Here is the equivalent JavaScript code. In modern JavaScript (ES6+), the closest equivalent to Python's f-string is a **template literal**, which uses backticks (`` ` ``) and the `${}` syntax.
+
+```javascript
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+```
+
+### Alternative Syntax (Arrow Function)
+If you prefer a more concise, one-liner version (similar to how Python functions are often written), you can use an arrow function:
+
+```javascript
+const greet = (name) => `Hello, ${name}!`;
+```<end_of_turn>

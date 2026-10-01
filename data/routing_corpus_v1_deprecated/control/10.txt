@@ -1,0 +1,5 @@
+﻿<bos><start_of_turn>user
+Who painted the Mona Lisa?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>The Mona Lisa was painted by **Leonardo da Vinci**.<end_of_turn>
