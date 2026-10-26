@@ -211,7 +211,7 @@ llama-server --model <GGUF_PATH>/deepseek-v3.gguf \
 |-------|---------|------|
 | P2 KV 卸載 | 三層儲存/取回，float16 往返 | **PASS** |
 | P3 引導 | 4 種類型 × 引導配置 | **PASS** |
-| P4 專家池 | Mixtral+DS-Coder，50–100% 命中率 | **PASS** |
+| P4 專家池 | Mixtral+DS-Coder 結構/模擬驗證，50–100% 命中率（本機無此兩顆權重；Gemma4 26B-A4B 實測見 §調校理論基礎 5） | **PASS（結構）** |
 | P5 邊緣 VLM | 4 設備 × 硬體配置 | **PASS** |
 | P6 Mac M4 | UMA 池規劃，Flash Attn | **PASS** |
 | P7 自迴圈 | 4 蒸餾樣本，+0.030/iter | **PASS** |
@@ -226,8 +226,9 @@ llama-server --model <GGUF_PATH>/deepseek-v3.gguf \
 | `deepseek-r1:1.5b` | 1.04 GB | Dense 30 層 + 推理鏈 | Ollama |
 | `Gemma4 E4B` (bartowski Q4_K_M) | 5.03 GB | Dense 42 層, 7.5B | llama-server |
 | Qwen3-1.7B (Spec-Experts 示範) | ~1.1 GB | Dense | llama-server |
-| Mixtral-8x7B Q2_K (Phase 4 目標) | ~15 GB | MoE 8 experts | llama-server |
-| DeepSeek-Coder-V2-Lite Q4 (Phase 4) | ~10 GB | MoE 64 experts | llama-server |
+| **`Gemma4 26B-A4B` (Q4_K_M)** | 17 GB | **MoE 128 experts/層, top-8, 30 層** | llama-server（本機實測 4.22 tok/s） |
+| Mixtral-8x7B Q2_K (論文 Phase 4 目標，本機未持有) | ~15 GB | MoE 8 experts | llama-server |
+| DeepSeek-Coder-V2-Lite Q4 (論文 Phase 4，本機未持有) | ~10 GB | MoE 64 experts | llama-server |
 | moondream-2B Q4 (Phase 5 GT 1030) | ~1.2 GB | VLM | llama-server Vulkan |
 
 ---
@@ -305,9 +306,29 @@ $$H_i = -\sum_{j=1}^k \tilde{p}_j \log_2 \tilde{p}_j, \quad \tilde{p}_j = \frac{
 防止 OS 排程器因全核心 LLM 佔用而造成螢幕黑屏
 ```
 
-### 5. MoE 架構事實修正
+### 5. Gemma4 系列：兩個不同的 checkpoint（Dense 與 MoE 並存）
 
-**Gemma4 E4B 是密集架構（Dense），非 MoE。** "E4B" = Effective 4 Billion（有效 40 億活躍參數）。Spec-Experts 框架設計用於真正的 MoE 模型：Mixtral-8x7B、DeepSeek-V3 等。
+Gemma4 家族在本機有**兩顆架構完全不同的 GGUF**，皆 `general.architecture = gemma4`，以 GGUF header 直接驗證（非推測）：
+
+| Checkpoint | 架構 | 層數 | experts | 說明 |
+|---|---|---|---|---|
+| `gemma4 E4B`（bartowski Q4_K_M, 5.03 GB） | **Dense**（無 `expert_count` 欄位） | 42 | — | "E4B" = Effective 4B，稠密 7.5B。本專案早期 baseline（~2 tok/s） |
+| `gemma4 26B-A4B`（Q4_K_M 17 GB / IQ2_S 10 GB） | **真 MoE** | 30 | **128 / layer，每 token 啟用 8** | 25.23B 總參數、約 4B 活躍；5:1 sliding-window:global attention |
+
+因此 Spec-Experts Phase 4/6（專家池）**並非只存在於 Mixtral/DeepSeek 的紙上設計**：本專案已在 Gemma4 26B-A4B 這顆真 MoE 上於本機（i5-4460 + GT 1030 2GB）實際運行，已完成的部分與尚未完成的部分如下。
+
+**已實測（Gemma4 26B-A4B，llama-server b8679 Vulkan）**
+- VRAM/ngl 預算：`-ngl 10 -c 16384` = 1682 MiB、`-ngl 11 -c 8192` = 1672 MiB（皆 <1.7 GB）；ngl 超過即 OOM。
+- 吞吐：decode **4.22 tok/s**（expert FFN 全部留 CPU，受 DDR3 頻寬限制，25 tok/s 目標於此硬體不可達）。
+- 真實 expert 路由量測：以 `llama-imatrix` 讀出每層 128 個 experts 的實際路由次數，v2 pipeline 於 2 個 pilot session（coder / planner）13/13 jobs 完成，涵蓋 reasoning / code 區塊類型（約 44 萬 token）。
+- 詳見分支 `VRAM-Opt-StreamingExperts` 的 `docs/gemma4_26b_a4b_vram_benchmark.md`、`docs/expert_affinity_corpus_design.md`（尚未合併至本分支）。
+
+**尚未驗證（誠實聲明）**
+- `spec_experts/expert_ram_pool.py` 的即時預取尚未接上 Gemma4 26B-A4B 的 llama-server（目前僅有離線路由統計，尚無線上預取/命中率數據）。
+- 結構驗證表中 P4「Mixtral+DS-Coder-V2-Lite 50–100% 命中」是針對該兩顆論文目標模型的結構/模擬驗證；這兩顆權重本機未持有，**不應解讀為 Gemma4 已驗證**。
+- 區塊類型分離度（V5）、重現性（V6）需完整 8-session 語料，尚未執行；affinity set 的最終數據尚待產出。
+
+另已在本機實際運行的 Gemma 系列：`gemma3:1b`（Ollama，平均 19.1 tok/s）、Gemma4 E4B dense（llama-server，~2 tok/s）、Gemma4 26B-A4B MoE（llama-server，4.22 tok/s）。
 
 ---
 
