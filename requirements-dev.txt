@@ -1,0 +1,4 @@
+# Dev/test dependencies for the affinity pipeline + slice tooling (install into .venv, never a global interpreter)
+numpy>=1.26,<2.0
+gguf>=0.18
+pytest>=8

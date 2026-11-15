@@ -1,0 +1,116 @@
+{
+  "session": "coder_04",
+  "n_tokens": 7923,
+  "spans": [
+    {
+      "start": 0,
+      "end": 10,
+      "type": "control"
+    },
+    {
+      "start": 10,
+      "end": 57,
+      "type": "user_prompt"
+    },
+    {
+      "start": 57,
+      "end": 62,
+      "type": "control"
+    },
+    {
+      "start": 62,
+      "end": 753,
+      "type": "reasoning"
+    },
+    {
+      "start": 753,
+      "end": 1660,
+      "type": "code"
+    },
+    {
+      "start": 1660,
+      "end": 1664,
+      "type": "control"
+    },
+    {
+      "start": 1664,
+      "end": 1673,
+      "type": "user_prompt"
+    },
+    {
+      "start": 1673,
+      "end": 1678,
+      "type": "control"
+    },
+    {
+      "start": 1678,
+      "end": 3013,
+      "type": "reasoning"
+    },
+    {
+      "start": 3013,
+      "end": 4576,
+      "type": "code"
+    },
+    {
+      "start": 4576,
+      "end": 4580,
+      "type": "control"
+    },
+    {
+      "start": 4580,
+      "end": 4597,
+      "type": "user_prompt"
+    },
+    {
+      "start": 4597,
+      "end": 4602,
+      "type": "control"
+    },
+    {
+      "start": 4602,
+      "end": 5271,
+      "type": "reasoning"
+    },
+    {
+      "start": 5271,
+      "end": 6409,
+      "type": "code"
+    },
+    {
+      "start": 6409,
+      "end": 6413,
+      "type": "control"
+    },
+    {
+      "start": 6413,
+      "end": 6487,
+      "type": "user_prompt"
+    },
+    {
+      "start": 6487,
+      "end": 6492,
+      "type": "control"
+    },
+    {
+      "start": 6492,
+      "end": 6923,
+      "type": "reasoning"
+    },
+    {
+      "start": 6923,
+      "end": 7729,
+      "type": "code"
+    },
+    {
+      "start": 7729,
+      "end": 7922,
+      "type": "reasoning"
+    },
+    {
+      "start": 7922,
+      "end": 7923,
+      "type": "control"
+    }
+  ]
+}

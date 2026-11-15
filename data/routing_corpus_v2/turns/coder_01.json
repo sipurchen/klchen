@@ -1,0 +1,56 @@
+{
+  "family": "coder",
+  "session": "01",
+  "seed": 2001,
+  "system": null,
+  "turns": [
+    {
+      "label": "code",
+      "user": "I'm starting a small Python project: a task queue that processes jobs with retries and exponential backoff. Write a short spec (goals, main functions, inputs/outputs) before any code."
+    },
+    {
+      "label": "code",
+      "user": "Now implement the module based on that spec."
+    },
+    {
+      "label": "code",
+      "user": "Add unit tests (pytest) covering the normal case and at least two edge cases."
+    },
+    {
+      "label": "reasoning",
+      "user": "Here is a failing test output:\n```\nFAILED test_edge_case - AssertionError: expected 0 got None\n```\nWalk through why this might be happening before fixing it, then fix it."
+    },
+    {
+      "label": "code",
+      "user": "Refactor the module to be cleaner — extract any repeated logic into a helper function, and add type hints throughout."
+    },
+    {
+      "label": "code",
+      "user": "Add a small CLI (argparse) so this module can be run from the command line."
+    },
+    {
+      "label": "code",
+      "user": "Now extend the project with a second module: a small metrics collector that tracks job success/failure counts and prints a summary. It should reuse code from the first module where sensible."
+    },
+    {
+      "label": "reasoning",
+      "user": "Review the whole project so far and explain, in plain language, the main design decisions and any trade-offs you made."
+    },
+    {
+      "label": "reasoning",
+      "user": "If this ran on 10x the input size, where would the performance bottleneck likely be, and how would you address it?"
+    },
+    {
+      "label": "factual",
+      "user": "List the Python standard-library modules you used across this project and, for each, one sentence on what it's for."
+    },
+    {
+      "label": "code",
+      "user": "One more thing: add basic error handling for invalid input to the CLI, with a clear error message."
+    },
+    {
+      "label": "factual",
+      "user": "Write a short summary (5-8 lines) of the whole project suitable for a README's top section."
+    }
+  ]
+}

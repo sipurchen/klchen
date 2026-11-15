@@ -1,0 +1,681 @@
+{
+ "args": {
+  "cmd": "train",
+  "train": "coder_pilot,coder_01,coder_02,planner_pilot,planner_01,planner_02,writer_01",
+  "targets": "logs/h2/targets_r50.json",
+  "out": "logs/h2/adapter_c2",
+  "rank": 16,
+  "alpha": 16.0,
+  "lr": 0.001,
+  "epochs": 2,
+  "accum": 2,
+  "lam": 1.0,
+  "mu": 3.0,
+  "hinge": 0.9,
+  "window": 768,
+  "max_windows": 0
+ },
+ "steps": [
+  {
+   "step": 1,
+   "epoch": 1,
+   "loss": 0.9868044555187225,
+   "mean_mass_in_target": 0.3454297681649526,
+   "mean_kl": 0.0,
+   "grad_norm": 0.02435442991554737,
+   "seconds": 197.4,
+   "cuda_peak_gib": 0.57
+  },
+  {
+   "step": 2,
+   "epoch": 1,
+   "loss": 0.9327748715877533,
+   "mean_mass_in_target": 0.3613147149483363,
+   "mean_kl": 6.301778129606343e-06,
+   "grad_norm": 0.03218991681933403,
+   "seconds": 14.4,
+   "cuda_peak_gib": 0.58
+  },
+  {
+   "step": 3,
+   "epoch": 1,
+   "loss": 0.984036922454834,
+   "mean_mass_in_target": 0.35100014756123227,
+   "mean_kl": 5.9693407577772936e-05,
+   "grad_norm": 0.045982278883457184,
+   "seconds": 9.4,
+   "cuda_peak_gib": 0.58
+  },
+  {
+   "step": 4,
+   "epoch": 1,
+   "loss": 0.8749445378780365,
+   "mean_mass_in_target": 0.38333426664272946,
+   "mean_kl": 0.0002714769320543079,
+   "grad_norm": 0.07241595536470413,
+   "seconds": 7.4,
+   "cuda_peak_gib": 0.58
+  },
+  {
+   "step": 5,
+   "epoch": 1,
+   "loss": 0.875501811504364,
+   "mean_mass_in_target": 0.38514748166004814,
+   "mean_kl": 0.000814683732217721,
+   "grad_norm": 0.07238923013210297,
+   "seconds": 8.0,
+   "cuda_peak_gib": 0.58
+  },
+  {
+   "step": 6,
+   "epoch": 1,
+   "loss": 0.9851438403129578,
+   "mean_mass_in_target": 0.3512525849044323,
+   "mean_kl": 0.0021280363619249937,
+   "grad_norm": 0.10027237236499786,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.58
+  },
+  {
+   "step": 7,
+   "epoch": 1,
+   "loss": 0.8626295030117035,
+   "mean_mass_in_target": 0.39352944294611614,
+   "mean_kl": 0.004007600805683372,
+   "grad_norm": 0.0924844816327095,
+   "seconds": 6.7,
+   "cuda_peak_gib": 0.58
+  },
+  {
+   "step": 8,
+   "epoch": 1,
+   "loss": 0.8688077628612518,
+   "mean_mass_in_target": 0.3974247708916664,
+   "mean_kl": 0.007586030173115432,
+   "grad_norm": 0.09716137498617172,
+   "seconds": 6.2,
+   "cuda_peak_gib": 0.58
+  },
+  {
+   "step": 9,
+   "epoch": 1,
+   "loss": 0.7466740608215332,
+   "mean_mass_in_target": 0.45157144020001094,
+   "mean_kl": 0.013211304740980267,
+   "grad_norm": 0.1065954640507698,
+   "seconds": 6.4,
+   "cuda_peak_gib": 0.58
+  },
+  {
+   "step": 10,
+   "epoch": 1,
+   "loss": 0.8459869027137756,
+   "mean_mass_in_target": 0.420920762916406,
+   "mean_kl": 0.019235316361300648,
+   "grad_norm": 0.09517955780029297,
+   "seconds": 6.6,
+   "cuda_peak_gib": 0.58
+  },
+  {
+   "step": 11,
+   "epoch": 1,
+   "loss": 0.878902941942215,
+   "mean_mass_in_target": 0.41878147224585216,
+   "mean_kl": 0.02741002864204347,
+   "grad_norm": 0.11563561856746674,
+   "seconds": 6.0,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 12,
+   "epoch": 1,
+   "loss": 0.8088027536869049,
+   "mean_mass_in_target": 0.45511680146058403,
+   "mean_kl": 0.03171363918421169,
+   "grad_norm": 0.09122006595134735,
+   "seconds": 6.2,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 13,
+   "epoch": 1,
+   "loss": 0.7391232550144196,
+   "mean_mass_in_target": 0.504580375055472,
+   "mean_kl": 0.047223415101567905,
+   "grad_norm": 0.07276931405067444,
+   "seconds": 6.2,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 14,
+   "epoch": 1,
+   "loss": 0.8856085538864136,
+   "mean_mass_in_target": 0.43898535122474036,
+   "mean_kl": 0.042501116264611484,
+   "grad_norm": 0.08008655905723572,
+   "seconds": 6.0,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 15,
+   "epoch": 1,
+   "loss": 0.746916651725769,
+   "mean_mass_in_target": 0.5097395266095798,
+   "mean_kl": 0.05145366946235299,
+   "grad_norm": 0.06266554445028305,
+   "seconds": 6.1,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 16,
+   "epoch": 1,
+   "loss": 0.7568531930446625,
+   "mean_mass_in_target": 0.5146402840813001,
+   "mean_kl": 0.056344953427712126,
+   "grad_norm": 0.06274745613336563,
+   "seconds": 6.0,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 17,
+   "epoch": 1,
+   "loss": 0.8786991238594055,
+   "mean_mass_in_target": 0.4921354646484057,
+   "mean_kl": 0.0831412696900467,
+   "grad_norm": 0.16626740992069244,
+   "seconds": 5.4,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 18,
+   "epoch": 1,
+   "loss": 0.899341493844986,
+   "mean_mass_in_target": 0.46094895054896673,
+   "mean_kl": 0.06687978841364384,
+   "grad_norm": 0.11441696435213089,
+   "seconds": 5.6,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 19,
+   "epoch": 1,
+   "loss": 0.8183846175670624,
+   "mean_mass_in_target": 0.5038479442397753,
+   "mean_kl": 0.06905348201592763,
+   "grad_norm": 0.07674279808998108,
+   "seconds": 6.0,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 20,
+   "epoch": 1,
+   "loss": 0.8484942615032196,
+   "mean_mass_in_target": 0.4790219326814016,
+   "mean_kl": 0.06251324672872821,
+   "grad_norm": 0.11564899981021881,
+   "seconds": 5.9,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 21,
+   "epoch": 1,
+   "loss": 0.8680763244628906,
+   "mean_mass_in_target": 0.481609874467055,
+   "mean_kl": 0.07262387465064725,
+   "grad_norm": 0.13715951144695282,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 22,
+   "epoch": 1,
+   "loss": 1.0255482494831085,
+   "mean_mass_in_target": 0.3992945293585459,
+   "mean_kl": 0.05952210544298093,
+   "grad_norm": 0.17374475300312042,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 23,
+   "epoch": 1,
+   "loss": 0.8204023540019989,
+   "mean_mass_in_target": 0.46715954343477883,
+   "mean_kl": 0.04737255231787761,
+   "grad_norm": 0.11980632692575455,
+   "seconds": 6.0,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 24,
+   "epoch": 1,
+   "loss": 0.8265445530414581,
+   "mean_mass_in_target": 0.4678435862064362,
+   "mean_kl": 0.04919852403302987,
+   "grad_norm": 0.06627590209245682,
+   "seconds": 6.1,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 25,
+   "epoch": 1,
+   "loss": 0.7282691597938538,
+   "mean_mass_in_target": 0.5041493902603785,
+   "mean_kl": 0.04418569495901466,
+   "grad_norm": 0.04088583588600159,
+   "seconds": 6.1,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 26,
+   "epoch": 1,
+   "loss": 0.7602070569992065,
+   "mean_mass_in_target": 0.491071829199791,
+   "mean_kl": 0.04643600406125188,
+   "grad_norm": 0.055452004075050354,
+   "seconds": 6.1,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 27,
+   "epoch": 1,
+   "loss": 0.7039444148540497,
+   "mean_mass_in_target": 0.510517576833566,
+   "mean_kl": 0.04221864879752199,
+   "grad_norm": 0.053370747715234756,
+   "seconds": 6.1,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 28,
+   "epoch": 1,
+   "loss": 0.8631594479084015,
+   "mean_mass_in_target": 0.43007156600554786,
+   "mean_kl": 0.03386812387034297,
+   "grad_norm": 0.12083033472299576,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 29,
+   "epoch": 1,
+   "loss": 0.8610411584377289,
+   "mean_mass_in_target": 0.4406850536664327,
+   "mean_kl": 0.04040798122684161,
+   "grad_norm": 0.09629879891872406,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 30,
+   "epoch": 1,
+   "loss": 0.8451316952705383,
+   "mean_mass_in_target": 0.4339904328187307,
+   "mean_kl": 0.030425514560192823,
+   "grad_norm": 0.0872655063867569,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 31,
+   "epoch": 1,
+   "loss": 0.7499808073043823,
+   "mean_mass_in_target": 0.47478658755620323,
+   "mean_kl": 0.028860691624383133,
+   "grad_norm": 0.07218879461288452,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 32,
+   "epoch": 1,
+   "loss": 0.7335131168365479,
+   "mean_mass_in_target": 0.48840205719073615,
+   "mean_kl": 0.03603101670742035,
+   "grad_norm": 0.06891359388828278,
+   "seconds": 5.9,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 33,
+   "epoch": 1,
+   "loss": 0.8413967490196228,
+   "mean_mass_in_target": 0.4355114847421646,
+   "mean_kl": 0.030825096741318704,
+   "grad_norm": 0.09127543121576309,
+   "seconds": 3.0,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 34,
+   "epoch": 2,
+   "loss": 0.7184552252292633,
+   "mean_mass_in_target": 0.4963580369949341,
+   "mean_kl": 0.036943165274957813,
+   "grad_norm": 0.06774178892374039,
+   "seconds": 5.9,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 35,
+   "epoch": 2,
+   "loss": 0.8489475846290588,
+   "mean_mass_in_target": 0.43299771696329115,
+   "mean_kl": 0.028458490843574206,
+   "grad_norm": 0.08459849655628204,
+   "seconds": 5.6,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 36,
+   "epoch": 2,
+   "loss": 0.7653022706508636,
+   "mean_mass_in_target": 0.4762730817000071,
+   "mean_kl": 0.035978883908440666,
+   "grad_norm": 0.05714917555451393,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 37,
+   "epoch": 2,
+   "loss": 0.8066140115261078,
+   "mean_mass_in_target": 0.45143887350956596,
+   "mean_kl": 0.03269926977033417,
+   "grad_norm": 0.11421023309230804,
+   "seconds": 5.5,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 38,
+   "epoch": 2,
+   "loss": 0.8737258315086365,
+   "mean_mass_in_target": 0.42946491986513136,
+   "mean_kl": 0.03689870381106933,
+   "grad_norm": 0.11799521744251251,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 39,
+   "epoch": 2,
+   "loss": 0.8247819542884827,
+   "mean_mass_in_target": 0.45592517306407293,
+   "mean_kl": 0.039986079248289265,
+   "grad_norm": 0.06581041216850281,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 40,
+   "epoch": 2,
+   "loss": 0.7299239933490753,
+   "mean_mass_in_target": 0.5052768985430399,
+   "mean_kl": 0.04734563653667768,
+   "grad_norm": 0.06525837630033493,
+   "seconds": 6.0,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 41,
+   "epoch": 2,
+   "loss": 0.940100222826004,
+   "mean_mass_in_target": 0.4087362731496493,
+   "mean_kl": 0.037578773032873866,
+   "grad_norm": 0.113406240940094,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 42,
+   "epoch": 2,
+   "loss": 0.8243111670017242,
+   "mean_mass_in_target": 0.4572964236140251,
+   "mean_kl": 0.04145979608098666,
+   "grad_norm": 0.05989193543791771,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 43,
+   "epoch": 2,
+   "loss": 0.9265282154083252,
+   "mean_mass_in_target": 0.426004758477211,
+   "mean_kl": 0.04458464737981558,
+   "grad_norm": 0.13711035251617432,
+   "seconds": 5.6,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 44,
+   "epoch": 2,
+   "loss": 0.737521767616272,
+   "mean_mass_in_target": 0.5076357185840606,
+   "mean_kl": 0.051431962723533314,
+   "grad_norm": 0.06814392656087875,
+   "seconds": 5.9,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 45,
+   "epoch": 2,
+   "loss": 0.7223072946071625,
+   "mean_mass_in_target": 0.505200058221817,
+   "mean_kl": 0.043336082343012096,
+   "grad_norm": 0.0533057302236557,
+   "seconds": 5.6,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 46,
+   "epoch": 2,
+   "loss": 0.8599942028522491,
+   "mean_mass_in_target": 0.44866132537523906,
+   "mean_kl": 0.0454323951775829,
+   "grad_norm": 0.09900033473968506,
+   "seconds": 5.5,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 47,
+   "epoch": 2,
+   "loss": 0.8540026545524597,
+   "mean_mass_in_target": 0.4442785660425822,
+   "mean_kl": 0.03975327787920833,
+   "grad_norm": 0.036436259746551514,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.582
+  },
+  {
+   "step": 48,
+   "epoch": 2,
+   "loss": 0.8546369969844818,
+   "mean_mass_in_target": 0.44391534229119617,
+   "mean_kl": 0.0397032563885053,
+   "grad_norm": 0.08402550220489502,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 49,
+   "epoch": 2,
+   "loss": 0.7884492874145508,
+   "mean_mass_in_target": 0.4787752504150073,
+   "mean_kl": 0.04686939089248578,
+   "grad_norm": 0.03822332248091698,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 50,
+   "epoch": 2,
+   "loss": 0.7846193611621857,
+   "mean_mass_in_target": 0.47196874767541885,
+   "mean_kl": 0.0398710157101353,
+   "grad_norm": 0.07483792304992676,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 51,
+   "epoch": 2,
+   "loss": 0.850914865732193,
+   "mean_mass_in_target": 0.45748309046030045,
+   "mean_kl": 0.05086122502883275,
+   "grad_norm": 0.09690191596746445,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 52,
+   "epoch": 2,
+   "loss": 0.8291774690151215,
+   "mean_mass_in_target": 0.46072028477986654,
+   "mean_kl": 0.0452690988779068,
+   "grad_norm": 0.058756861835718155,
+   "seconds": 5.5,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 53,
+   "epoch": 2,
+   "loss": 0.7308041751384735,
+   "mean_mass_in_target": 0.504215207695961,
+   "mean_kl": 0.04556665271520614,
+   "grad_norm": 0.027803387492895126,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 54,
+   "epoch": 2,
+   "loss": 0.6822112500667572,
+   "mean_mass_in_target": 0.5303066074848175,
+   "mean_kl": 0.04812772733469804,
+   "grad_norm": 0.0595078244805336,
+   "seconds": 5.6,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 55,
+   "epoch": 2,
+   "loss": 0.8036922514438629,
+   "mean_mass_in_target": 0.47032829622427624,
+   "mean_kl": 0.045058579494555794,
+   "grad_norm": 0.045199912041425705,
+   "seconds": 5.5,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 56,
+   "epoch": 2,
+   "loss": 0.8146217167377472,
+   "mean_mass_in_target": 0.4616213579972585,
+   "mean_kl": 0.03894746797159314,
+   "grad_norm": 0.06622423231601715,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 57,
+   "epoch": 2,
+   "loss": 0.8058555424213409,
+   "mean_mass_in_target": 0.4754383713006973,
+   "mean_kl": 0.044644509349018334,
+   "grad_norm": 0.05750827491283417,
+   "seconds": 5.8,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 58,
+   "epoch": 2,
+   "loss": 0.7225207090377808,
+   "mean_mass_in_target": 0.5081587448716164,
+   "mean_kl": 0.04635669079919656,
+   "grad_norm": 0.04106362909078598,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 59,
+   "epoch": 2,
+   "loss": 0.829749584197998,
+   "mean_mass_in_target": 0.4641372948884964,
+   "mean_kl": 0.048460320693751176,
+   "grad_norm": 0.04524527117609978,
+   "seconds": 5.5,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 60,
+   "epoch": 2,
+   "loss": 0.759641170501709,
+   "mean_mass_in_target": 0.48925807227691015,
+   "mean_kl": 0.04361908764888843,
+   "grad_norm": 0.04797448590397835,
+   "seconds": 5.7,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 61,
+   "epoch": 2,
+   "loss": 0.733598381280899,
+   "mean_mass_in_target": 0.5075483491023381,
+   "mean_kl": 0.05000349183877309,
+   "grad_norm": 0.06193532049655914,
+   "seconds": 6.0,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 62,
+   "epoch": 2,
+   "loss": 0.7442843019962311,
+   "mean_mass_in_target": 0.4972240353624026,
+   "mean_kl": 0.04663679078221321,
+   "grad_norm": 0.06041361764073372,
+   "seconds": 6.0,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 63,
+   "epoch": 2,
+   "loss": 0.9484697878360748,
+   "mean_mass_in_target": 0.4037295088171959,
+   "mean_kl": 0.038908965947727366,
+   "grad_norm": 0.11168449372053146,
+   "seconds": 5.5,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 64,
+   "epoch": 2,
+   "loss": 0.8335411250591278,
+   "mean_mass_in_target": 0.46800531645615895,
+   "mean_kl": 0.04850937674442927,
+   "grad_norm": 0.09292592853307724,
+   "seconds": 5.1,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 65,
+   "epoch": 2,
+   "loss": 0.718611478805542,
+   "mean_mass_in_target": 0.5065256670117378,
+   "mean_kl": 0.04105915737648805,
+   "grad_norm": 0.02676582708954811,
+   "seconds": 5.6,
+   "cuda_peak_gib": 0.584
+  },
+  {
+   "step": 66,
+   "epoch": 2,
+   "loss": 0.7296568155288696,
+   "mean_mass_in_target": 0.5045680950085322,
+   "mean_kl": 0.04722656023999055,
+   "grad_norm": 0.05922099947929382,
+   "seconds": 2.9,
+   "cuda_peak_gib": 0.584
+  }
+ ],
+ "train_seconds": 587.4
+}

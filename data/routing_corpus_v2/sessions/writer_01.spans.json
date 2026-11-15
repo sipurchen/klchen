@@ -1,0 +1,136 @@
+{
+  "session": "writer_01",
+  "n_tokens": 6833,
+  "spans": [
+    {
+      "start": 0,
+      "end": 10,
+      "type": "control"
+    },
+    {
+      "start": 10,
+      "end": 48,
+      "type": "user_prompt"
+    },
+    {
+      "start": 48,
+      "end": 53,
+      "type": "control"
+    },
+    {
+      "start": 53,
+      "end": 687,
+      "type": "reasoning"
+    },
+    {
+      "start": 687,
+      "end": 839,
+      "type": "creative"
+    },
+    {
+      "start": 839,
+      "end": 843,
+      "type": "control"
+    },
+    {
+      "start": 843,
+      "end": 855,
+      "type": "user_prompt"
+    },
+    {
+      "start": 855,
+      "end": 860,
+      "type": "control"
+    },
+    {
+      "start": 860,
+      "end": 1616,
+      "type": "reasoning"
+    },
+    {
+      "start": 1616,
+      "end": 2286,
+      "type": "creative"
+    },
+    {
+      "start": 2286,
+      "end": 2290,
+      "type": "control"
+    },
+    {
+      "start": 2290,
+      "end": 2305,
+      "type": "user_prompt"
+    },
+    {
+      "start": 2305,
+      "end": 2310,
+      "type": "control"
+    },
+    {
+      "start": 2310,
+      "end": 2935,
+      "type": "reasoning"
+    },
+    {
+      "start": 2935,
+      "end": 3893,
+      "type": "creative"
+    },
+    {
+      "start": 3893,
+      "end": 3897,
+      "type": "control"
+    },
+    {
+      "start": 3897,
+      "end": 3909,
+      "type": "user_prompt"
+    },
+    {
+      "start": 3909,
+      "end": 3914,
+      "type": "control"
+    },
+    {
+      "start": 3914,
+      "end": 4627,
+      "type": "reasoning"
+    },
+    {
+      "start": 4627,
+      "end": 5565,
+      "type": "creative"
+    },
+    {
+      "start": 5565,
+      "end": 5569,
+      "type": "control"
+    },
+    {
+      "start": 5569,
+      "end": 5585,
+      "type": "user_prompt"
+    },
+    {
+      "start": 5585,
+      "end": 5590,
+      "type": "control"
+    },
+    {
+      "start": 5590,
+      "end": 6336,
+      "type": "reasoning"
+    },
+    {
+      "start": 6336,
+      "end": 6832,
+      "type": "creative"
+    },
+    {
+      "start": 6832,
+      "end": 6833,
+      "type": "control"
+    }
+  ]
+}

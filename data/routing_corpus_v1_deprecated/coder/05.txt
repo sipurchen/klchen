@@ -1,0 +1,23 @@
+﻿<bos><start_of_turn>user
+Explain what this regex does: matches a phone number in the form 123-456-7890, three digits, dash, three digits, dash, four digits.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>To match a phone number in the format **123-456-7890**, the regular expression would look like this:
+
+### The Regex:
+`\d{3}-\d{3}-\d{4}`
+
+---
+
+### Breakdown of the components:
+
+1.  **`\d{3}`**: 
+    *   `\d` is a shorthand character class that matches any **digit** (0-9).
+    *   `{3}` is a quantifier that tells the engine to match exactly **three** of the preceding element.
+    *   *Result: Matches exactly three digits (e.g., `123`).*
+
+2.  **`-`**: 
+    *   This is a literal character. It tells the engine to look for an actual **hyphen/dash**.
+
+3.  **`\d{3}`**: 
+    *   Matches<end_of_turn>

@@ -1,0 +1,5 @@
+﻿<bos><start_of_turn>user
+What is the capital of France?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>The capital of France is Paris.<end_of_turn>

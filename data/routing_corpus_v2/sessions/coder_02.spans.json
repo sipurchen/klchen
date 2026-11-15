@@ -1,0 +1,86 @@
+{
+  "session": "coder_02",
+  "n_tokens": 5639,
+  "spans": [
+    {
+      "start": 0,
+      "end": 10,
+      "type": "control"
+    },
+    {
+      "start": 10,
+      "end": 50,
+      "type": "user_prompt"
+    },
+    {
+      "start": 50,
+      "end": 55,
+      "type": "control"
+    },
+    {
+      "start": 55,
+      "end": 631,
+      "type": "reasoning"
+    },
+    {
+      "start": 631,
+      "end": 1376,
+      "type": "code"
+    },
+    {
+      "start": 1376,
+      "end": 1380,
+      "type": "control"
+    },
+    {
+      "start": 1380,
+      "end": 1389,
+      "type": "user_prompt"
+    },
+    {
+      "start": 1389,
+      "end": 1394,
+      "type": "control"
+    },
+    {
+      "start": 1394,
+      "end": 2156,
+      "type": "reasoning"
+    },
+    {
+      "start": 2156,
+      "end": 3329,
+      "type": "code"
+    },
+    {
+      "start": 3329,
+      "end": 3333,
+      "type": "control"
+    },
+    {
+      "start": 3333,
+      "end": 3350,
+      "type": "user_prompt"
+    },
+    {
+      "start": 3350,
+      "end": 3355,
+      "type": "control"
+    },
+    {
+      "start": 3355,
+      "end": 4050,
+      "type": "reasoning"
+    },
+    {
+      "start": 4050,
+      "end": 5638,
+      "type": "code"
+    },
+    {
+      "start": 5638,
+      "end": 5639,
+      "type": "control"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+﻿<bos><start_of_turn>user
+Write a short incident-response runbook outline for 'production API returning 500 errors'.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>This runbook outline provides a structured framework for responding to a high-severity incident where the production API is returning HTTP 500 (Internal Server Error) responses.
+
+---
+
+# Incident Response Runbook: Production API 500 Errors
+
+**Severity Level:** Critical (P1/P0)  
+**Owner:** On-call Engineering / SRE Team  
+**Goal:** Identify the root cause, mitigate impact, and restore service stability.
+
+---
+
+## 1. Detection & Initial Triage
+*   **Verify the Alert:** Confirm the alert is not a false positive (check monitoring tools like Datadog, New Relic, or CloudWatch).
+*   **Scope the Impact:**
+    *   Is it affecting all endpoints or a specific subset?
+    *   Is it affecting all users or a specific region/tenant?
+    *   What is the error rate percentage? (e.g., 5%<end_of_turn>

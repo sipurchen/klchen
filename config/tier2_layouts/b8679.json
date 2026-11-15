@@ -1,0 +1,11 @@
+{
+ "llama_cpp_commit": "b8679",
+ "note": "Windows Vulkan build b8679 ships no headers and this machine has no C compiler, so these offsets are INFERRED, not measured: they follow the d327bf1 layout minus the fields added after b8679 (n_rs_seq, n_outputs_max, n_outputs_max_per_seq, ctx_type: -16 bytes before cb_eval; load_mode/lazy_mode do not move n_gpu_layers). Sizes are deliberately generous: on Windows x64 a struct larger than 8 bytes is passed by reference to a copy and returned through a hidden pointer, so a blob at least as large as the real struct is safe. The layout is validated by behaviour (the callback fires, every layer yields one row per token) and by the Tier 1 cross-check of the same session (Pearson r).",
+ "llama_model_params": {"size": 128, "tensor_buft_overrides": 8, "n_gpu_layers": 16},
+ "llama_context_params": {"size": 256, "n_ctx": 0, "n_batch": 4, "n_ubatch": 8, "n_seq_max": 12, "n_threads": 16,
+                          "n_threads_batch": 20, "cb_eval": 72, "cb_eval_user_data": 80, "no_perf": 122},
+ "llama_batch": {"size": 56, "n_tokens": 0, "token": 8, "pos": 24, "n_seq_id": 32, "seq_id": 40, "logits": 48},
+ "llama_model_tensor_buft_override": {"size": 16, "pattern": 0, "buft": 8},
+ "ggml_tensor": {"size": 336, "type": 0, "ne": 16, "nb": 48, "name": 256},
+ "constants": {"GGML_TYPE_I32": 26, "GGML_BACKEND_DEVICE_TYPE_CPU": 0, "GGML_MAX_NAME": 64}
+}

@@ -1,0 +1,91 @@
+{
+ "adapter": "logs/h2/adapter_e1",
+ "sessions": {},
+ "pooled": {
+  "0.8": {
+   "code": {
+    "median_size_base": 34.0,
+    "median_size_other": 21.0,
+    "relative_change": -0.38235294117647056,
+    "median_layer_jaccard": 0.6040706605222734
+   },
+   "control": {
+    "median_size_base": 18.0,
+    "median_size_other": 15.5,
+    "relative_change": -0.1388888888888889,
+    "median_layer_jaccard": 0.7609523809523809
+   },
+   "creative": {
+    "median_size_base": 35.0,
+    "median_size_other": 24.0,
+    "relative_change": -0.3142857142857143,
+    "median_layer_jaccard": 0.6297429620563035
+   },
+   "factual": {
+    "median_size_base": 35.0,
+    "median_size_other": 23.0,
+    "relative_change": -0.34285714285714286,
+    "median_layer_jaccard": 0.6436507936507937
+   },
+   "reasoning": {
+    "median_size_base": 43.0,
+    "median_size_other": 27.0,
+    "relative_change": -0.37209302325581395,
+    "median_layer_jaccard": 0.6385933806146572
+   },
+   "user_prompt": {
+    "median_size_base": 30.0,
+    "median_size_other": 23.0,
+    "relative_change": -0.23333333333333334,
+    "median_layer_jaccard": 0.6819852941176471
+   }
+  },
+  "0.9": {
+   "code": {
+    "median_size_base": 49.5,
+    "median_size_other": 31.0,
+    "relative_change": -0.37373737373737376,
+    "median_layer_jaccard": 0.5980769230769231
+   },
+   "control": {
+    "median_size_base": 27.0,
+    "median_size_other": 23.0,
+    "relative_change": -0.14814814814814814,
+    "median_layer_jaccard": 0.7231800766283525
+   },
+   "creative": {
+    "median_size_base": 48.5,
+    "median_size_other": 34.0,
+    "relative_change": -0.29896907216494845,
+    "median_layer_jaccard": 0.6429769392033543
+   },
+   "factual": {
+    "median_size_base": 49.0,
+    "median_size_other": 31.5,
+    "relative_change": -0.35714285714285715,
+    "median_layer_jaccard": 0.6602564102564102
+   },
+   "reasoning": {
+    "median_size_base": 59.0,
+    "median_size_other": 36.5,
+    "relative_change": -0.3813559322033898,
+    "median_layer_jaccard": 0.6176923076923078
+   },
+   "user_prompt": {
+    "median_size_base": 44.5,
+    "median_size_other": 34.5,
+    "relative_change": -0.2247191011235955,
+    "median_layer_jaccard": 0.7142512077294686
+   }
+  }
+ },
+ "nll_base": 1.8374609695139699,
+ "nll_student": 2.003817714541145,
+ "delta_nll": 0.16635674502717523,
+ "top1_agreement": 0.8252924683360727,
+ "mean_relative_change_alpha90": -0.35280130881214233,
+ "h2_size_met": true,
+ "guard_nll_met": false,
+ "guard_top1_met": false,
+ "h2_passed": false
+}

@@ -1,0 +1,653 @@
+# session=coder_01 n_tokens=7266
+
+--- [control] tokens[0:10] ---
+<|turn>system
+<|think|>
+<turn|>
+<|turn>user
+
+
+--- [user_prompt] tokens[10:51] ---
+I'm starting a small Python project: a task queue that processes jobs with retries and exponential backoff. Write a short spec (goals, main functions, inputs/outputs) before any code.
+
+--- [control] tokens[51:56] ---
+<turn|>
+<|turn>model
+
+
+--- [reasoning] tokens[56:655] ---
+<|channel>thought
+
+*   Project: Small Python task queue.
+*   Core Features: Processing jobs, retries, exponential backoff.
+*   Output Format: A short specification (Goals, Main Functions, Inputs/Outputs) *before* any code.
+
+    *   What is its purpose? To manage a pool of tasks that need to be executed, handling failures gracefully.
+    *   *Primary Goal:* Reliable task execution.
+    *   *Secondary Goal:* Resilience to transient errors (via retries/backoff).
+    *   *Tertiary Goal:* Simplicity (since it's a "small project").
+    *   *Technical Goal:* Decouple task definition from task execution.
+
+    *   What are the "moving parts"?
+        *   A `Task` object (the unit of work).
+        *   A `Queue` (the storage/buffer).
+        *   A `Worker` (the engine that runs the tasks).
+        *   A `Scheduler/Manager` (to coordinate).
+
+    *   *Functionality breakdown:*
+        *   Adding tasks to the queue.
+        *   Retrieving tasks.
+        *   Executing a task.
+        *   Handling failures (calculating wait time).
+        *   Re-queueing failed tasks.
+
+    *   *Task Definition:*
+        *   Inputs: A callable (the function), arguments (`*args`, `**kwargs`), max retries, initial delay.
+        *   Outputs: Success/Failure status, result/exception.
+
+    *   *Queue Operations:*
+        *   Input: A Task object.
+        *   Output: None.
+
+    *   *Worker Operations:*
+        *   Input: Task object.
+        *   Output: Updated Task object (with retry count).
+
+    *   *Introduction:* Define the project scope.
+    *   *Goals:* Reliability, Scalability (internal), Resilience.
+    *   *Core Components:*
+        *   `Task`: The data structure.
+        *   `Queue`: The storage.
+        *   `Worker`: The logic.
+    *   *Functions:* `enqueue`, `process_next`, `calculate_backoff`.
+    *   *Data Models (I/O):* Explicitly list what goes in and out.
+
+    *   *Check:* Did I include exponential backoff? Yes.
+    *   *Check:* Is it "short"? Yes, no fluff.
+    *   *Check:* Is it "before any code"? Yes.
+
+    *   *Self-Correction during drafting:* I initially thought about including a database, but for a "small project" spec, let's keep it in-memory (using `queue.Queue`) to keep the spec focused on the logic of retries.<channel|>
+
+--- [code] tokens[655:1552] ---
+This specification outlines a lightweight, in-memory task queue designed for reliability in the face of transient failures.
+
+---
+
+# Specification: Python Retry-Queue (PRQ)
+
+## 1. Project Goals
+*   **Reliability:** Ensure that tasks are not lost due to transient errors (e.g., network timeouts).
+*   **Resilience:** Implement an exponential backoff strategy to prevent overwhelming downstream services during failure loops.
+*   **Simplicity:** Provide a clean, decorator-based or object-oriented API that is easy to integrate into existing Python scripts.
+*   **Decoupling:** Separate the definition of the task (the logic) from the execution logic (the retry/backoff policy).
+
+## 2. Core Components
+
+### A. The `Task` Object
+A data container representing a single unit of work.
+*   **Attributes:**
+    *   `func`: The callable to be executed.
+    *   `args`: Positional arguments for the function.
+    *   `kwargs`: Keyword arguments for the function.
+    *   `retries_remaining`: Integer tracking how many attempts are left.
+    *   `next_run_time`: A timestamp indicating when the task is eligible to run again.
+    *   `delay_multiplier`: The base factor used for exponential backoff.
+
+### B. The `TaskQueue` Manager
+The orchestrator that manages the lifecycle of tasks.
+*   **Responsibilities:**
+    *   Holding the queue of pending tasks.
+    *   Scheduling tasks for future execution based on backoff timers.
+    *   Providing an interface to add new tasks.
+
+### C. The `Worker`
+The execution engine that pulls tasks from the queue.
+*   **Responsibilities:**
+    *   Monitoring the queue for "ready" tasks.
+    *   Executing the task and catching exceptions.
+    *   Calculating backoff intervals upon failure.
+    *   Re-enqueuing tasks if retries are available.
+
+## 3. Main Functions
+
+| Function | Input | Output | Description |
+| :--- | :--- | :--- | :--- |
+| `enqueue(func, args, kwargs, max_retries, base_delay)` | A callable and configuration parameters. | `Task` object added to queue. | Creates a new `Task` and places it in the immediate execution queue. |
+| `process_next()` | None | `None` | Pulls the next available task from the queue and attempts execution. |
+| `calculate_backoff(retry_count, base_delay)` | `retry_count` (int), `base_delay` (float) | `float` (seconds) | Computes $base\_delay \times 2^{retry\_count}$ to determine wait time. |
+| `handle_failure(task, exception)` | `Task` object, `Exception` | `None` | Decrements retry count; if $>0$, calculates new `next_run_time` and re-enqueues. |
+
+## 4. Data Flow (The Retry Loop)
+
+1.  **Submission:** User calls `enqueue()`. A `Task` is created and placed in a `PriorityQueue` (sorted by `next_run_time`).
+2.  **Execution:** The `Worker` checks the head of the queue. If `now() >= task.next_run_time`, it executes `task.func`.
+3.  **Success Path:** If `task.func` returns successfully, the task is marked complete and removed.
+4.  **Failure Path:**
+    *   If an exception is raised, `handle_failure()` is called.
+    *   If `retries_remaining > 0`:
+        *   Calculate new delay: $delay = base\_delay \times 2^{attempts\_made}$.
+        *   Update `task.next_run_time = now() + delay`.
+        *   Update `task.retries_remaining -= 1`.
+        *   Re-insert the task into the queue.
+    *   If `retries_remaining == 0`:
+        *   Log a permanent failure and discard the task.<turn|>
+
+--- [control] tokens[1552:1556] ---
+
+<|turn>user
+
+
+--- [user_prompt] tokens[1556:1565] ---
+Now implement the module based on that spec.
+
+--- [control] tokens[1565:1570] ---
+<turn|>
+<|turn>model
+
+
+--- [reasoning] tokens[1570:2567] ---
+<|channel>thought
+Python Task Queue with retries and exponential backoff.
+The provided specification.
+`Task` object, `TaskQueue` manager, `Worker` engine, `enqueue` logic, `calculate_backoff` logic, and error handling.
+`queue.PriorityQueue` (to handle `next_run_time` sorting), `time`, `functools`, `logging`, and `threading` (to allow the worker to run in the background).
+
+    *   *Imports:* `time`, `heapq` (or `queue.PriorityQueue`), `datetime`, `logging`, `threading`, `dataclasses`.
+    _Self-correction: `dataclasses` is great for the `Task` object._
+
+    *   *Class `Task`:*
+        *   Needs to be comparable so `PriorityQueue` works (compares `next_run_time`).
+        *   Fields: `next_run_time`, `func`, `args`, `kwargs`, `retries_remaining`, `base_delay`, `attempts_made`.
+
+    *   *Class `TaskQueue`:*
+        *   Internal storage: `queue.PriorityQueue`.
+        *   Method `enqueue(...)`.
+        *   Method `get_next_task()`.
+
+    *   *Class `Worker`:*
+        *   A loop running in a thread.
+        *   Logic to check if the task is ready.
+        *   Logic to handle success/failure.
+
+    *   *Wait... how does `PriorityQueue` handle the "is it time yet?" logic?*
+        The worker shouldn't just pop the top task if it's not time yet. It should peek or check. If the top task's `next_run_time` is in the future, the worker should sleep.
+
+    *   *Class `Task`:*
+        ```python
+        @dataclass(order=True)
+        class Task:
+            next_run_time: float
+            func: Callable = field(compare=False)
+            args: tuple = field(compare=False)
+            kwargs: dict = field(compare=False)
+            retries_remaining: int = field(compare=False)
+            base_delay: float = field(compare=False)
+            attempts_made: int = field(compare=False)
+        ```
+
+    *   *Class `TaskQueue`:*
+        ```python
+        class TaskQueue:
+            def __init__(self):
+                self.queue = queue.PriorityQueue()
+            def enqueue(self, ...):
+                # Create Task object
+                # Push to queue
+        ```
+
+    *   *Class `Worker`:*
+        ```python
+        class Worker(threading.Thread):
+            def run(self):
+                while self.running:
+                    task = self.queue.get() # This blocks... but we need to check time.
+                    # If task.next_run_time > now:
+                    #    Put it back or wait.
+        ```
+        *Refinement on Worker logic:* Since `queue.PriorityQueue` blocks on `get()`, if the first item isn't ready, the worker might hang.
+        *Better approach:* Use a `threading.Event` or a small sleep loop. Or, use `queue.get(timeout=...)`. If a timeout occurs, we check the queue. Actually, if we use a `PriorityQueue`, the top element is always the one with the *earliest* `next_run_time`. So, if `top.next_run_time > now`, we can sleep until that time.
+
+    *   *Exponential Backoff:*
+        `delay = base_delay * (2 ** attempts_made)`
+
+    *   `Task` (dataclass).
+    *   `TaskQueue` (wrapper around `PriorityQueue`).
+    *   `Worker` (the thread loop).
+    *   `Example Usage` (to demonstrate it works).
+
+    *   *Error Handling:* Wrap `task.func(*args, **kwargs)` in a `try/except`.
+    *   *Logging:* Use the `logging` module to show retries and failures.
+    *   *Thread Safety:* `queue.PriorityQueue` is thread-safe.
+
+    *   `Task`: Check.
+    *   `TaskQueue`: Check.
+    *   `Worker`: Check.
+    *   `enqueue`: Check.
+    *   `calculate_backoff`: Check.
+    *   `handle_failure`: Check.
+
+(This matches the provided good response).<channel|>
+
+--- [code] tokens[2567:4509] ---
+Here is the implementation of the **Python Retry-Queue (PRQ)** based on the specification provided.
+
+I have used `dataclasses` for the `Task` structure and `threading` to allow the `Worker` to run in the background, simulating a real-world asynchronous environment.
+
+```python
+import time
+import logging
+import threading
+import queue
+from dataclasses import dataclass, field
+from typing import Callable, Any, Tuple, Dict
+
+# Configure logging to track task progress and retries
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%H:%M:%S",
+)
+logger = logging.getLogger("PRQ")
+
+@dataclass(order=True)
+class Task:
+    """
+    Represents a unit of work. 
+    The 'order=True' and placing 'next_run_time' first allows the 
+    PriorityQueue to sort tasks by their scheduled execution time.
+    """
+    next_run_time: float
+    func: Callable = field(compare=False)
+    args: Tuple = field(default_factory=tuple, compare=False)
+    kwargs: Dict = field(default_factory=dict, compare=False)
+    retries_remaining: int = field(default=0, compare=False)
+    base_delay: float = field(default=1.0, compare=False)
+    attempts_made: int = field(default=0, compare=False)
+
+class TaskQueue:
+    """Man:ages the storage and retrieval of tasks."""
+    def __init__(self):
+        self._queue = queue.PriorityQueue()
+
+    def enqueue(self, func: Callable, args: Tuple = (), kwargs: Dict = None, 
+                max_retries: int = 3, base_delay: float = 1.0):
+        """Creates a new Task and adds it to the queue."""
+        kwargs = kwargs or {}
+        new_task = Task(
+            next_run_time=time.time(),
+            func=func,
+            args=args,
+            kwargs=kwargs,
+            retries_remaining=max_retries,
+            base_delay=base_delay,
+            attempts_made=0
+        )
+        self._queue.put(new_task)
+        logger.info(f"Enqueued task: {func.__name__} (Retries left: {max_retries})")
+
+    def get_next_task(self, timeout: float = 1.0) -> Task:
+        """Retrieves the next task from the queue."""
+        try:
+            return self._queue.get(timeout=timeout)
+        except queue.Empty:
+            return None
+
+    def re_enqueue(self, task: Task):
+        """Puts a task back into the queue (used for retries)."""
+        self._queue.put(task)
+
+class Worker(threading.Thread):
+    """The execution engine that processes tasks from the TaskQueue."""
+    def __int__(self):
+        super().__init__()
+        self.running = True
+
+    def __init__(self, task_queue: TaskQueue):
+        super().__init__()
+        self.task_queue = task_queue
+        self.running = True
+        self.daemon = True  # Thread dies when main program exits
+
+    def calculate_backoff(self, attempts_made: int, base_delay: float) -> float:
+        """Implementation of exponential backoff: base * 2^attempts."""
+        return base_delay * (2 ** attempts_made)
+
+    def run(self):
+        logger.info("Worker started.")
+        while self.running:
+            task = self.task_queue.get_next_task(timeout=1.0)
+            
+            if task is None:
+                continue
+
+            # Check if the task is ready to run (handles backoff delay)
+            now = time.time()
+            if task.next_run_time > now:
+                # Not time yet, put it back and wait a bit
+                self.task_queue.re_enqueue(task)
+                time.sleep(0.1)
+                continue
+
+            self._execute_task(task)
+
+    def _execute_task(self, task: Task):
+        """Logic for executing a single task and handling the outcome."""
+        try:
+            logger.info(f"Executing: {task.func.__name__} (Attempt {task.attempts_made + 1})")
+            task.func(*task.args, **task.kwargs)
+            logger.info(f"Successfully completed: {task.func.__name__}")
+        
+        except Exception as e:
+            logger.error(f"Task failed: {task.func.__name__} | Error: {e}")
+            self._handle_failure(task, e)
+
+    def _handle_failure(self, task: Task, error: Exception):
+        """Logic for managing retries and exponential backoff."""
+        if task.retries_remaining > 0:
+            task.retries_remaining -= 1
+            task.attempts_made += 1
+            
+            delay = self.calculate_backoff(task.attempts_made, task.base_delay)
+            task.next_run_tme = time.time() + delay
+            
+            logger.warning(
+                f"Retrying {task.func.__name__} in {delay:.2f}s. "
+                f"({task.retries_remaining} retries left)"
+            )
+            # Re-calculate the actual run time
+            task.next_run_time = time.time() + delay
+            self.task_queue.re_enqueue(task)
+        else:
+            logger.error(f"Task {task.func.__name__} failed permanently after all retries.")
+
+# --- Demonstration Code ---
+
+def unreliable_task(name: str, fail_until_attempt: int):
+    """A dummy task that fails a specific number of times before succeeding."""
+    # We use a global/static counter for demo purposes to simulate state
+    if not hasattr(unreliable_task, "_counter"):
+        unreliable_task._counter = 0
+    
+    unreliable_task._counter += 1
+    
+    if unreliable_task._counter <= fail_until_attempt:
+        raise ValueError(f"Simulated transient error (Attempt {unlar_task._counter})")
+    print(f"--- Task '{name}' actually finished successfully! ---")
+
+def permanent_failure_task():
+    """A task that will always fail."""
+    raise RuntimeError("This is a fatal error.")
+
+if __name__ == "__main__":
+    # 1. Initialize Queue and Worker
+    my_queue = TaskQueue()
+    worker_thread = Worker(my_queue)
+    worker_thread.start()
+
+    # 2. Enqueue a task that will succeed after 2 failures
+    # base_delay=1s -> 1st retry at 2s, 2nd retry at 4s...
+    my_queue.enqueue(unreliable_task, args=("RecoverableTask", 2), max_retries=3, base_delay=1.0)
+
+    # 3. Enqueue a task that will fail permanently
+    my_queue.enqueue(permanent_failure_task, max_retries=2, base_delay=1.0)
+
+    # Keep main thread alive to watch the execution
+    try:
+        time.sleep(15)
+        print("\nDemonstration complete. Shutting down.")
+    except KeyboardInterrupt:
+        pass
+```
+
+### Key Implementation Details:
+1.  **`Task` Sorting:** By using `@dataclass(order=True)` and placing `next_run_time` as the first field, the `PriorityQueue` automatically keeps the task with the *earliest* timestamp at the top.
+2.  **The "Wait" Mechanism:** In `Worker.run`, if the worker pulls a task whose `next_run_time` hasn't arrived yet, it puts it back in the queue. This allows the queue to "sleep" until the backoff period expires.
+3.  **Thread Safety:** I used `queue.PriorityQueue`, which is inherently thread-safe, meaning the `Worker` thread and the `Main` thread can interact with the queue without race conditions.
+4.  **Exponential Backoff:** The formula `base_delay * (2 ** attempts_made)` ensures that the delay grows exponentially (1s, 2s, 4s, 8s...), reducing pressure on the system during outages.<turn|>
+
+--- [control] tokens[4509:4513] ---
+
+<|turn>user
+
+
+--- [user_prompt] tokens[4513:4530] ---
+Add unit tests (pytest) covering the normal case and at least two edge cases.
+
+--- [control] tokens[4530:4535] ---
+<turn|>
+<|turn>model
+
+
+--- [reasoning] tokens[4535:5752] ---
+<|channel>thought
+The existing Python Task Queue implementation (the `TaskQueue`, `Worker`, and `Task` classes).
+Write `pytest` unit tests.
+
+        *   Normal case (success).
+        *   Edge case 1: Permanent failure (max retries reached).
+        *   Edge case 2: Task scheduled for the future (backoff logic verification).
+        *   (Optional) Edge case 3: Empty queue/timeout behavior.
+
+    *   Testing a `Worker` thread is tricky because it's an infinite loop.
+    *   *Strategy:* Instead of trying to test the running thread (which involves timing issues), I will test the logic of the `TaskQueue` and the `Worker`'s internal methods (`calculate_backoff`, `_handle_failure`) in isolation.
+    *   I will also create a "Mock" or "Controlled" version of the worker logic to verify that the `TaskQueue` behaves correctly when tasks are added/re-added.
+
+    *   **Test 1: `test_enqueue_success`**
+        *   *Goal:* Verify a task is added correctly to the queue.
+        *   *Logic:* Create `TaskQueue`, `enqueue` a function, `get_next_task`, check attributes.
+
+    *   **Test 2: `test_exponential_backoff_calculation`**
+        *   *Goal:* Verify the math for backoff.
+        *   *Logic:* Call `worker.calculate_backoff(attempts=1, base=1.0)` -> expect 2.0.
+
+    *   **Test 3: `test_permanent_failure_logic`**
+        *   *Goal:* Verify that once retries run out, the task is no longer re-enqueued.
+        
+    *   **Test 4: `test_backoff_scheduling`**
+        *   *Goal:* Verify that a failed task gets a new `next_run_time` in the future.
+
+    *   *Setup:* Need a `conftest.py` or just put it in one file for simplicity. Let's assume one file `test_task_queue.py`.
+    *   *Mocks:* I'll use `unittest.mock` to prevent actual sleeping or real time passing in tests where possible, though `time.time()` is hard to mock without `freezegun`. I'll stick to standard `pytest` logic.
+
+    *   *Test Case: Normal Success*
+        ```python
+        def test_task_queue_success():
+            tq = TaskQueue()
+            def dummy(): pass
+            tq.enqueue(dummy)
+            task = tq.get_next_task()
+            assert task.func == dummy
+            assert task.retries_ymaining == 3
+        ```
+
+    *   *Test Case: Backoff Math*
+        ```python
+        def test_backoff_math():
+            worker = Worker(TaskQueue())
+            assert worker.calculate_backoff(0, 1.0) == 1.0
+            assert worker.calculate_backoff(1, 1.0) == 2.0
+            assert worker.calculate_backoff(2, 1.0) == 4.0
+        ```
+
+    *   *Test Case: Exhausting Retries (The "Edge" Case)*
+        ```python
+        def test_exhaust_retries():
+            tq = TaskQueue()
+            worker = Worker(tq)
+            def fail(): raise ValueError("Fail")
+            tq.enqueue(fail, max_retries=1)
+            
+            task = t6.get_next_task()
+            # Manually trigger the failure logic
+            worker._handle_failure(task, ValueError("Fail"))
+            
+            # After 1 retry is used, retries_remaining should be 0. 
+            # If we trigger it again, it shouldn't re-enqueue.
+            # Wait, I need to verify the task is NOT in the queue.
+            # This is hard because re-enqueue puts it back.
+            # Let's check the task object state.
+        ```
+
+    *   *Refined Test Case: Task Re-enqueuing logic*
+        If `retries_remaining` becomes 0, the task should be dropped. I need to check the `TaskQueue` size.
+
+    *   *Edge Case: Future Task*
+        Verify that if a task has a `next_run_time` in the future, `get_next_task` returns it, but the logic in `Worker` would handle it.
+
+    *   Use `pytest`.
+    *   Use `unittest.mock` to mock the `TaskQueue` for the `Worker` tests.
+    *   Ensure the tests are clean and don't actually start background threads that hang the test suite.
+
+    *(Self-Correction during coding)*: Testing `Worker.run` is dangerous in unit tests because it's a `while True` loop. I will test the *methods* called by the loop (`_execute_task`, `_handle_mock_failure`) instead.
+
+    *   `test_enqueue_functionality` (Normal)
+    *   `test_backoff_calculation` (Math verification)
+    *   `test_retry_mechanism_exhaustion` (Edge Case: Retries hit zero)
+    *   `test_task_backoff_scheduling` (Edge Case: Time is updated)
+
+(This matches the provided good response).<channel|>
+
+--- [code] tokens[5752:7265] ---
+To test this effectively, we need to avoid running the infinite `while` loop of the `Worker` thread, as that would hang our test suite. Instead, we will unit test the **logic components**: the `TaskQueue` (storage), the `calculate_backoff` (math), and the `Worker` methods (`_handle_failure` and `_execute_task`) in isolation.
+
+I recommend using `pytest`. You can install it via `pip install pytest`.
+
+### The Test Suite (`test_task_queue.py`)
+
+```python
+import pytest
+import time
+from unittest.mock import Mock, patch
+from your_module_name import TaskQueue, Worker, Task  # Replace your_module_name
+
+# --- Fixtures ---
+
+@pytest.fixture
+def task_queue():
+    return TaskQueue()
+
+@pytest.fixture
+def worker(task_queue):
+    return Worker(task_queue)
+
+@pytest.fixture
+int_task_func():
+    def func():
+        return "success"
+    return func
+
+# --- Tests ---
+
+def test_enqueue_success(task_queue, int_task_func):
+    """
+    Normal Case: Verify that a task is correctly added to the queue 
+    with all expected attributes.
+    """
+    task_queue.enqueue(int_task_func, args=("test_arg",), kwargs={"key": "val"}, max_retries=5)
+    
+    task = task_queue.get_next_task(timeout=0.1)
+    
+    assert task is not None
+    assert task.func == int_task_func
+    assert task.args == ("test_arg",)
+    assert task.kwargs == {"key": "val"}
+    assert task.retries_remaining == 5
+    assert task.attempts_made == 0
+
+def test_backoff_calculation(worker):
+    """
+    Math Verification: Ensure exponential backoff follows the 2^n formula.
+    """
+    base_delay = 1.0
+    # 0 attempts: 1.0 * 2^0 = 1.0
+    assert worker.calculate_backoff(0, base_delay) == 1.0
+    # 1 attempt:  1.0 * 2^1 = 2.0
+    assert worker.calculate_backoff(1, base_delay) == 2.0
+    # 3 attempts: 1.0 * 2^3 = 8.0
+    assert worker.calculate_backoff(3, base_delay) == 8.0
+
+def test_retry_mechanism_exhaustion(task_queue, worker):
+    """
+    Edge Case: Verify that when retries_remaining reaches 0, 
+    the task is NOT re-enqueued.
+    """
+    def failing_func():
+        raise ValueError("Permanent Failure")
+
+    # Enqueue with 0 retries allowed
+    task_queue.enqueue(failing_func, max_retries=0)
+    task = task_queue.get_next_task()
+    
+    # Simulate the failure handling
+    worker._handle_failure(task, ValueError("Permanent Failure"))
+    
+    # The queue should be empty because retries_remaining was 0
+    assert task_queue.get_next_task(timeout=0.1) is None
+    assert task.retries_remaining == 0
+
+def test_task_backoff_scheduling(task_queue, worker):
+    """
+    Edge Case: Verify that upon failure, the task's next_run_time 
+    is pushed into the future.
+    """
+    def failing_func():
+        raise ValueError("Temporary Failure")
+
+    base_delay = 10.0
+    task_queue.enqueue(failing_func, max_retries=2, base_delay=base_delay)
+    task = task.get_next_task()
+    
+    # Capture time before failure
+    start_time = time.time()
+    
+    # Simulate failure
+    worker._handle_failure(task, ValueError("Temporary Failure"))
+    
+    # Verify the task was re-enqueued and its time is in the future
+    re_enqueued_task = task_queue.get_next_task()
+    assert re_enqueued_task is not None
+    assert re_enqueued_task.next_run_time > start_time
+    # The delay should be base_delay * 2^1 = 20.0
+    # We check if it's roughly 10-20 seconds from now
+    expected_min_delay = start_time + base_delay
+    assert re_enqueued_task.next_run_time >= expected_min_delay
+
+def test_worker_executes_successfully(task_queue, worker):
+    """
+    Normal Case: Verify that the worker correctly processes a 
+    successful task and removes it from the queue.
+    """
+    mock_func = Mock()
+    task_queue.enqueue(mock_func)
+    
+    # Manually trigger the execution logic
+    task = task_queue.get_next_task()
+    worker._execute_task(task)
+    
+    # Verify the function was called
+    mock_func.assert_called_once()
+    # Verify the queue is now empty
+    assert task_queue.get_next_task(timeout=0.1) is None
+```
+
+### How to run this:
+
+1.  Save your main code as `task_queue_module.py`.
+2.  Save the test code as `test_task_queue.py` in the same directory.
+3.  **Important:** Update the import line in the test file: `from task_queue_module import TaskQueue, Worker, Task`.
+4.  Run the following command in your terminal:
+
+```bash
+pytest test_task_queue.py
+```
+
+### What these tests cover:
+1.  **`test_enqueue_success`**: Ensures the `TaskQueue` isn't corrupting data when wrapping functions and arguments.
+2.  **`test_backoff_calculation`**: Ensures the core mathematical requirement of the spec (exponential growth) is strictly accurate.
+3.  **`test_retry_mechanism_exhaustion`**: Tests the "boundary condition" where the retry counter hits zero, ensuring we don't enter an infinite loop of failures.
+4.  **`test_task_backoff_scheduling`**: Tests the "time-travel" aspect—ensuring that a failed task is rescheduled for a future timestamp, not run immediately again.
+5.  **`test_worker_executes_successfully`**: Uses a `Mock` object to verify that the `Worker` actually triggers the underlying function.<turn|>
+
+--- [control] tokens[7265:7266] ---
+
+

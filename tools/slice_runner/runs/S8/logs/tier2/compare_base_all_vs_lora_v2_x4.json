@@ -1,0 +1,157 @@
+{
+ "base": "base_all",
+ "other": "lora_v2_x4",
+ "by_alpha": {
+  "0.8": {
+   "code": {
+    "median_size_base": 34.0,
+    "median_size_other": 32.5,
+    "relative_change": -0.04411764705882353,
+    "median_layer_jaccard": 0.9142857142857143
+   },
+   "control": {
+    "median_size_base": 19.0,
+    "median_size_other": 17.0,
+    "relative_change": -0.10526315789473684,
+    "median_layer_jaccard": 0.8297101449275363
+   },
+   "creative": {
+    "median_size_base": 38.0,
+    "median_size_other": 36.5,
+    "relative_change": -0.039473684210526314,
+    "median_layer_jaccard": 0.9538706256627784
+   },
+   "factual": {
+    "median_size_base": 36.5,
+    "median_size_other": 35.5,
+    "relative_change": -0.0273972602739726,
+    "median_layer_jaccard": 0.9380952380952381
+   },
+   "reasoning": {
+    "median_size_base": 45.5,
+    "median_size_other": 44.5,
+    "relative_change": -0.02197802197802198,
+    "median_layer_jaccard": 0.9198717948717949
+   },
+   "user_prompt": {
+    "median_size_base": 31.0,
+    "median_size_other": 32.5,
+    "relative_change": 0.04838709677419355,
+    "median_layer_jaccard": 0.8484848484848485
+   }
+  },
+  "0.9": {
+   "code": {
+    "median_size_base": 49.0,
+    "median_size_other": 49.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 0.9289308176100629
+   },
+   "control": {
+    "median_size_base": 29.0,
+    "median_size_other": 26.0,
+    "relative_change": -0.10344827586206896,
+    "median_layer_jaccard": 0.903125
+   },
+   "creative": {
+    "median_size_base": 52.0,
+    "median_size_other": 50.0,
+    "relative_change": -0.038461538461538464,
+    "median_layer_jaccard": 0.9629629629629629
+   },
+   "factual": {
+    "median_size_base": 50.0,
+    "median_size_other": 49.5,
+    "relative_change": -0.01,
+    "median_layer_jaccard": 0.9446324951644101
+   },
+   "reasoning": {
+    "median_size_base": 62.0,
+    "median_size_other": 61.0,
+    "relative_change": -0.016129032258064516,
+    "median_layer_jaccard": 0.9602212855637513
+   },
+   "user_prompt": {
+    "median_size_base": 45.0,
+    "median_size_other": 47.0,
+    "relative_change": 0.044444444444444446,
+    "median_layer_jaccard": 0.8635658914728682
+   }
+  }
+ },
+ "type_separation_jsd": {
+  "code_vs_control": {
+   "jsd_base": 0.4073275048213371,
+   "jsd_other": 0.4353460225771084
+  },
+  "code_vs_creative": {
+   "jsd_base": 0.4568890740213328,
+   "jsd_other": 0.4557884040041269
+  },
+  "code_vs_factual": {
+   "jsd_base": 0.3196352187774628,
+   "jsd_other": 0.3253583142454986
+  },
+  "code_vs_reasoning": {
+   "jsd_base": 0.1826377829355912,
+   "jsd_other": 0.18388687876250212
+  },
+  "code_vs_user_prompt": {
+   "jsd_base": 0.32954892303262573,
+   "jsd_other": 0.3144936500557529
+  },
+  "control_vs_creative": {
+   "jsd_base": 0.4662372977149062,
+   "jsd_other": 0.4833186405691831
+  },
+  "control_vs_factual": {
+   "jsd_base": 0.4173418310852436,
+   "jsd_other": 0.43884946439126715
+  },
+  "control_vs_reasoning": {
+   "jsd_base": 0.3200106392999825,
+   "jsd_other": 0.3422208997669303
+  },
+  "control_vs_user_prompt": {
+   "jsd_base": 0.33786700720064783,
+   "jsd_other": 0.3987623876056864
+  },
+  "creative_vs_factual": {
+   "jsd_base": 0.14965905819976238,
+   "jsd_other": 0.1481574703000787
+  },
+  "creative_vs_reasoning": {
+   "jsd_base": 0.16820668673796074,
+   "jsd_other": 0.1676300339148687
+  },
+  "creative_vs_user_prompt": {
+   "jsd_base": 0.27067162053262894,
+   "jsd_other": 0.19427369377278758
+  },
+  "factual_vs_reasoning": {
+   "jsd_base": 0.06018329903647676,
+   "jsd_other": 0.06140402336965109
+  },
+  "factual_vs_user_prompt": {
+   "jsd_base": 0.1693023619523763,
+   "jsd_other": 0.10777745729527508
+  },
+  "reasoning_vs_user_prompt": {
+   "jsd_base": 0.13175260941431227,
+   "jsd_other": 0.09241792923857381
+  }
+ },
+ "h2": {
+  "criterion": "mean over types of the relative change of the median per-layer alpha=0.9 set size <= -30% and reasoning_vs_code / code_vs_factual JSD not below 0.9x base",
+  "mean_relative_change_alpha90": -0.016147642679900744,
+  "per_type_relative_change": {
+   "reasoning": -0.016129032258064516,
+   "code": 0.0,
+   "factual": -0.01,
+   "creative": -0.038461538461538464
+  },
+  "size_criterion_met": false,
+  "separation_held": true,
+  "mean_median_layer_jaccard": 0.9491868903252967
+ }
+}

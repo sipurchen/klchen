@@ -1,0 +1,10 @@
+﻿<bos><start_of_turn>user
+What is the speed of light in a vacuum, approximately?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>The speed of light in a vacuum is approximately **299,792,458 meters per second**.
+
+In common scientific and everyday use, it is often rounded to:
+*   **3.00 × 10⁸ m/s** (Scientific notation)
+*   **300,000 km/s** (Kilometers per second)
+*   **186,282 miles per second** (Miles per second)<end_of_turn>

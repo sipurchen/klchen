@@ -1,0 +1,26 @@
+﻿<bos><start_of_turn>user
+This Python function has a bug: def divide(a, b): return a / b. Fix it so it handles b=0 safely and add a type hint.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>To fix this, you should add a check for the divisor and use the `Optional` type hint from the `typing` module to indicate that the function might return `None` if division by zero occurs.
+
+Here is the corrected code:
+
+```python
+from typing import Optional
+
+def divide(a: float, b: float) -> Optional[float]:
+    """Divides a by b. Returns None if b is zero."""
+    if b == 0:
+        return None
+    return a / b
+
+# Testing the function
+print(divide(10, 2))   # Output: 5.0
+print(divide(10, 0))   # Output: None
+```
+
+### Key Improvements:
+1.  **Error Handling:** Added an `if b == 0` check to prevent a `ZeroDivisionError`.
+2.  **Type Hints:** 
+    *   `a<end_of_turn>

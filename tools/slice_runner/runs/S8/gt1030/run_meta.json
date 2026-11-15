@@ -1,0 +1,21 @@
+{
+ "tag": "gt_pilot",
+ "profile": "gt1030",
+ "model": "E:\\LLMmodel\\gemma4-26B-A4B-it-GGUF\\google_gemma-4-26B-A4B-it-Q4_K_M.gguf",
+ "lora": null,
+ "lora_scale": 1.0,
+ "ngl": 8,
+ "ubatch": 128,
+ "n_ctx": 8192,
+ "threads": 2,
+ "device_buffers_mib": {
+  "Vulkan0": 1609.24
+ },
+ "vram_verdict": "warn",
+ "sessions": {
+  "planner_pilot": {
+   "tokens": 1280,
+   "seconds": 4852.1
+  }
+ }
+}

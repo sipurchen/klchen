@@ -1,0 +1,96 @@
+{
+  "session": "planner_03",
+  "n_tokens": 6906,
+  "spans": [
+    {
+      "start": 0,
+      "end": 10,
+      "type": "control"
+    },
+    {
+      "start": 10,
+      "end": 52,
+      "type": "user_prompt"
+    },
+    {
+      "start": 52,
+      "end": 57,
+      "type": "control"
+    },
+    {
+      "start": 57,
+      "end": 2341,
+      "type": "reasoning"
+    },
+    {
+      "start": 2341,
+      "end": 2345,
+      "type": "control"
+    },
+    {
+      "start": 2345,
+      "end": 2374,
+      "type": "user_prompt"
+    },
+    {
+      "start": 2374,
+      "end": 2379,
+      "type": "control"
+    },
+    {
+      "start": 2379,
+      "end": 4066,
+      "type": "reasoning"
+    },
+    {
+      "start": 4066,
+      "end": 4070,
+      "type": "control"
+    },
+    {
+      "start": 4070,
+      "end": 4100,
+      "type": "user_prompt"
+    },
+    {
+      "start": 4100,
+      "end": 4105,
+      "type": "control"
+    },
+    {
+      "start": 4105,
+      "end": 5698,
+      "type": "reasoning"
+    },
+    {
+      "start": 5698,
+      "end": 5702,
+      "type": "control"
+    },
+    {
+      "start": 5702,
+      "end": 5728,
+      "type": "user_prompt"
+    },
+    {
+      "start": 5728,
+      "end": 5733,
+      "type": "control"
+    },
+    {
+      "start": 5733,
+      "end": 6352,
+      "type": "reasoning"
+    },
+    {
+      "start": 6352,
+      "end": 6905,
+      "type": "factual"
+    },
+    {
+      "start": 6905,
+      "end": 6906,
+      "type": "control"
+    }
+  ]
+}

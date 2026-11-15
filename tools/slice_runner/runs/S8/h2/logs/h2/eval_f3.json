@@ -1,0 +1,91 @@
+{
+ "router": "logs/h2/adapter_c1",
+ "peft": "logs/h2/adapter_f3",
+ "pooled": {
+  "0.8": {
+   "code": {
+    "median_size_base": 34.0,
+    "median_size_other": 22.0,
+    "relative_change": -0.35294117647058826,
+    "median_layer_jaccard": 0.6090831918505942
+   },
+   "control": {
+    "median_size_base": 18.0,
+    "median_size_other": 15.0,
+    "relative_change": -0.16666666666666666,
+    "median_layer_jaccard": 0.6809090909090909
+   },
+   "creative": {
+    "median_size_base": 35.0,
+    "median_size_other": 24.0,
+    "relative_change": -0.3142857142857143,
+    "median_layer_jaccard": 0.625
+   },
+   "factual": {
+    "median_size_base": 35.0,
+    "median_size_other": 23.5,
+    "relative_change": -0.32857142857142857,
+    "median_layer_jaccard": 0.6347222222222222
+   },
+   "reasoning": {
+    "median_size_base": 43.0,
+    "median_size_other": 25.0,
+    "relative_change": -0.4186046511627907,
+    "median_layer_jaccard": 0.5997023809523809
+   },
+   "user_prompt": {
+    "median_size_base": 30.0,
+    "median_size_other": 20.0,
+    "relative_change": -0.3333333333333333,
+    "median_layer_jaccard": 0.6066017316017316
+   }
+  },
+  "0.9": {
+   "code": {
+    "median_size_base": 49.5,
+    "median_size_other": 34.0,
+    "relative_change": -0.31313131313131315,
+    "median_layer_jaccard": 0.6351422550052688
+   },
+   "control": {
+    "median_size_base": 27.0,
+    "median_size_other": 21.5,
+    "relative_change": -0.2037037037037037,
+    "median_layer_jaccard": 0.6821428571428572
+   },
+   "creative": {
+    "median_size_base": 48.5,
+    "median_size_other": 34.5,
+    "relative_change": -0.28865979381443296,
+    "median_layer_jaccard": 0.6568181818181817
+   },
+   "factual": {
+    "median_size_base": 49.0,
+    "median_size_other": 33.0,
+    "relative_change": -0.32653061224489793,
+    "median_layer_jaccard": 0.6545454545454545
+   },
+   "reasoning": {
+    "median_size_base": 59.0,
+    "median_size_other": 35.0,
+    "relative_change": -0.4067796610169492,
+    "median_layer_jaccard": 0.6206060606060606
+   },
+   "user_prompt": {
+    "median_size_base": 44.5,
+    "median_size_other": 29.5,
+    "relative_change": -0.33707865168539325,
+    "median_layer_jaccard": 0.6112637362637363
+   }
+  }
+ },
+ "nll_base": 1.8374609695139699,
+ "nll_student": 2.1627093990248105,
+ "delta_nll": 0.32524842951084065,
+ "top1_agreement": 0.8455960553031036,
+ "mean_relative_change_alpha90": -0.3337753450518983,
+ "h2_size_met": true,
+ "guard_nll_met": false,
+ "guard_top1_met": false,
+ "h2_passed": false
+}

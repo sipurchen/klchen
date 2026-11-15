@@ -1,0 +1,17 @@
+{
+ "session": "planner_pilot",
+ "tokens": 1280,
+ "profile": "gt1030_win",
+ "ngl": 8,
+ "ubatch": 128,
+ "vram_mib": 1609.24,
+ "tok_per_s": 0.27,
+ "locality_gt": 0.91,
+ "locality_gx10_same_tokens": 0.907,
+ "shuffled_control_both": 0.776,
+ "count_matrix_pearson": 0.9972,
+ "per_layer_r_min": 0.986,
+ "mean_shared_experts_of_8": 7.39,
+ "identical_token_layers": 0.56,
+ "layout": "config/tier2_layouts/b8679.json (inferred, validated by behaviour)"
+}

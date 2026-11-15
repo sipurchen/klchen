@@ -1,0 +1,15 @@
+﻿<bos><start_of_turn>user
+How many continents are there on Earth?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>There are generally considered to be **seven** continents on Earth. They are:
+
+1.  **Africa**
+2.  **Antarctica**
+3.  **Asia**
+4.  **Australia** (sometimes referred to as Oceania)
+5.  **Europe**
+6.  **North America**
+7.  **South America**
+
+**Note:** Different parts of the world sometimes use different models. For example, some educators teach a 6-continent model (combining Europe and Asia into "Eurasia" or combining North and South America into "America"), and some geographers consider the combined landmass of Europe and Asia as one continent called Eurasia.<end_of_turn>

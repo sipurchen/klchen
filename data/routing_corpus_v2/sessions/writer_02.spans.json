@@ -1,0 +1,186 @@
+{
+  "session": "writer_02",
+  "n_tokens": 6668,
+  "spans": [
+    {
+      "start": 0,
+      "end": 10,
+      "type": "control"
+    },
+    {
+      "start": 10,
+      "end": 45,
+      "type": "user_prompt"
+    },
+    {
+      "start": 45,
+      "end": 50,
+      "type": "control"
+    },
+    {
+      "start": 50,
+      "end": 531,
+      "type": "reasoning"
+    },
+    {
+      "start": 531,
+      "end": 807,
+      "type": "creative"
+    },
+    {
+      "start": 807,
+      "end": 811,
+      "type": "control"
+    },
+    {
+      "start": 811,
+      "end": 823,
+      "type": "user_prompt"
+    },
+    {
+      "start": 823,
+      "end": 828,
+      "type": "control"
+    },
+    {
+      "start": 828,
+      "end": 1309,
+      "type": "reasoning"
+    },
+    {
+      "start": 1309,
+      "end": 1738,
+      "type": "creative"
+    },
+    {
+      "start": 1738,
+      "end": 1742,
+      "type": "control"
+    },
+    {
+      "start": 1742,
+      "end": 1757,
+      "type": "user_prompt"
+    },
+    {
+      "start": 1757,
+      "end": 1762,
+      "type": "control"
+    },
+    {
+      "start": 1762,
+      "end": 2307,
+      "type": "reasoning"
+    },
+    {
+      "start": 2307,
+      "end": 2890,
+      "type": "creative"
+    },
+    {
+      "start": 2890,
+      "end": 2894,
+      "type": "control"
+    },
+    {
+      "start": 2894,
+      "end": 2906,
+      "type": "user_prompt"
+    },
+    {
+      "start": 2906,
+      "end": 2911,
+      "type": "control"
+    },
+    {
+      "start": 2911,
+      "end": 3425,
+      "type": "reasoning"
+    },
+    {
+      "start": 3425,
+      "end": 4048,
+      "type": "creative"
+    },
+    {
+      "start": 4048,
+      "end": 4052,
+      "type": "control"
+    },
+    {
+      "start": 4052,
+      "end": 4068,
+      "type": "user_prompt"
+    },
+    {
+      "start": 4068,
+      "end": 4073,
+      "type": "control"
+    },
+    {
+      "start": 4073,
+      "end": 4586,
+      "type": "reasoning"
+    },
+    {
+      "start": 4586,
+      "end": 5016,
+      "type": "creative"
+    },
+    {
+      "start": 5016,
+      "end": 5020,
+      "type": "control"
+    },
+    {
+      "start": 5020,
+      "end": 5043,
+      "type": "user_prompt"
+    },
+    {
+      "start": 5043,
+      "end": 5048,
+      "type": "control"
+    },
+    {
+      "start": 5048,
+      "end": 5569,
+      "type": "reasoning"
+    },
+    {
+      "start": 5569,
+      "end": 5672,
+      "type": "factual"
+    },
+    {
+      "start": 5672,
+      "end": 5676,
+      "type": "control"
+    },
+    {
+      "start": 5676,
+      "end": 5696,
+      "type": "user_prompt"
+    },
+    {
+      "start": 5696,
+      "end": 5701,
+      "type": "control"
+    },
+    {
+      "start": 5701,
+      "end": 6378,
+      "type": "reasoning"
+    },
+    {
+      "start": 6378,
+      "end": 6667,
+      "type": "factual"
+    },
+    {
+      "start": 6667,
+      "end": 6668,
+      "type": "control"
+    }
+  ]
+}

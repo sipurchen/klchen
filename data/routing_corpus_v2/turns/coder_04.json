@@ -1,0 +1,20 @@
+{
+  "family": "coder",
+  "session": "04",
+  "seed": 2004,
+  "system": null,
+  "turns": [
+    {"label": "code", "user": "I'm starting a small Python project: a command-line tool that converts a Markdown file with headings, lists and links into simple HTML. Write a short spec (goals, main functions, inputs/outputs) before any code."},
+    {"label": "code", "user": "Now implement the module based on that spec."},
+    {"label": "code", "user": "Add unit tests (pytest) covering the normal case and at least two edge cases."},
+    {"label": "reasoning", "user": "Here is a failing test output: ``` FAILED test_nested_list - AssertionError: expected '<ul><li>a<ul><li>b</li></ul></li></ul>' got '<ul><li>a</li><li>b</li></ul>' ``` Walk through why this might be happening before fixing it, then fix it."},
+    {"label": "code", "user": "Refactor the module to be cleaner — extract any repeated logic into a helper function, and add type hints throughout."},
+    {"label": "code", "user": "Add a small CLI (argparse) so this module can be run from the command line with an input and an output path."},
+    {"label": "code", "user": "Now extend the project with a second module: a watcher that re-converts the file whenever it changes. It should reuse code from the first module where sensible."},
+    {"label": "reasoning", "user": "Review the whole project so far and explain, in plain language, the main design decisions and any trade-offs you made."},
+    {"label": "reasoning", "user": "If this ran on a folder of 10,000 Markdown files, where would the performance bottleneck likely be, and how would you address it?"},
+    {"label": "factual", "user": "List the Python standard-library modules you used across this project and, for each, one sentence on what it's for."},
+    {"label": "code", "user": "One more thing: add basic error handling for a missing or unreadable input file, with a clear error message."},
+    {"label": "factual", "user": "Write a short summary (5-8 lines) of the whole project suitable for a README's top section."}
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "session": "coder_pilot",
+  "n_tokens": 7969,
+  "spans": [
+    {
+      "start": 0,
+      "end": 10,
+      "type": "control"
+    },
+    {
+      "start": 10,
+      "end": 49,
+      "type": "user_prompt"
+    },
+    {
+      "start": 49,
+      "end": 54,
+      "type": "control"
+    },
+    {
+      "start": 54,
+      "end": 619,
+      "type": "reasoning"
+    },
+    {
+      "start": 619,
+      "end": 1476,
+      "type": "code"
+    },
+    {
+      "start": 1476,
+      "end": 1480,
+      "type": "control"
+    },
+    {
+      "start": 1480,
+      "end": 1489,
+      "type": "user_prompt"
+    },
+    {
+      "start": 1489,
+      "end": 1494,
+      "type": "control"
+    },
+    {
+      "start": 1494,
+      "end": 2088,
+      "type": "reasoning"
+    },
+    {
+      "start": 2088,
+      "end": 3843,
+      "type": "code"
+    },
+    {
+      "start": 3843,
+      "end": 3847,
+      "type": "control"
+    },
+    {
+      "start": 3847,
+      "end": 3864,
+      "type": "user_prompt"
+    },
+    {
+      "start": 3864,
+      "end": 3869,
+      "type": "control"
+    },
+    {
+      "start": 3869,
+      "end": 4468,
+      "type": "reasoning"
+    },
+    {
+      "start": 4468,
+      "end": 5898,
+      "type": "code"
+    },
+    {
+      "start": 5898,
+      "end": 5902,
+      "type": "control"
+    },
+    {
+      "start": 5902,
+      "end": 5944,
+      "type": "user_prompt"
+    },
+    {
+      "start": 5944,
+      "end": 5949,
+      "type": "control"
+    },
+    {
+      "start": 5949,
+      "end": 7249,
+      "type": "reasoning"
+    },
+    {
+      "start": 7249,
+      "end": 7304,
+      "type": "code"
+    },
+    {
+      "start": 7304,
+      "end": 7503,
+      "type": "reasoning"
+    },
+    {
+      "start": 7503,
+      "end": 7746,
+      "type": "code"
+    },
+    {
+      "start": 7746,
+      "end": 7902,
+      "type": "reasoning"
+    },
+    {
+      "start": 7902,
+      "end": 7944,
+      "type": "code"
+    },
+    {
+      "start": 7944,
+      "end": 7968,
+      "type": "reasoning"
+    },
+    {
+      "start": 7968,
+      "end": 7969,
+      "type": "control"
+    }
+  ]
+}

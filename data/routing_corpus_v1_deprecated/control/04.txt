@@ -1,0 +1,5 @@
+﻿<bos><start_of_turn>user
+What is the largest planet in our solar system?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>The largest planet in our solar system is **Jupiter**.<end_of_turn>

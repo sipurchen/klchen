@@ -1,0 +1,25 @@
+{
+ "tag": "pilot_base",
+ "profile": "gx10_sim",
+ "model": "~/models/gemma4-26b/gemma4-26b-Q4_K_M.gguf",
+ "lora": null,
+ "lora_scale": 1.0,
+ "ngl": 2,
+ "ubatch": 64,
+ "n_ctx": 8192,
+ "threads": 5,
+ "device_buffers_mib": {
+  "CUDA0": 933.24
+ },
+ "vram_verdict": "warn",
+ "sessions": {
+  "planner_pilot": {
+   "tokens": 6634,
+   "seconds": 27.2
+  },
+  "coder_pilot": {
+   "tokens": 7969,
+   "seconds": 31.6
+  }
+ }
+}

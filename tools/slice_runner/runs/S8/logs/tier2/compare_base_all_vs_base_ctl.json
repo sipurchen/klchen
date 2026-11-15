@@ -1,0 +1,157 @@
+{
+ "base": "base_all",
+ "other": "base_ctl",
+ "by_alpha": {
+  "0.8": {
+   "code": {
+    "median_size_base": 34.0,
+    "median_size_other": 34.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "control": {
+    "median_size_base": 19.0,
+    "median_size_other": 19.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "creative": {
+    "median_size_base": 38.0,
+    "median_size_other": 38.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "factual": {
+    "median_size_base": 36.5,
+    "median_size_other": 36.5,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "reasoning": {
+    "median_size_base": 45.5,
+    "median_size_other": 45.5,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "user_prompt": {
+    "median_size_base": 31.0,
+    "median_size_other": 31.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   }
+  },
+  "0.9": {
+   "code": {
+    "median_size_base": 49.0,
+    "median_size_other": 49.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "control": {
+    "median_size_base": 29.0,
+    "median_size_other": 29.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "creative": {
+    "median_size_base": 52.0,
+    "median_size_other": 52.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "factual": {
+    "median_size_base": 50.0,
+    "median_size_other": 50.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "reasoning": {
+    "median_size_base": 62.0,
+    "median_size_other": 62.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   },
+   "user_prompt": {
+    "median_size_base": 45.0,
+    "median_size_other": 45.0,
+    "relative_change": 0.0,
+    "median_layer_jaccard": 1.0
+   }
+  }
+ },
+ "type_separation_jsd": {
+  "code_vs_control": {
+   "jsd_base": 0.4073275048213371,
+   "jsd_other": 0.4073275048213371
+  },
+  "code_vs_creative": {
+   "jsd_base": 0.4568890740213328,
+   "jsd_other": 0.4568890740213328
+  },
+  "code_vs_factual": {
+   "jsd_base": 0.3196352187774628,
+   "jsd_other": 0.3196352187774628
+  },
+  "code_vs_reasoning": {
+   "jsd_base": 0.1826377829355912,
+   "jsd_other": 0.1826377829355912
+  },
+  "code_vs_user_prompt": {
+   "jsd_base": 0.32954892303262573,
+   "jsd_other": 0.32954892303262573
+  },
+  "control_vs_creative": {
+   "jsd_base": 0.4662372977149062,
+   "jsd_other": 0.4662372977149062
+  },
+  "control_vs_factual": {
+   "jsd_base": 0.4173418310852436,
+   "jsd_other": 0.4173418310852436
+  },
+  "control_vs_reasoning": {
+   "jsd_base": 0.3200106392999825,
+   "jsd_other": 0.3200106392999825
+  },
+  "control_vs_user_prompt": {
+   "jsd_base": 0.33786700720064783,
+   "jsd_other": 0.33786700720064783
+  },
+  "creative_vs_factual": {
+   "jsd_base": 0.14965905819976238,
+   "jsd_other": 0.14965905819976238
+  },
+  "creative_vs_reasoning": {
+   "jsd_base": 0.16820668673796074,
+   "jsd_other": 0.16820668673796074
+  },
+  "creative_vs_user_prompt": {
+   "jsd_base": 0.27067162053262894,
+   "jsd_other": 0.27067162053262894
+  },
+  "factual_vs_reasoning": {
+   "jsd_base": 0.06018329903647676,
+   "jsd_other": 0.06018329903647676
+  },
+  "factual_vs_user_prompt": {
+   "jsd_base": 0.1693023619523763,
+   "jsd_other": 0.1693023619523763
+  },
+  "reasoning_vs_user_prompt": {
+   "jsd_base": 0.13175260941431227,
+   "jsd_other": 0.13175260941431227
+  }
+ },
+ "h2": {
+  "criterion": "mean over types of the relative change of the median per-layer alpha=0.9 set size <= -30% and reasoning_vs_code / code_vs_factual JSD not below 0.9x base",
+  "mean_relative_change_alpha90": 0.0,
+  "per_type_relative_change": {
+   "reasoning": 0.0,
+   "code": 0.0,
+   "factual": 0.0,
+   "creative": 0.0
+  },
+  "size_criterion_met": false,
+  "separation_held": true,
+  "mean_median_layer_jaccard": 1.0
+ }
+}

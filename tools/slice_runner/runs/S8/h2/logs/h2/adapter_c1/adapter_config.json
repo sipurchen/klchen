@@ -1,0 +1,16 @@
+{
+ "peft_type": "LORA",
+ "task_type": "CAUSAL_LM",
+ "r": 16,
+ "lora_alpha": 16.0,
+ "lora_dropout": 0.0,
+ "target_modules": [
+  "router.proj"
+ ],
+ "bias": "none",
+ "base_model_name_or_path": null,
+ "fan_in_fan_out": false,
+ "inference_mode": true,
+ "use_rslora": false,
+ "use_dora": false
+}

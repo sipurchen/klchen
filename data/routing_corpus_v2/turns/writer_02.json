@@ -1,0 +1,36 @@
+{
+  "family": "writer",
+  "session": "02",
+  "seed": 5002,
+  "system": null,
+  "turns": [
+    {
+      "label": "creative",
+      "user": "I need help writing something creative: a product announcement for a small open-source developer tool. First give me a one-paragraph brief describing tone, audience, and goal."
+    },
+    {
+      "label": "creative",
+      "user": "Now write a short outline (bullet points) for it."
+    },
+    {
+      "label": "creative",
+      "user": "Draft the first full version based on that outline. Keep it reasonably concise."
+    },
+    {
+      "label": "creative",
+      "user": "Revise it to have a warmer, more conversational tone."
+    },
+    {
+      "label": "creative",
+      "user": "Continue it with one more section/scene that builds on what you just wrote."
+    },
+    {
+      "label": "factual",
+      "user": "Now summarize the final piece in 3-4 sentences, as if writing a description for a catalog or index."
+    },
+    {
+      "label": "factual",
+      "user": "Write a short FAQ (3 questions and answers) that a reader might have after seeing this piece."
+    }
+  ]
+}

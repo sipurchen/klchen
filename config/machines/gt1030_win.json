@@ -1,0 +1,18 @@
+{
+  "name": "gt1030",
+  "platform": "windows",
+  "llama_bin_dir": "bin/llama-cpp",
+  "model_path": "${LLMS_DIR}/gemma4-26B-A4B-it-GGUF/google_gemma-4-26B-A4B-it-Q4_K_M.gguf",
+  "work_dir": "logs/affinity_sim",
+  "cpu": {
+    "mode": "affinity_mask",
+    "cores": [2, 3],
+    "priority": "below_normal",
+    "threads": 2
+  },
+  "vram": {
+    "target_mb": 1500,
+    "max_mb": 1700
+  },
+  "max_load1": null
+}

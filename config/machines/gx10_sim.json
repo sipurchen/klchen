@@ -1,0 +1,18 @@
+{
+  "name": "gx10_sim",
+  "platform": "linux",
+  "llama_bin_dir": "~/llama.cpp/build/bin",
+  "model_path": "~/models/gemma4-26b/gemma4-26b-Q4_K_M.gguf",
+  "work_dir": "~/gemma4_affinity_sim/work",
+  "cpu": {
+    "mode": "taskset",
+    "cores": [0, 1, 2, 3, 4],
+    "priority": "nice10",
+    "threads": 5
+  },
+  "vram": {
+    "target_mb": 750,
+    "max_mb": 1000
+  },
+  "max_load1": 6.0
+}

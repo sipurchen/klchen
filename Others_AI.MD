@@ -53,10 +53,13 @@ M4 效率係數 (Metal backend 實測): ~0.75–0.85
 
 | 平台 | Gemma4 E4B 速度 | 備註 |
 |------|----------------|------|
-| i5-4460 + GT 1030 (現有) | ~2 tok/s | CPU-only, DDR3 17 GB/s |
+| i5-4460 + GT 1030 (現有, dense 7.5B) | ~2 tok/s | CPU-only, DDR3 17 GB/s |
+| i5-4460 + GT 1030 (現有, **26B-A4B 真MoE, 實測**) | **~4.2 tok/s** | ngl=10 attn-only GPU offload, experts CPU-bound；實測數字，非估算，詳見 [docs/gemma4_26b_a4b_vram_benchmark.md](docs/gemma4_26b_a4b_vram_benchmark.md) |
 | RTX 2050 (目標 Windows) | ~15–18 tok/s | GDDR6 112 GB/s × 0.65 |
 | **Mac Mini M4 32GB** | **~19 tok/s** | 統一記憶體, 120 GB/s |
 | RTX 3060 12GB | ~48 tok/s | GDDR6 360 GB/s |
+
+> ⚠️ 26B-A4B MoE 的 4.2 tok/s 是 CPU/RAM 頻寬瓶頸(128 experts 中 8 個 active/token 全跑 CPU)，不是配置問題。25 tok/s 目標在此硬體上**不可行**，除非換到有足夠 VRAM 完整容納 active experts 的顯卡(≥4GB 起跳)。
 
 ---
 

@@ -1,0 +1,79 @@
+{
+ "router": "logs/h2/adapter_c1",
+ "peft": "logs/h2/adapter_f2",
+ "pooled": {
+  "0.8": {
+   "code": {
+    "median_size_base": 29.5,
+    "median_size_other": 21.0,
+    "relative_change": -0.288135593220339,
+    "median_layer_jaccard": 0.6348484848484848
+   },
+   "control": {
+    "median_size_base": 19.0,
+    "median_size_other": 16.0,
+    "relative_change": -0.15789473684210525,
+    "median_layer_jaccard": 0.6726190476190477
+   },
+   "creative": {
+    "median_size_base": 32.0,
+    "median_size_other": 24.0,
+    "relative_change": -0.25,
+    "median_layer_jaccard": 0.641941391941392
+   },
+   "reasoning": {
+    "median_size_base": 44.5,
+    "median_size_other": 30.0,
+    "relative_change": -0.3258426966292135,
+    "median_layer_jaccard": 0.6122448979591837
+   },
+   "user_prompt": {
+    "median_size_base": 31.0,
+    "median_size_other": 22.5,
+    "relative_change": -0.27419354838709675,
+    "median_layer_jaccard": 0.5972972972972973
+   }
+  },
+  "0.9": {
+   "code": {
+    "median_size_base": 43.0,
+    "median_size_other": 30.0,
+    "relative_change": -0.3023255813953488,
+    "median_layer_jaccard": 0.6698717948717949
+   },
+   "control": {
+    "median_size_base": 29.0,
+    "median_size_other": 23.0,
+    "relative_change": -0.20689655172413793,
+    "median_layer_jaccard": 0.6821428571428572
+   },
+   "creative": {
+    "median_size_base": 45.5,
+    "median_size_other": 36.5,
+    "relative_change": -0.1978021978021978,
+    "median_layer_jaccard": 0.7075471698113207
+   },
+   "reasoning": {
+    "median_size_base": 61.5,
+    "median_size_other": 41.5,
+    "relative_change": -0.3252032520325203,
+    "median_layer_jaccard": 0.6823899371069182
+   },
+   "user_prompt": {
+    "median_size_base": 45.5,
+    "median_size_other": 32.0,
+    "relative_change": -0.2967032967032967,
+    "median_layer_jaccard": 0.6222410865874364
+   }
+  }
+ },
+ "nll_base": 1.9611390058019098,
+ "nll_student": 2.0643409045714383,
+ "delta_nll": 0.10320189876952846,
+ "top1_agreement": 0.8352790432801822,
+ "mean_relative_change_alpha90": -0.27511034374335563,
+ "h2_size_met": false,
+ "guard_nll_met": true,
+ "guard_top1_met": false,
+ "h2_passed": false
+}

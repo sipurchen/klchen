@@ -1,0 +1,5 @@
+﻿<bos><start_of_turn>user
+What is the boiling point of water at sea level in Celsius?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>The boiling point of water at sea level is **100 degrees Celsius**.<end_of_turn>

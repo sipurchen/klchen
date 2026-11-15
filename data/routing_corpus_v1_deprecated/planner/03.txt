@@ -1,0 +1,18 @@
+﻿<bos><start_of_turn>user
+Compare the trade-offs of using a monolith vs microservices architecture for a 5-person startup team.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>For a 5-person startup, the decision between a monolith and microservices is rarely about technical "correctness" and almost always about **velocity vs. scalability.**
+
+In a team of five, your most precious resource is not server cost or uptime—it is **engineering hours.** Every hour spent managing infrastructure is an hour not spent building features that customers will pay for.
+
+Here is a breakdown of the trade-offs specifically through the lens of a tiny team.
+
+---
+
+### 1. The Monolith: "The Speed Demon"
+In a monolith, all business logic, database access, and UI code live in a single codebase and run as a single process.
+
+#### **The Pros (Why you should do this)**
+*   **Extreme Velocity:** You can implement a feature from database to UI in one pull request. There is no need to coordinate changes across multiple repositories or manage API versioning between services.
+*   **Operational Simplicity<end_of_turn>

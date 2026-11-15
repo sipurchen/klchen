@@ -1,0 +1,157 @@
+{
+ "base": "base_all",
+ "other": "h2_c1",
+ "by_alpha": {
+  "0.8": {
+   "code": {
+    "median_size_base": 34.0,
+    "median_size_other": 24.0,
+    "relative_change": -0.29411764705882354,
+    "median_layer_jaccard": 0.6702898550724637
+   },
+   "control": {
+    "median_size_base": 19.0,
+    "median_size_other": 15.0,
+    "relative_change": -0.21052631578947367,
+    "median_layer_jaccard": 0.7049689440993789
+   },
+   "creative": {
+    "median_size_base": 38.0,
+    "median_size_other": 27.5,
+    "relative_change": -0.27631578947368424,
+    "median_layer_jaccard": 0.6674397031539888
+   },
+   "factual": {
+    "median_size_base": 36.5,
+    "median_size_other": 24.0,
+    "relative_change": -0.3424657534246575,
+    "median_layer_jaccard": 0.6486486486486487
+   },
+   "reasoning": {
+    "median_size_base": 45.5,
+    "median_size_other": 29.0,
+    "relative_change": -0.3626373626373626,
+    "median_layer_jaccard": 0.6257894736842105
+   },
+   "user_prompt": {
+    "median_size_base": 31.0,
+    "median_size_other": 20.5,
+    "relative_change": -0.3387096774193548,
+    "median_layer_jaccard": 0.6483516483516484
+   }
+  },
+  "0.9": {
+   "code": {
+    "median_size_base": 49.0,
+    "median_size_other": 34.5,
+    "relative_change": -0.29591836734693877,
+    "median_layer_jaccard": 0.6973443223443223
+   },
+   "control": {
+    "median_size_base": 29.0,
+    "median_size_other": 23.0,
+    "relative_change": -0.20689655172413793,
+    "median_layer_jaccard": 0.7
+   },
+   "creative": {
+    "median_size_base": 52.0,
+    "median_size_other": 39.0,
+    "relative_change": -0.25,
+    "median_layer_jaccard": 0.7452762923351159
+   },
+   "factual": {
+    "median_size_base": 50.0,
+    "median_size_other": 34.0,
+    "relative_change": -0.32,
+    "median_layer_jaccard": 0.6666666666666666
+   },
+   "reasoning": {
+    "median_size_base": 62.0,
+    "median_size_other": 39.0,
+    "relative_change": -0.3709677419354839,
+    "median_layer_jaccard": 0.6315610859728507
+   },
+   "user_prompt": {
+    "median_size_base": 45.0,
+    "median_size_other": 30.5,
+    "relative_change": -0.32222222222222224,
+    "median_layer_jaccard": 0.6377551020408163
+   }
+  }
+ },
+ "type_separation_jsd": {
+  "code_vs_control": {
+   "jsd_base": 0.4073275048213371,
+   "jsd_other": 0.36178801952164796
+  },
+  "code_vs_creative": {
+   "jsd_base": 0.4568890740213328,
+   "jsd_other": 0.39917305166874173
+  },
+  "code_vs_factual": {
+   "jsd_base": 0.3196352187774628,
+   "jsd_other": 0.2802800169107186
+  },
+  "code_vs_reasoning": {
+   "jsd_base": 0.1826377829355912,
+   "jsd_other": 0.15397525563135345
+  },
+  "code_vs_user_prompt": {
+   "jsd_base": 0.32954892303262573,
+   "jsd_other": 0.2889868380324476
+  },
+  "control_vs_creative": {
+   "jsd_base": 0.4662372977149062,
+   "jsd_other": 0.3993236589651384
+  },
+  "control_vs_factual": {
+   "jsd_base": 0.4173418310852436,
+   "jsd_other": 0.34577722259190313
+  },
+  "control_vs_reasoning": {
+   "jsd_base": 0.3200106392999825,
+   "jsd_other": 0.27180013077273846
+  },
+  "control_vs_user_prompt": {
+   "jsd_base": 0.33786700720064783,
+   "jsd_other": 0.30122779116791265
+  },
+  "creative_vs_factual": {
+   "jsd_base": 0.14965905819976238,
+   "jsd_other": 0.11665825825455794
+  },
+  "creative_vs_reasoning": {
+   "jsd_base": 0.16820668673796074,
+   "jsd_other": 0.14109909048022815
+  },
+  "creative_vs_user_prompt": {
+   "jsd_base": 0.27067162053262894,
+   "jsd_other": 0.22416196070137093
+  },
+  "factual_vs_reasoning": {
+   "jsd_base": 0.06018329903647676,
+   "jsd_other": 0.050418766418622904
+  },
+  "factual_vs_user_prompt": {
+   "jsd_base": 0.1693023619523763,
+   "jsd_other": 0.137162217723872
+  },
+  "reasoning_vs_user_prompt": {
+   "jsd_base": 0.13175260941431227,
+   "jsd_other": 0.10333353068170756
+  }
+ },
+ "h2": {
+  "criterion": "mean over types of the relative change of the median per-layer alpha=0.9 set size <= -30% and reasoning_vs_code / code_vs_factual JSD not below 0.9x base",
+  "mean_relative_change_alpha90": -0.30922152732060565,
+  "per_type_relative_change": {
+   "reasoning": -0.3709677419354839,
+   "code": -0.29591836734693877,
+   "factual": -0.32,
+   "creative": -0.25
+  },
+  "size_criterion_met": true,
+  "separation_held": false,
+  "mean_median_layer_jaccard": 0.6852120918297389
+ }
+}

@@ -1,0 +1,14 @@
+﻿<bos><start_of_turn>user
+What is the tallest mountain in the world?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>The tallest mountain in the world is **Mount Everest**.
+
+Its peak is **29,032 feet (8,849 meters)** above sea level. It is located in the Himalayas on the border between Nepal and China.
+
+***
+
+**Note on different ways to measure "tallest":**
+* **Highest altitude (above sea level):** Mount Everest.
+* **Tallest from base to peak:** **Mauna Kea** in Hawaii. While its peak is only 13,803 feet above sea level, its base sits on the ocean floor. From the very bottom to the top, it measures about 33,500 feet (10,210 meters).
+* **Closest to space (furthest from Earth's center):** **Mount Chimborazo** in Ecuador. Because the Earth bulges at the equator, the summit of Chimborazo sits further away from the Earth<end_of_turn>

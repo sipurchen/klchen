@@ -1,0 +1,124 @@
+{
+ "base": "base_new",
+ "other": "h2_f2_new",
+ "by_alpha": {
+  "0.8": {
+   "code": {
+    "median_size_base": 31.0,
+    "median_size_other": 22.0,
+    "relative_change": -0.2903225806451613,
+    "median_layer_jaccard": 0.6984848484848485
+   },
+   "control": {
+    "median_size_base": 18.5,
+    "median_size_other": 15.0,
+    "relative_change": -0.1891891891891892,
+    "median_layer_jaccard": 0.7379862700228832
+   },
+   "creative": {
+    "median_size_base": 29.0,
+    "median_size_other": 24.0,
+    "relative_change": -0.1724137931034483,
+    "median_layer_jaccard": 0.7071078431372549
+   },
+   "reasoning": {
+    "median_size_base": 44.5,
+    "median_size_other": 30.0,
+    "relative_change": -0.3258426966292135,
+    "median_layer_jaccard": 0.6631205673758864
+   },
+   "user_prompt": {
+    "median_size_base": 32.0,
+    "median_size_other": 23.5,
+    "relative_change": -0.265625,
+    "median_layer_jaccard": 0.6216216216216216
+   }
+  },
+  "0.9": {
+   "code": {
+    "median_size_base": 45.0,
+    "median_size_other": 33.0,
+    "relative_change": -0.26666666666666666,
+    "median_layer_jaccard": 0.729047619047619
+   },
+   "control": {
+    "median_size_base": 27.0,
+    "median_size_other": 23.0,
+    "relative_change": -0.14814814814814814,
+    "median_layer_jaccard": 0.7312382739212007
+   },
+   "creative": {
+    "median_size_base": 42.0,
+    "median_size_other": 34.0,
+    "relative_change": -0.19047619047619047,
+    "median_layer_jaccard": 0.7582125603864734
+   },
+   "reasoning": {
+    "median_size_base": 59.0,
+    "median_size_other": 42.0,
+    "relative_change": -0.288135593220339,
+    "median_layer_jaccard": 0.7169076751946608
+   },
+   "user_prompt": {
+    "median_size_base": 46.0,
+    "median_size_other": 34.0,
+    "relative_change": -0.2608695652173913,
+    "median_layer_jaccard": 0.6530748663101604
+   }
+  }
+ },
+ "type_separation_jsd": {
+  "code_vs_control": {
+   "jsd_base": 0.39646492925340215,
+   "jsd_other": 0.3628410063501689
+  },
+  "code_vs_creative": {
+   "jsd_base": 0.5777882295448369,
+   "jsd_other": 0.517511726053304
+  },
+  "code_vs_reasoning": {
+   "jsd_base": 0.15362366369530556,
+   "jsd_other": 0.1322417891683783
+  },
+  "code_vs_user_prompt": {
+   "jsd_base": 0.2145929930338107,
+   "jsd_other": 0.18213891853539993
+  },
+  "control_vs_creative": {
+   "jsd_base": 0.5693723399531343,
+   "jsd_other": 0.5022287455048312
+  },
+  "control_vs_reasoning": {
+   "jsd_base": 0.35226197299877837,
+   "jsd_other": 0.2762053154266517
+  },
+  "control_vs_user_prompt": {
+   "jsd_base": 0.31148520352481823,
+   "jsd_other": 0.28712245592491437
+  },
+  "creative_vs_reasoning": {
+   "jsd_base": 0.2306785748498215,
+   "jsd_other": 0.2119064798603159
+  },
+  "creative_vs_user_prompt": {
+   "jsd_base": 0.42889196871533275,
+   "jsd_other": 0.36936438629083423
+  },
+  "reasoning_vs_user_prompt": {
+   "jsd_base": 0.134109798545335,
+   "jsd_other": 0.11177352378413916
+  }
+ },
+ "h2": {
+  "criterion": "mean over types of the relative change of the median per-layer alpha=0.9 set size <= -30% and reasoning_vs_code / code_vs_factual JSD not below 0.9x base",
+  "mean_relative_change_alpha90": -0.2484261501210654,
+  "per_type_relative_change": {
+   "reasoning": -0.288135593220339,
+   "code": -0.26666666666666666,
+   "creative": -0.19047619047619047
+  },
+  "size_criterion_met": false,
+  "separation_held": false,
+  "mean_median_layer_jaccard": 0.7347226182095845
+ }
+}

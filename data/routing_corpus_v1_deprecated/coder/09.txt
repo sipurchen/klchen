@@ -1,0 +1,7 @@
+﻿<bos><start_of_turn>user
+Write a one-line bash command that finds all .log files modified in the last 24 hours.<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>```bash
+find . -name "*.log" -mtime -1
+```<end_of_turn>

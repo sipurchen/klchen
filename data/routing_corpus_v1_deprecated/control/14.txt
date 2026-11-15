@@ -1,0 +1,9 @@
+﻿<bos><start_of_turn>user
+What language has the most native speakers worldwide?<end_of_turn>
+<start_of_turn>model
+<|channel>thought
+<channel|>The language with the most native speakers worldwide is **Mandarin Chinese**.
+
+According to most linguistic databases (such as Ethnologue), Mandarin Chinese has significantly more native speakers than any other language, with over 900 million people speaking it as their first language.
+
+While **English** is the most spoken language in the world when you combine native speakers and non-native (second language) speakers, Mandarin holds the top spot for those who speak it as their mother tongue.<end_of_turn>

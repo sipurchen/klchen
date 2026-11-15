@@ -1,0 +1,57 @@
+{
+ "tag": "lora_v2_x4",
+ "profile": "gx10_sim",
+ "model": "~/models/gemma4-26b/gemma4-26b-Q4_K_M.gguf",
+ "lora": "logs/lora/external.gguf",
+ "lora_scale": 4.0,
+ "ngl": 2,
+ "ubatch": 64,
+ "n_ctx": 8192,
+ "threads": 5,
+ "device_buffers_mib": {
+  "CUDA0": 933.24
+ },
+ "vram_verdict": "warn",
+ "sessions": {
+  "coder_01": {
+   "tokens": 7266,
+   "seconds": 29.5
+  },
+  "coder_02": {
+   "tokens": 5639,
+   "seconds": 23.2
+  },
+  "coder_03": {
+   "tokens": 7140,
+   "seconds": 30.6
+  },
+  "coder_pilot": {
+   "tokens": 7969,
+   "seconds": 32.2
+  },
+  "planner_01": {
+   "tokens": 6260,
+   "seconds": 27.0
+  },
+  "planner_02": {
+   "tokens": 6560,
+   "seconds": 26.9
+  },
+  "planner_03": {
+   "tokens": 6906,
+   "seconds": 28.4
+  },
+  "planner_pilot": {
+   "tokens": 6634,
+   "seconds": 27.5
+  },
+  "writer_01": {
+   "tokens": 6833,
+   "seconds": 27.3
+  },
+  "writer_02": {
+   "tokens": 6668,
+   "seconds": 28.4
+  }
+ }
+}

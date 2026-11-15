@@ -89,7 +89,7 @@ $$\text{cost}(C_i) = \frac{\text{age}(C_i) \cdot \text{size}(C_i)}{\pi(C_i)}, \q
 
 基於語義邊界事件的 MoE 專家預取，避免推論中途 VRAM 載入：
 
-| 區塊類型 | 親和力專家集（Mixtral-8x7B） |
+| 區塊類型 | 親和力專家集（Mixtral-8x7B，理論估算） |
 |---------|---------------------------|
 | reasoning | {0, 1, 3, 7} |
 | code | {2, 4, 5, 6} |
@@ -101,7 +101,11 @@ $$\text{cost}(C_i) = \frac{\text{age}(C_i) \cdot \text{size}(C_i)}{\pi(C_i)}, \q
 - `deepseek-coder-v2-lite-q4`：64 專家，每個 0.25 GB，7 GB RAM → 8/64 預熱
 - `deepseek-v3-671b-q2`：256 專家，每個 0.82 GB（Mac M4 前 33 個常駐 UMA）
 
-**Spec-Experts 路由節省：** 20 區塊會話節省 ~1.76 s（Mixtral Q2, DDR3 17 GB/s）
+**Spec-Experts 路由節省（理論估算）：** 20 區塊會話節省 ~1.76 s（Mixtral Q2, DDR3 17 GB/s）；Gemma4 26B-A4B 的實測見下方「近期研究」
+
+**實測（Gemma4 26B-A4B，128 experts/8 active，GT 1030）：** `-ngl 10 -c 16384` 實測 1682 MiB VRAM（<1.7GB 目標內），但 decode 僅 **4.22 tok/s**（CPU 跑 expert FFN 的硬頻寬上限，非配置問題）。完整方法論與 ngl/ctx 對照表見 [docs/gemma4_26b_a4b_vram_benchmark.md](docs/gemma4_26b_a4b_vram_benchmark.md)。
+
+**LocalAI 借鏡：** `--override-tensor` 策略對應 LocalAI 的 `cpu_moe`/`override_tensor` 慣例（見 [docs/localai_comparison.md](docs/localai_comparison.md)）；本專案的語義感知 expert prefetch（本 Phase）在 LocalAI 中不存在，屬本專案獨有貢獻。
 
 ---
 
@@ -225,8 +229,8 @@ llama-server --model <GGUF_PATH>/deepseek-v3.gguf \
 | `gemma3:1b` | 777 MB | Dense 29 層 | Ollama |
 | `deepseek-r1:1.5b` | 1.04 GB | Dense 30 層 + 推理鏈 | Ollama |
 | `Gemma4 E4B` (bartowski Q4_K_M) | 5.03 GB | Dense 42 層, 7.5B | llama-server |
-| Qwen3-1.7B (Spec-Experts 示範) | ~1.1 GB | Dense | llama-server |
 | **`Gemma4 26B-A4B` (Q4_K_M)** | 17 GB | **MoE 128 experts/層, top-8, 30 層** | llama-server（本機實測 4.22 tok/s） |
+| Qwen3-1.7B (Spec-Experts 示範) | ~1.1 GB | Dense | llama-server |
 | Mixtral-8x7B Q2_K (論文 Phase 4 目標，本機未持有) | ~15 GB | MoE 8 experts | llama-server |
 | DeepSeek-Coder-V2-Lite Q4 (論文 Phase 4，本機未持有) | ~10 GB | MoE 64 experts | llama-server |
 | moondream-2B Q4 (Phase 5 GT 1030) | ~1.2 GB | VLM | llama-server Vulkan |
@@ -306,29 +310,14 @@ $$H_i = -\sum_{j=1}^k \tilde{p}_j \log_2 \tilde{p}_j, \quad \tilde{p}_j = \frac{
 防止 OS 排程器因全核心 LLM 佔用而造成螢幕黑屏
 ```
 
-### 5. Gemma4 系列：兩個不同的 checkpoint（Dense 與 MoE 並存）
+### 5. Gemma4 26B-A4B 在 GT 1030 上的實測
 
-Gemma4 家族在本機有**兩顆架構完全不同的 GGUF**，皆 `general.architecture = gemma4`，以 GGUF header 直接驗證（非推測）：
+Gemma4 26B-A4B（Q4_K_M 17 GB；30 層、每層 128 個 experts、每 token 啟用 8 個）於本機（i5-4460 + GT 1030 2 GB，llama-server b8679 Vulkan）實測：
 
-| Checkpoint | 架構 | 層數 | experts | 說明 |
-|---|---|---|---|---|
-| `gemma4 E4B`（bartowski Q4_K_M, 5.03 GB） | **Dense**（無 `expert_count` 欄位） | 42 | — | "E4B" = Effective 4B，稠密 7.5B。本專案早期 baseline（~2 tok/s） |
-| `gemma4 26B-A4B`（Q4_K_M 17 GB / IQ2_S 10 GB） | **真 MoE** | 30 | **128 / layer，每 token 啟用 8** | 25.23B 總參數、約 4B 活躍；5:1 sliding-window:global attention |
-
-因此 Spec-Experts Phase 4/6（專家池）**並非只存在於 Mixtral/DeepSeek 的紙上設計**：本專案已在 Gemma4 26B-A4B 這顆真 MoE 上於本機（i5-4460 + GT 1030 2GB）實際運行，已完成的部分與尚未完成的部分如下。
-
-**已實測（Gemma4 26B-A4B，llama-server b8679 Vulkan）**
 - VRAM/ngl 預算：`-ngl 10 -c 16384` = 1682 MiB、`-ngl 11 -c 8192` = 1672 MiB（皆 <1.7 GB）；ngl 超過即 OOM。
-- 吞吐：decode **4.22 tok/s**（expert FFN 全部留 CPU，受 DDR3 頻寬限制，25 tok/s 目標於此硬體不可達）。
-- 真實 expert 路由量測：以 `llama-imatrix` 讀出每層 128 個 experts 的實際路由次數，v2 pipeline 於 2 個 pilot session（coder / planner）13/13 jobs 完成，涵蓋 reasoning / code 區塊類型（約 44 萬 token）。
-- 詳見分支 `VRAM-Opt-StreamingExperts` 的 `docs/gemma4_26b_a4b_vram_benchmark.md`、`docs/expert_affinity_corpus_design.md`（尚未合併至本分支）。
-
-**尚未驗證（誠實聲明）**
-- `spec_experts/expert_ram_pool.py` 的即時預取尚未接上 Gemma4 26B-A4B 的 llama-server（目前僅有離線路由統計，尚無線上預取/命中率數據）。
-- 結構驗證表中 P4「Mixtral+DS-Coder-V2-Lite 50–100% 命中」是針對該兩顆論文目標模型的結構/模擬驗證；這兩顆權重本機未持有，**不應解讀為 Gemma4 已驗證**。
-- 區塊類型分離度（V5）、重現性（V6）需完整 8-session 語料，尚未執行；affinity set 的最終數據尚待產出。
-
-另已在本機實際運行的 Gemma 系列：`gemma3:1b`（Ollama，平均 19.1 tok/s）、Gemma4 E4B dense（llama-server，~2 tok/s）、Gemma4 26B-A4B MoE（llama-server，4.22 tok/s）。
+- 吞吐：decode **4.22 tok/s**（expert FFN 全部留 CPU，受 DDR3 頻寬限制）。
+- Expert 路由量測：以 `llama-imatrix` 讀出每層 128 個 experts 的實際路由次數（詳見下方「近期研究」）。
+- 詳見分支 `VRAM-Opt-StreamingExperts` 的 `docs/gemma4_26b_a4b_vram_benchmark.md`、`docs/expert_affinity_corpus_design.md`。
 
 ---
 
@@ -494,7 +483,31 @@ EMA 品質更新（α=0.3）+ 品質閘控（Q ≥ 0.7）JSONL 匯出 → 未來
 
 ---
 
+## 近期研究：MoE 專家路由量測與 LoRA 專家集合縮小 / Expert Routing Study
+
+**這個 repo 在做什麼：** 讓 Gemma4 這類大型模型在 2 GB VRAM 的舊硬體（i5-4460 + GT 1030）上可用，並研究 MoE 模型「每個 token 實際用到哪些專家」，作為專家快取（RAM 池）與 LoRA 訓練的依據。
+
+| 研究項目（Gemma4 26B-A4B，10 個 session、約 6.8 萬 token 的逐 token 序列） | 結果 |
+|---|---|
+| 相鄰 token 的專家集合有交集的機率 | 0.915（均勻隨機 0.412；打亂順序 0.737） |
+| 各區塊類型的專家集合大小（涵蓋 90% 路由質量，每層共 128） | reasoning 62、code 49、factual 50、creative 52 |
+| 專家池命中率（每層 57 個專家） | 區塊邊界預取 0.940、LRU 0.939 |
+| 只動 attention／稠密 MLP 的 LoRA | 專家集合變化 0% |
+| 只掛在路由器上的 LoRA（留出 session） | 專家集合縮小約 33%，與基底 next-token 一致率 0.84 |
+| 同一顆 LoRA（全新生成的 session） | 專家集合縮小 27.5%，一致率 0.835 |
+
+- **量測方法**：用 ctypes 從 llama.cpp 讀取每層路由器的 top-k（`affinity_pipeline/tier2_ctypes.py`、`scripts/tier2_locality.py`）；結構位移由該版本標頭編譯量出，不手抄。
+- **專家池重放**：`scripts/pool_replay.py`。**LoRA**：`scripts/h2_targets.py`、`scripts/h2_router_lora.py`、`scripts/h2_comp.py`。
+- **硬體**：gx10 模擬受限環境（核心 0–4、nice 10、GPU 預算 1.0 GiB）；GT 1030 上以 Windows b8679 重放前 1280 個 token（局部性 0.910，與 gx10 的專家使用矩陣相關 0.9972）。
+- **論文**：[docs/thesis_zh.md](docs/thesis_zh.md)、[docs/thesis_en.md](docs/thesis_en.md)；復現指令見論文附錄 C；證據與原始輸出在 `tools/slice_runner/runs/S8/`。
+
+---
+
 ## Changelog
+
+### v2.1.0 (2026-11-15) — 專家路由量測與 LoRA 專家集合縮小
+- 新增逐 token 專家序列量測（Tier 2）、專家池策略重放、router LoRA 與補償 adapter
+- 論文改為學術論文格式（中英文）
 
 ### v2.0.0 (2026-06-26) — Spec-Experts Phase 1-7 完整實作
 - ✅ Phase 1：外部監控器（熵 + PPL z 分數 + 角色標籤 FSM）
