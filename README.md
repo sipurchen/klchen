@@ -501,9 +501,27 @@ EMA 品質更新（α=0.3）+ 品質閘控（Q ≥ 0.7）JSONL 匯出 → 未來
 - **硬體**：gx10 模擬受限環境（核心 0–4、nice 10、GPU 預算 1.0 GiB）；GT 1030 上以 Windows b8679 重放前 1280 個 token（局部性 0.910，與 gx10 的專家使用矩陣相關 0.9972）。
 - **論文**：[docs/thesis_zh.md](docs/thesis_zh.md)、[docs/thesis_en.md](docs/thesis_en.md)；復現指令見論文附錄 C；證據與原始輸出在 `tools/slice_runner/runs/S8/`。
 
+**Embedding 延伸（2026-11）：** 檢驗小型 embedding 模型能否協助專家池選擇、路由預測與回答的事實正確性（12 個 session 的留一法重放；24 題端到端；預先登記判準）。
+
+| 研究項目 | 結果 |
+|---|---|
+| 路由指紋（前 32 個 token 的專家分布）選固定池 vs 類型池（C=57） | 0.914 vs 0.865；預先登記判準達成 |
+| embedding 檢索專家剖面選固定池 vs 類型池（C=48/57/64） | +0.02～+0.025；預先登記判準尚未達成（C=32 +0.012）；允許即時補載（LRU）時無差異 |
+| 小型 embedder 成本（2 核、無 GPU，gx10 量測） | bge-small 每 chunk 0.7 s；常駐記憶體 392 MiB（超過 300 MiB 目標） |
+| 文件檢索 hit@3（40 題） | BM25 0.650；最佳 embedding（Qwen3-Embedding-0.6B）0.525 |
+| 檢索增強後的 24 題關鍵事實平均分（Gemma4 26B-A4B） | 0.076 → 0.53～0.63（+0.45～+0.56）；只取前 2 段時新增 prompt 最大 703 token（上限 1024），+0.40～+0.43 |
+| `multilingual-e5-small` 英文題 hit@3 偏低（0.10）的診斷 | 前綴、截斷、跨語言偏差皆非原因；向量空間對比度最低（chunk 間餘弦均值 0.882）；原因部分查明 |
+
+- **做法與限制**：規劃、預先登記的判準與各切片驗收紀錄見 [docs/embedding_research_plan_2026-11-19.md](docs/embedding_research_plan_2026-11-19.md)；結果與證據檔在 `docs/embedding_plan/evidence/`；復現指令見論文附錄 D。embedder 記憶體為 gx10 的 CUDA 版量測，目標機器需另行量測。
+
 ---
 
 ## Changelog
+
+### v2.2.0 (2026-11-22) — Embedding 輔助研究
+- 新增 embedding 選池、路由指紋、檢索增強回答的離線與端到端評估（`scripts/a_embedding_pools.py`、`routing_fingerprint_eval.py`、`embed_cost.py`、`eval_rag_retrieval.py`、`rag_e2e.py`）
+- 新增共用 embedder 封裝 `affinity_pipeline/embedding_io.py`；論文新增 §3.10、§4.5、§5.8、§5.9 與附錄 D
+- 補跑檢索增強的前 2 段配置（`rag_e2e.py --top-k`）與 `multilingual-e5-small` 英文題異常診斷（`scripts/e5_diagnose.py`）
 
 ### v2.1.0 (2026-11-15) — 專家路由量測與 LoRA 專家集合縮小
 - 新增逐 token 專家序列量測（Tier 2）、專家池策略重放、router LoRA 與補償 adapter

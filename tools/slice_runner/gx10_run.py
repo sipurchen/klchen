@@ -35,7 +35,9 @@ DEFAULT_TIMEOUT_S = 1800
 MAX_TIMEOUT_S = 14400
 
 SHIP = ["affinity_pipeline", "config/machines", "config/tier2_layouts", "scripts", "data/routing_corpus_v2/sessions",
-        "data/routing_corpus_v2/turns", "tools/slice_runner/remote"]
+        "data/routing_corpus_v2/turns", "tools/slice_runner/remote",
+        "data/rag_eval", "docs",
+]
 # name -> argv prefix (relative to REMOTE_DIR)
 WHITELIST = {
     "segment": ["scripts/segment_chunk_types.py"],
@@ -51,6 +53,14 @@ WHITELIST = {
     "h2": ["tools/slice_runner/remote/h2_run.py"],
     "h2targets": ["scripts/h2_targets.py"],
     "replay": ["scripts/pool_replay.py"],
+    "embedreplay": ["scripts/embed_pool_eval.py"],
+    "fingerprint": ["scripts/routing_fingerprint_eval.py"],
+    "embedchunks": ["scripts/embed_chunks.py"],
+    "rageval": ["scripts/eval_rag_retrieval.py"],
+    "aembed": ["scripts/a_embedding_pools.py"],      # E03 (Claude)
+    "embedcost": ["scripts/embed_cost.py"],          # E04 (Claude)
+    "rage2e": ["scripts/rag_e2e.py"],                # E08 (Claude)
+    "e5diag": ["scripts/e5_diagnose.py"],            # E10 (Claude)
 }
 ARG_RE = re.compile(r"[\w./:=,@+-]+")   # no shell metacharacters, no spaces inside a token
 FETCH_RE = re.compile(r"(data|logs)/[\w./-]+")

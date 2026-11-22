@@ -21,7 +21,9 @@
 
 **Conclusion.** The expert routing of Gemma4 26B-A4B has clear temporal locality that a least-recently-used (LRU) policy exploits effectively; shrinking the expert set is achievable through a router LoRA, and its extent trades off against output agreement with the base. The external monitor of Phase 1 reaches live detection at 5.1 tok/s on the GT 1030; Phases 2, 3, 5, 6 and 7 are presented through structural validation, with evidence levels in §6.4.
 
-**Keywords:** mixture of experts, expert routing, semantic boundary detection, LoRA, expert caching, constrained-hardware inference, Gemma4
+**Extension (embeddings).** Three uses of a small embedding model were examined: (A) choosing the expert pool by retrieving the expert-usage profiles of similar chunks, (C) predicting later experts from a routing fingerprint of the model's own first 32 tokens, and (B) retrieval-augmented generation to raise the factual accuracy of answers. In a leave-one-session-out replay over 12 sessions the routing fingerprint met its pre-registered criteria (H5 supported); embedding-selected pools raised the hit rate by 0.02–0.025 for fixed pools at C ≥ 48 but did not meet the pre-registered criterion (H4: no advantage observed yet), and showed no observable difference from token-level LRU when the pool may be refilled. Retrieval raised the mean key-fact score on 24 questions from 0.076 to 0.53–0.63 (differences +0.45 to +0.56), while the ranking metric hit@3 was 0.650 for BM25 and 0.525 for the best embedding; with retrieval cut to the top-2 passages the added prompt is at most 703 tokens (limit 1024) and the difference remains +0.40 to +0.43 (H6 partially supported).
+
+**Keywords:** mixture of experts, expert routing, semantic boundary detection, LoRA, expert caching, constrained-hardware inference, Gemma4, embeddings, retrieval-augmented generation
 
 ---
 
@@ -49,6 +51,17 @@ A single response usually contains segments of different nature (reasoning, code
 - **H2 (expert-set shrinkage):** after LoRA training, the median α = 0.9 expert-set size of the four content types shrinks by at least 30% on average, while the next-token top-1 agreement with the base model is at least 0.85 and the mean NLL increase is at most 0.15 nats/token. The values of the three criteria are hypothesized values fixed before the data were measured.
 - **H3 (boundary prefetch):** type prefetch at chunk boundaries yields a higher expert-pool hit rate than a token-level LRU.
 
+**Research questions (extension)**
+
+- **RQ6:** Can a small embedding model help, on constrained hardware, to (A) choose the expert pool, (B) raise the factual accuracy of answers, or (C) predict later experts from the model's own routing fingerprint?
+
+**Hypotheses for RQ6 (criteria registered before measurement)**
+
+- **H4 (embedding-selected pool):** a fixed expert pool obtained by retrieving expert-usage profiles with embeddings has a hit rate at least 0.02 above the hand-typed pool at both C = 32 and C = 48 (lower bound of the paired bootstrap 95% interval > 0), and at least 0.01 above for the policy that preloads the pool and refills with LRU.
+- **H4c (embedder cost):** the embedder needs at most 1.0 s per chunk and at most 300 MiB resident memory on 2 cores without a GPU.
+- **H5 (routing fingerprint):** the fixed pool chosen from the fingerprint of the first 32 tokens has a hit rate on the remaining tokens of the span at least 0.02 above the all-type pool used when the type is unknown; predicting the top-8 of the next layer from the choices of the previous layer has a recall at least 0.15 above the popular top-8 of that layer.
+- **H6 (retrieval augmentation):** retrieval hit@3 ≥ 0.85 and at least 0.05 above BM25/TF-IDF; the 24-question end-to-end mean key-fact score with retrieval minus without is ≥ 0.20, with at most 1024 added prompt tokens per question.
+
 ### 1.3 Contributions
 
 1. A three-signal external monitor with priority-weighted signal fusion (§3.2).
@@ -58,10 +71,11 @@ A single response usually contains segments of different nature (reasoning, code
 5. An empirical study of the expert routing of Gemma4 26B-A4B: type affinity, temporal locality and replay of expert-pool policies (§5.3–§5.5).
 6. A router LoRA with distillation compensation that shrinks the expert set, evaluated on held-out and fresh data (§3.9, §5.6).
 7. Designs for edge VLM routing, a Mac M4 expert pool and self-loop distillation (§3.6–§3.8).
+8. An offline and end-to-end evaluation of embedding-assisted expert-pool selection, routing fingerprints and retrieval-augmented answering, with pre-registered criteria and including the negative and partial results (§3.10, §4.5, §5.8, §5.9).
 
 ### 1.4 Organisation of the Thesis
 
-Chapter 2 reviews technical background and related work; Chapter 3 describes the seven-phase system design and the router-LoRA method; Chapter 4 describes the experimental design (environment, corpus, measurement methods and evaluation criteria); Chapter 5 presents the results; Chapter 6 discusses their implications, threats to validity and evidence levels; Chapter 7 concludes. The appendices give the module map and reproduction steps.
+Chapter 2 reviews technical background and related work; Chapter 3 describes the seven-phase system design, the router-LoRA method and the embedding-assisted methods; Chapter 4 describes the experimental design (environment, corpus, measurement methods and evaluation criteria); Chapter 5 presents the results; Chapter 6 discusses their implications, threats to validity and evidence levels; Chapter 7 concludes. The appendices give the module map and reproduction steps.
 
 ---
 
@@ -478,6 +492,26 @@ This stage back-propagates through the frozen experts, which the offload engine 
 
 ---
 
+### 3.10 Embedding Assistance: Pool Selection, Routing Fingerprints and Retrieval Augmentation
+
+The three directions share one premise, that a small embedder fits the constrained environment, and one implementation (`affinity_pipeline/embedding_io.py`).
+
+#### 3.10.1 Direction A: retrieving expert-usage profiles with embeddings
+
+For each span (the chunks of §4.2) the per-layer expert-usage profile $p_s \in \mathbb{R}^{30 \times 128}$ is computed (times each expert was selected divided by the number of tokens of the span). For a span of the held-out session with embedding $q$, the $k = 8$ spans of the other sessions with the highest cosine similarity are taken, the profile is the sum of their profiles weighted by similarity (negative values clipped to 0), and the top-$C$ experts per layer form the pool. The method is non-parametric: no classifier is trained and no content-type label is used. Two embedding sources are used: the causal context (the user prompt plus the last 512 tokens of the previous span, available before generation) and the text of the span itself (available only after generation, an upper bound on the information). A soft-type control weights the four type profiles by the similarity of the embedding to the four content-type centroids. A pool is used in two ways: as a fixed pool (a hit means the expert is in the pool) or preloaded at the span boundary and refilled with LRU inside capacity $C$.
+
+#### 3.10.2 Direction C: the routing fingerprint
+
+No model is added. The unit-length per-layer expert histogram of the first 32 tokens of a span is the fingerprint; a cosine $k = 8$ nearest-neighbour search over the later-token profiles of the other sessions yields the pool for the later tokens (C1). In addition, adjacent-layer co-selection counts predict the top-8 of layer $l+1$ from the top-8 of a token at layer $l$ (C2). The cost of the first 32 tokens is charged under token-level LRU.
+
+#### 3.10.3 Direction B: retrieval-augmented answering
+
+The corpus is the project's `docs/*.md`, split by Markdown heading section, with long sections further split into sub-chunks of at most 256 tokens with a 32-token overlap. The retrievers are BM25, character TF-IDF and the cosine similarity of four embedding models; the prompt consists of an instruction, the top-3 retrieved chunks (with file and heading) and the question, wrapped in Gemma4's turn markers.
+
+#### 3.10.4 Embedder implementation details
+
+The embedder is `llama-embedding` of llama.cpp loading Q8_0 GGUF files: `bge-small-en-v1.5` (CLS pooling), `all-MiniLM-L6-v2` (mean), `multilingual-e5-small` (mean, with `query:`/`passage:` prefixes) and `Qwen3-Embedding-0.6B` (last token, instruction prefix on queries), plus a character 3–5-gram TF-IDF (hashed to 4096 dimensions) as a lexical control. Three implementation points matter: (1) the program splits its input at newlines and returns one vector per line, so multi-line text uses a private separator and the number of returned vectors is checked; (2) the pooling declared in the GGUF header is used rather than a forced value; (3) input longer than the model window (512 tokens for BERT-style models) aborts the program, so inputs are truncated to an estimated token budget (480) and a failing batch is retried in halves.
+
 ---
 
 ## 4. Experimental Design
@@ -521,6 +555,14 @@ The gx10 setting simulates the resource limits of the GT 1030: expert tensors st
 - **H2 criteria (preset):** set-size change (mean over the four types of the α = 0.9 median) ≤ −30%; ΔNLL ≤ 0.15 nats/token; next-token top-1 agreement with the base ≥ 0.85. All three must hold.
 - **Evaluation protocol:** the quality criteria are the teacher-forced NLL and the next-token top-1 agreement, with no free generation, so they do not depend on a generation stop condition; comparisons involving free generation use the full end-token set of the model (ids 1, 106 and 50; the end-of-turn token is `<turn|>`, id 106) as the stop condition and decode with special tokens kept.
 - **Hyper-parameter selection:** made on the held-out sessions over 10 settings; the finally chosen one is evaluated once more on the fresh sessions.
+
+### 4.5 Experimental Design of the Embedding Extension
+
+- **Data (A, C):** 12 sessions (10 plus 2 fresh sessions), 264 spans, about 82 thousand tokens of per-token expert sequences (Tier 2). All analyses are leave-one-session-out (LOSO): the pool of the held-out session is built only from the profiles of the other 11 sessions. The baselines `type`, `reactive` and `spec` follow §5.5, and the same program recomputes the replay of §5.5 as a self-check (maximum difference 0 at all four capacities).
+- **Primary configuration for H4 (pre-registered):** representation `bge-small-en-v1.5`, causal-context source, kNN $k = 8$, each training count divided by its number of tokens. Other representations, the non-causal source and the soft-type version are secondary results and are not used for the decision, to avoid multiple comparisons. Statistics are per-session paired differences over 12 sessions with 10,000 bootstrap resamples (seed 0).
+- **H4c:** 20 real chunks per model, one `llama-embedding` process at a time on CPU cores 0–1 with no GPU; the peak resident memory of the process itself (`VmHWM` read from `/proc`), the cold-start time and the warm estimate after subtracting model loading are recorded.
+- **Corpus and questions for H6:** the corpus is frozen at 498 chunks (11 files); 40 questions (20 Chinese, 20 English, 10 needing two passages) were written from the documents by a different model, each with verbatim quotes as evidence, all checked by script. Three of them have evidence in the excluded planning file and cannot be retrieved by any method, so the retrieval metrics are recomputed on the 37 answerable questions. The end-to-end test uses 24 of them (12 per language) answered by Gemma4 26B-A4B (Q4_K_M, `-ngl 2 -ub 64`, experts on CPU), temperature 0, at most 128 new tokens, under four conditions: no retrieval, BM25 top-3, Qwen3-Embedding top-3, and the gold evidence passages.
+- **End-to-end scoring (an automatic rule fixed in advance):** a key fact counts as present when its normalised string occurs in the answer or when every number it contains occurs in the answer; the score of a question is the fraction of its facts present.
 
 ---
 
@@ -701,6 +743,86 @@ f2 was chosen before the fresh data were examined (the best compromise on the he
 | P6 Mac M4 | 4 models × UMA pool planning | PASS |
 | P7 Self-Loop | 4 distill samples, +0.030/iter trend | PASS |
 
+### 5.8 Embedding-Assisted Expert Pools and Routing Fingerprints (H4, H4c, H5)
+
+#### 5.8.1 Direction A: embedding-selected pools (H4)
+
+The table gives the pre-registered primary configuration (bge-small, causal context) against the hand-typed pool (mean over 12 sessions, 95% interval in parentheses).
+
+| C | fixed type pool | fixed embedding pool | difference (fixed pool) | difference with preload + LRU |
+|---:|---:|---:|---|---|
+| 32 | 0.687 | 0.699 | +0.012 (−0.009, +0.037) | +0.0000 |
+| 48 | 0.815 | 0.840 | +0.025 (+0.005, +0.049) | −0.0000 |
+| 57 | 0.867 | 0.892 | +0.025 (+0.008, +0.046) | +0.0001 |
+| 64 | 0.902 | 0.922 | +0.021 (+0.006, +0.038) | +0.0003 |
+
+The criterion requires the fixed-pool difference to be ≥ 0.02 with a lower interval bound > 0 at both C = 32 and 48, and the preload-plus-LRU difference to be ≥ 0.01; C = 32 and the preload-plus-LRU criterion were not met, so H4 shows no advantage observed yet under the pre-registered criteria. Secondary results follow.
+
+1. For fixed pools the difference is +0.02 to +0.025 at C ≥ 48 (interval excludes 0); with the text of the span itself (the non-causal upper bound) it is +0.04 to +0.06 (+0.058 at C = 32, +0.039 at C = 64), similar for the four models.
+2. `multilingual-e5-small` with causal context gives +0.029 to +0.036 at the four values of C (interval excludes 0); character TF-IDF with causal context gives +0.025 to +0.030 (interval excludes 0), comparable to bge, so the gain in the causal-context setting is not specific to embeddings.
+3. The fixed-pool hit rate of the soft-type version is 0.027 to 0.059 lower than that of the hard type.
+4. When the pool may be refilled with LRU, the hit rate of every representation is within ±0.001 of token-level LRU (C = 32–64: reactive 0.793/0.903/0.941/0.961); preloading adds 2.8, 4.4, 5.3 and 6.0 expert loads per token over reactive (primary configuration).
+5. Split by whether the previous content span has a different type, the fixed-pool difference is +0.013 to +0.027 on spans after a type change and +0.012 to +0.023 on same-type spans, within 0.004 of each other: mixed content has no special gain. The pre-registered definition of mixed (maximum soft-type weight < 0.6) held for every span in practice and was therefore not used.
+
+#### 5.8.2 Direction C: the routing fingerprint (H5)
+
+| criterion | fingerprint | baseline | paired difference over 12 sessions (95% interval) | pre-registered threshold | reading |
+|---|---:|---:|---|---:|---|
+| C1: pool hit rate on later tokens at C = 57 | 0.914 | 0.821 (all-type pool) | +0.094 (+0.065, +0.131) | +0.020 | met |
+| C2: next-layer top-8 recall | 0.465 | 0.252 (popular top-8 of the layer) | +0.214 (+0.204, +0.225) | +0.150 | met |
+
+Both criteria of H5 were met. Charging the first 32 tokens (113 spans, prefix under LRU), the fingerprint pool as a fixed pool without refill has a higher hit rate than the fixed typed pool (C = 57: 0.914 vs 0.865; C = 32: 0.750 vs 0.685; C = 48: 0.870 vs 0.813); with LRU refill the fingerprint hybrid differs from the preloaded typed pool by −0.0006 in hit rate and loads slightly more per token (C = 57: 16.6 vs 16.4); token-level LRU has the lowest loads per token at all three values of C (C = 57: 14.1).
+
+#### 5.8.3 Embedder cost (H4c)
+
+| model (file size) | 2-core cold start p50/p95 (s) | of which model loading (s) | warm estimate p50 (s) | peak resident memory (MiB) |
+|---|---|---:|---:|---:|
+| bge-small (37 MB) | 0.69/0.71 | 0.59 | 0.10 | 392 |
+| all-MiniLM (25 MB) | 0.67/0.87 | 0.58 | 0.09 | 551 |
+| multilingual-e5-small (132 MB) | 1.62/1.67 | 1.36 | 0.26 | 881 |
+| Qwen3-Embedding-0.6B (639 MB) | 3.36/3.54 | 3.14 | 0.21 | 5168 |
+
+On latency, bge-small and MiniLM meet ≤ 1.0 s per chunk; on memory, all models exceed 300 MiB in this measurement. One core and two cores differ little (bge: 0.77 vs 0.69 s), so the cost is dominated by model loading; served by a resident process the cost is about 0.1–0.26 s per chunk. Reducing `-c`/`-b`/`-ub` to 512 leaves the peak unchanged; the main source of memory is the CUDA libraries linked into the gx10 build of `llama-embedding` (initialised even with `-ngl 0`). The resident memory on the target machine (a Vulkan or CPU build) has to be measured there; the values here are an upper bound from the gx10 CUDA build.
+
+### 5.9 Retrieval-Augmented Answering (H6)
+
+#### 5.9.1 Retrieval (40 questions; 498 chunks)
+
+| method | hit@1 | hit@3 | hit@5 | MRR | zh/en hit@3 | hit@3 on the 37 answerable questions |
+|---|---:|---:|---:|---:|---|---:|
+| BM25 | 0.475 | 0.650 | 0.750 | 0.592 | 0.55/0.75 | 0.703 |
+| character TF-IDF | 0.250 | 0.425 | 0.475 | 0.357 | 0.20/0.65 | — |
+| bge-small (CLS) | 0.300 | 0.400 | 0.425 | 0.373 | 0.30/0.50 | 0.432 |
+| all-MiniLM | 0.325 | 0.425 | 0.500 | 0.400 | 0.20/0.65 | 0.459 |
+| multilingual-e5-small | 0.150 | 0.250 | 0.300 | 0.234 | 0.40/0.10 | 0.270 |
+| Qwen3-Embedding-0.6B | 0.325 | 0.525 | 0.600 | 0.454 | 0.50/0.55 | 0.568 |
+
+None of the four embedding models reached hit@3 ≥ 0.85; the best (Qwen3) differs from BM25 by −0.125 (−0.275, +0.025). Exploratory: reciprocal-rank fusion (RRF, $k = 10$) of BM25 and Qwen3 gives 0.70; the fusions of the other models are not above BM25. Recomputed with an answer-oriented metric (a chunk counts as a hit if it contains ≥ 50% of the key facts) the order is the same (BM25 0.60, Qwen3 0.525). The English-question hit@3 of `multilingual-e5-small` is 0.10. A diagnosis was run on this result: swapping the prefixes and using `query:` on both sides give exactly the same metrics as the original setting, and omitting the prefixes or truncating the input to 256 estimated tokens leaves the English-question hit@3 at 0.10; 100% of the top-3 chunks for English questions are English (the corpus is 76.9% English, 20.3% mixed, 2.8% Chinese), so the cause is not a cross-language bias; under the answer-oriented metric the English questions score 0.00–0.05. What can be observed is that the vector space of e5 has a clearly lower contrast than the other three models: the mean cosine between chunks is 0.882 (standard deviation 0.026) against 0.649, 0.232 and 0.412 for bge, MiniLM and Qwen3 (standard deviations 0.073, 0.143, 0.105); among the question-to-chunk similarities the best chunk exceeds the median by 0.061 (other models 0.197–0.431). Whether this comes from the e5 model itself (trained contrastively at a low temperature, so cosines are concentrated at high values) or from the conversion and quantisation of this GGUF needs reference-implementation vectors to settle and was not obtained here, so the cause is partly identified.
+
+#### 5.9.2 End-to-end (24 questions)
+
+| condition | mean key-fact score | zh | en | difference to no retrieval (95% interval) | added prompt tokens median/max | median prefill |
+|---|---:|---:|---:|---|---|---:|
+| no retrieval | 0.076 | 0.097 | 0.056 | — | — | 0.67 s |
+| BM25 top-3 | 0.611 | 0.833 | 0.389 | +0.535 (+0.375, +0.694) | 803/1029 | 3.7 s |
+| Qwen3 top-3 | 0.528 | 0.750 | 0.306 | +0.451 (+0.285, +0.625) | 854/1074 | 3.7 s |
+| gold passages | 0.632 | 0.917 | 0.347 | +0.556 (+0.403, +0.708) | 325/722 | 2.4 s |
+
+A difference ≥ 0.20 was met in all three retrieval conditions; at most 1024 added prompt tokens per question was met in the gold-passage condition and slightly exceeded in the maximum of the top-3 configuration (1029 and 1074; medians 803 and 854). Without retrieval the answers were mostly statements without the correct numbers; with the documents most facts were stated item by item. The gold-passage condition is only 0.02 above BM25, which shows that on this question set the ranking of retrieval is not the main limit and the extraction of facts from the passages by the model weighs more. The top-3 of BM25 contains the complete evidence for 17 of 24 questions, that of Qwen3 for 13 of 24.
+
+The automatic score is a conservative lower bound: English key facts are mostly textual statements and do not count if the answer paraphrases them. Reading the answers of the gold-passage condition for 12 English questions, about 0.80 of the facts were stated against an automatic score of 0.35; Chinese key facts are mostly numbers and the two agree better (0.92). The absolute English values should therefore not be quoted directly, while the direction and size of the difference of the three retrieval conditions to no retrieval are not affected.
+
+#### 5.9.3 The top-2 configuration (within budget)
+
+To bring the added prompt within 1024 tokens, BM25 and Qwen3 retrieval were cut to the top-2 passages, everything else as in §5.9.2 (the same 24 questions; the no-retrieval answers are identical to the earlier ones).
+
+| condition | mean key-fact score | difference to no retrieval (95% interval) | added prompt tokens median/max | change in mean score vs top-3 | questions whose complete evidence is in the retrieved passages (top-2/top-3) |
+|---|---:|---|---|---:|---|
+| BM25 top-2 | 0.510 | +0.434 (+0.271, +0.601) | 529/703 | −0.101 | 16/17 |
+| Qwen3 top-2 | 0.472 | +0.396 (+0.222, +0.576) | 547/703 | −0.056 | 12/13 |
+
+Both the difference criterion and the added-token criterion were met (maximum 703 tokens). The decrease in the mean score comes from 2–4 questions (no question improved) and is concentrated in the 8 questions that need two passages: for these the top-2 covers 0–2 questions, and the BM25 mean score on two-passage questions falls from 0.417 (top-3) to 0.250; single-passage questions (16) are affected less (BM25 0.708 to 0.641). The configuration within budget can therefore be chosen by question type: top-2 suffices for single-passage factual questions, while questions that need several passages need top-3 with shorter chunks, which has not been tested.
+
 ---
 
 ## 6. Discussion
@@ -711,6 +833,7 @@ f2 was chosen before the fresh data were examined (the best compromise on the he
 - **RQ2, RQ3:** the designs and offline structural validation are complete; measuring their effect on a real model is outside the scope of this work.
 - **RQ4 (H1, H2, H3):** H1 is supported: the probability that adjacent tokens' expert sets intersect is 0.915, and 0.910 in the replay on the GT 1030. H3 is not supported: chunk-boundary type prefetch has a hit rate comparable to a token-level LRU and a higher load volume. The set shrinkage of H2 is achievable with the router LoRA (held-out sessions −33.2%, fresh sessions −27.5%), with agreement against the base of 0.843 and 0.835, close to the hypothesized value of 0.85, so H2 receives preliminary support and needs further verification.
 - **RQ5:** distillation-style LoRA training completes within a 1.0 GiB GPU budget (§5.6.3, GPU peak 0.79 GiB); the effect of the whole loop on quality is outside the scope of this work.
+- **RQ6 (H4, H4c, H5, H6):** H5 is supported (routing fingerprint C1 +0.094, C2 +0.214). H4 shows no advantage observed yet under the pre-registered criteria: fixed pools gain 0.02–0.025 at C ≥ 48, C = 32 and preload-plus-refill did not meet the criteria, and the causal-context gain of character TF-IDF is comparable to bge. For H4c the latency criterion is met by bge-small and MiniLM and the memory criterion was not met in the gx10 measurement. H6 is partially supported: retrieval hit@3 did not reach 0.85 (BM25 0.650, best embedding 0.525), the end-to-end difference is +0.45 to +0.56, and the maximum of the added tokens of the top-3 configuration slightly exceeds 1024, while the top-2 configuration has a maximum of 703 tokens and meets the difference criterion (+0.40 to +0.43).
 
 ### 6.2 Implications
 
@@ -718,12 +841,16 @@ f2 was chosen before the fresh data were examined (the best compromise on the he
 2. **LoRA and expert selection.** A LoRA must act on the router to influence which experts are selected; a LoRA acting only on attention and the dense MLP has no observable effect on the expert set.
 3. **Trade-off between shrinkage and output consistency.** Under the setting of this work, at about 33% shrinkage the top-1 agreement lies between 0.83 and 0.85.
 4. **Evaluation design.** This work uses the teacher-forced NLL and the next-token top-1 agreement as quality criteria, so comparisons do not depend on a generation stop condition; comparisons involving free generation use the full end-token set of the model (ids 1, 106 and 50 for Gemma4) as the stop condition and keep special tokens to read the end-of-turn position. This design gives the comparisons among the LoRAs a consistent basis (§4.4).
+5. **LRU already exploits most of the attainable hit rate.** When the pool may be refilled immediately, the source of the preloaded pool (hand-typed, embedding, routing fingerprint) changes the hit rate by at most ±0.001; differences appear only for fixed pools that cannot be refilled, so the value of embeddings and routing fingerprints depends on whether the deployment can refill.
+6. **The effect of retrieval augmentation comes from supplying evidence.** The gain in the 24-question end-to-end test is similar under BM25, embeddings and gold passages (+0.45 to +0.56); the questions come from project documents that Gemma4 cannot know beforehand, so the result reflects whether the model answers from evidence supplied and not general question answering.
+7. **Embedding implementation details affect conclusions.** The first vectors contained only the first line of every text because `llama-embedding` splits its input at newlines; after the correction (§3.10.4) retrieval hit@3 rose from 0.275 to 0.40–0.525. Embedding experiments should be accepted on 'multi-line text yields exactly one vector' and on 'a plausible retrieval baseline'.
 
 ### 6.3 Threats to Validity
 
 - **Internal validity:** hyper-parameters were chosen from 10 settings on the held-out sessions, so the held-out results contain selection bias; the finally chosen setting was therefore also evaluated on fresh sessions. The criterion values (NLL ≤ 0.15, top-1 ≥ 0.85) are hypothesized values of the researcher, not external standards.
 - **External validity:** a single model (Gemma4 26B-A4B, Q4_K_M) and a single corpus source (dialogue generated by the model itself); creative and factual samples are fewer and the fresh sessions contain no factual type.
 - **Measurement validity:** load times are converted from nominal bandwidth and are not measured latency; NLL and top-1 were measured in the bf16 offload engine while the second measurement of locality and set size used Q4_K_M llama.cpp; the replay on the GT 1030 covers 1280 tokens.
+- **Validity of the embedding extension:** only 12 sessions are available, so comparisons are paired per session and tokens are not used as significance units; the primary configuration of H4 was registered before the results and all other configurations are secondary. The 40 retrieval questions were written by a single model and the 24 end-to-end questions are taken from them; the automatic scoring of English key facts is conservative; the embedder memory was measured on the gx10 CUDA build and the latency and prefill speeds are gx10 simulation values, not GT 1030 measurements; `CC_For_Codex_Suggestions.MD` was not included because of its upper-case extension under the case-sensitive Linux file search, and the retrieval evaluation uses the same set of 498 chunks; the cause of the English-question result of e5 is only partly identified (§5.9.1).
 
 ### 6.4 Scope and Evidence Levels
 
@@ -739,6 +866,9 @@ f2 was chosen before the fresh data were examined (the best compromise on the he
 | Phase 5 (§3.6) | structural validation; device numbers are vendor specifications | no Jetson, Android or ARM camera obtained |
 | Phase 6 (§3.7) | structural validation; UMA and NVMe numbers are vendor specifications | no Mac Mini M4 obtained; the expert distribution of DeepSeek-V3 was not measured |
 | Phase 7 (§3.8) | structural validation; §5.6.3 is a measurement of the same mechanism on a constrained GPU | |
+| Embedding pools and routing fingerprints (§5.8.1, §5.8.2) | offline replay of real routing sequences (12 sessions, LOSO) | gx10 restricted; baselines identical to §5.5 |
+| Embedder cost (§5.8.3) | measured under gx10 restricted conditions | cores 0–1, CUDA build of llama.cpp; target machine not measured |
+| Retrieval and end-to-end (§5.9) | measured with the gx10 restricted preset (24 questions) | questions from project documents; speeds are gx10 simulation values |
 
 The corpus is dialogue generated by Gemma4 itself, with 2 pilots on Windows and the others generated on gx10 with its GGUF (a different file from the GT 1030's). The conclusions concern Gemma4 26B-A4B (Q4_K_M); statements about Mixtral, DeepSeek and similar models cite public specifications. The device numbers of Phase 5 and Phase 6 (FPS, UMA bandwidth, NVMe speed) are specification values.
 
@@ -748,7 +878,9 @@ The corpus is dialogue generated by Gemma4 itself, with 2 pilots on Windows and 
 
 On the 2 GB VRAM GT 1030 and an older PC, Gemma4 26B-A4B runs with `-ngl 10` at 1.7 GB VRAM and decodes at 4.22 tok/s. Its expert routing has clear temporal locality (adjacent-token intersection probability 0.915), which is formed jointly by the concentration on popular experts and by adjacency and can be exploited effectively by a token-level LRU; chunk-boundary type prefetch has a comparable hit rate to an LRU. Shrinking the expert set is achievable with a LoRA attached to the router: −33.2% on average on the held-out sessions and −27.5% on the fresh sessions; the next-token top-1 agreement with the base is 0.843 and 0.835, close to the hypothesized value of 0.85, so H2 receives preliminary support, and shrinkage and output consistency trade off.
 
-**Future work.** (1) Continue verifying the shrinkage and output consistency of H2 with more sessions (including factual and more creative), other corpus sources and other MoE models; (2) explore larger distillation data and other losses to move the trade-off curve between shrinkage and agreement; (3) connect the expert pool to llama-server to measure online hit rate and latency; (4) obtain measured data for Phases 5 and 6 on a Jetson and a Mac M4; (5) extend to other MoE models.
+The embedding extension shows that the routing fingerprint, without adding any model, is better as a fixed pool than the hand-typed pool (H5 supported); embedding-selected pools raise the hit rate by 0.02–0.025 for fixed pools but show no observable difference from token-level LRU when immediate refill is allowed (H4: no advantage observed yet); retrieval augmentation raises the mean key-fact score on 24 questions from 0.076 to 0.53–0.63, and on the ranking metric BM25 is above the four small embedding models (H6 partially supported).
+
+**Future work.** (1) Continue verifying the shrinkage and output consistency of H2 with more sessions (including factual and more creative), other corpus sources and other MoE models; (2) explore larger distillation data and other losses to move the trade-off curve between shrinkage and agreement; (3) connect the expert pool to llama-server to measure online hit rate and latency; (4) obtain measured data for Phases 5 and 6 on a Jetson and a Mac M4; (5) extend to other MoE models. In addition, the resident memory of the embedder and the end-to-end latency should be measured on the target machine (a Vulkan or CPU build); for the questions that need two passages a top-3 configuration with shorter chunks can be tested; the English key facts should be re-checked with more questions and manual scoring; and reference-implementation vectors should be used to decide whether the low contrast of `multilingual-e5-small` comes from the conversion or quantisation of this GGUF.
 
 ---
 
@@ -881,3 +1013,28 @@ $p=[System.Diagnostics.Process]::GetCurrentProcess(); $p.ProcessorAffinity=[IntP
 $env:LLMS_DIR='<LLMS_DIR>'; $env:AFFINITY_PROFILE='gt1030_win'
 python -u scripts\tier2_locality.py run --tag gt_pilot --sessions planner_pilot,coder_pilot --ngl 8 --ubatch 128
 ```
+
+---
+
+## Appendix D: Reproducing the Embedding Extension
+
+```bash
+# Environment variable needed (never written to a file): GX10_HOST; the embedding models are four Q8_0 GGUF files in ~/gemma4_affinity_sim/work/embed_models/ on gx10
+python tools/slice_runner/gx10_run.py sync
+# span vectors (chunk.npy, ctx.npy; once per model)
+python tools/slice_runner/gx10_run.py run embedchunks --args "--model bge-small-en-v1.5-q8_0.gguf"
+# Direction A (H4): embedding-selected pools vs typed pools, including the self-check against the §5.5 replay
+python tools/slice_runner/gx10_run.py run aembed --args "--tags base_all,base_new --caps 32,48,57,64 --workers 4 --out logs/a_embedding_pools.json"
+# Direction C (H5): routing fingerprint (including the prefix-cost comparison)
+python tools/slice_runner/gx10_run.py run fingerprint --args "--tags base_all,base_new --out logs/routing_fingerprint_eval.json"
+# H4c: embedder cost
+python tools/slice_runner/gx10_run.py run embedcost --args "--model bge-small-en-v1.5-q8_0.gguf --n 20 --out logs/embed_cost/bge.json"
+# Direction B: retrieval and end-to-end (H6)
+python tools/slice_runner/gx10_run.py run rageval --args "--mode embed --model Qwen3-Embedding-0.6B-Q8_0.gguf --out logs/rag_eval"
+python tools/slice_runner/gx10_run.py run rage2e --args "--retriever Qwen3-Embedding-0.6B-Q8_0.gguf --out logs/rag_e2e"
+# the top-2 configuration (§5.9.3) and the e5 diagnosis (§5.9.1)
+python tools/slice_runner/gx10_run.py run rage2e --args "--retriever Qwen3-Embedding-0.6B-Q8_0.gguf --top-k 2 --conditions none,bm25,emb --out logs/rag_e2e_top2"
+python tools/slice_runner/gx10_run.py run e5diag --args "--out logs/e5_diagnose"
+```
+
+The main result files and the answers per question are kept in `docs/embedding_plan/evidence/`; the plan, the pre-registered criteria and the acceptance records of each slice are in `docs/embedding_research_plan_2026-11-19.md`.

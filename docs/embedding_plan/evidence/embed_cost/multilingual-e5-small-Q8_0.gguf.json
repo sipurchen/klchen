@@ -1,0 +1,43 @@
+{
+ "model": "multilingual-e5-small-Q8_0.gguf",
+ "pooling": "mean",
+ "n": 20,
+ "chunk_chars_median": 2396.5,
+ "gpu_mib": 0,
+ "runs": {
+  "1": {
+   "affinity_cores": [
+    0
+   ],
+   "threads": 1,
+   "load_only_s_median": 1.3924195813015103,
+   "cold_s_p50": 1.664103565737605,
+   "cold_s_p95": 1.7647912109270691,
+   "cold_s_max": 1.7777086338028312,
+   "warm_est_s_p50": 0.27168398443609476,
+   "warm_est_s_p95": 0.37237162962555886,
+   "peak_rss_mib_children": 880.69140625,
+   "rss_note": "max VmHWM of the llama-embedding process itself, polled from /proc"
+  },
+  "2": {
+   "affinity_cores": [
+    0,
+    1
+   ],
+   "threads": 2,
+   "load_only_s_median": 1.3601190960034728,
+   "cold_s_p50": 1.623635835479945,
+   "cold_s_p95": 1.665204584179446,
+   "cold_s_max": 1.673863599076867,
+   "warm_est_s_p50": 0.26351673947647214,
+   "warm_est_s_p95": 0.3050854881759733,
+   "peak_rss_mib_children": 880.94921875,
+   "rss_note": "max VmHWM of the llama-embedding process itself, polled from /proc"
+  }
+ },
+ "h4c": {
+  "two_core_cold_p95_le_1s": false,
+  "two_core_warm_p95_le_1s": true,
+  "rss_le_300_mib": false
+ }
+}
