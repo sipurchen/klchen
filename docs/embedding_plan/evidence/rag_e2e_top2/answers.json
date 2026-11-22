@@ -1,0 +1,1990 @@
+[
+ {
+  "id": "Q01",
+  "lang": "zh",
+  "needs_two_passages": false,
+  "key_facts": [
+   "tok 45",
+   "ΔH = 0.41",
+   "θ_H = 0.35",
+   "5.1 tok/s"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>在 Phase 1 實驗中，邊界是在第 128 個 token 觸發。當時的熵降幅度為 0.15，設定閾值為 0.1，而推論吞吐量為 120 tokens/s。<turn|>",
+   "wall_s": 6.573478937149048,
+   "prompt_tokens": 72,
+   "prompt_ms": 1160.105,
+   "predicted_n": 63,
+   "predicted_ms": 5367.954,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>在 Phase 1 的即時實驗中，邊界是在第 45 個 token 處觸發。當時的熵降幅度（$\\Delta H$）為 0.41，設定閾值 $\\theta_H$ 為 0.35，而推論吞吐量為 5.1 tok/s。<turn|>",
+   "wall_s": 9.514053344726562,
+   "prompt_tokens": 391,
+   "prompt_ms": 1976.476,
+   "predicted_n": 77,
+   "predicted_ms": 7523.476,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.2.3 熵監控器（priority=5）"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "5.1.1 Phase 1 實測結果（GT 1030）"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>在即時實驗中，邊界是在第 45 個 token 處觸發。當時的熵降幅度（ΔH）為 0.41，設定閾值（θH）為 0.35，而推論吞吐量為 5.1 tok/s。<turn|>",
+   "wall_s": 10.15393328666687,
+   "prompt_tokens": 347,
+   "prompt_ms": 3288.439,
+   "predicted_n": 70,
+   "predicted_ms": 6825.154,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.2.3 熵監控器（priority=5）"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "3.2.3 Entropy Monitor (priority = 5)"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q02",
+  "lang": "zh",
+  "needs_two_passages": false,
+  "key_facts": [
+   "code 1.5",
+   "factual 1.2",
+   "creative 0.8",
+   "reasoning 0.5"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>在 Phase 2 三層 KV 快取卸載的 LRU 驅動模型中，四種語義區塊類型的優先權權重數值分別為 1、2、4 與 8。這組權重透過位元移位設計，確保不同類型的區塊在 LRU 淘汰機制中具有明確的層級差異。<turn|>",
+   "wall_s": 7.375434160232544,
+   "prompt_tokens": 65,
+   "prompt_ms": 339.488,
+   "predicted_n": 82,
+   "predicted_ms": 7001.875,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>在 Phase 2 的 LRU 驅逐模型中，四種語義區塊類型的優先權權重數值分別為：$\\pi(\\text{code})=1.5$、$\\pi(\\text{factual})=1.2$、$\\pi(\\text{creative})=0.8$ 以及 $\\pi(\\text{reasoning})=0.5$。<turn|>",
+   "wall_s": 12.172730922698975,
+   "prompt_tokens": 474,
+   "prompt_ms": 3683.007,
+   "predicted_n": 84,
+   "predicted_ms": 8474.837,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.3.2 LRU 驅逐代價模型"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.1 架構總覽"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>提供的文件中沒有提到 Phase 2 三層 KV 快取卸載的 LRU 驅逐模型，僅有關於 Phase 4 專家 RAM 池與 LRU 驅逐代價模型的資訊。因此，文件中不包含該問題的答案。<turn|>",
+   "wall_s": 7.687050819396973,
+   "prompt_tokens": 454,
+   "prompt_ms": 2080.236,
+   "predicted_n": 58,
+   "predicted_ms": 5563.23,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.5 Phase 4：專家 RAM 池"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.3.2 LRU 驅逐代價模型"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q03",
+  "lang": "zh",
+  "needs_two_passages": false,
+  "key_facts": [
+   "33 個專家",
+   "0.82 GB",
+   "27 GB",
+   ">80%"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>在 Phase 6 的規劃中，DeepSeek-V3 可以將 16 個熱門專家釘選於 32 GB 的統一記憶體中。單個專家大小約為 1.5 GB，常駐總容量約為 24 GB，而常見存取覆蓋率則設定在 75% 左右。<turn|>",
+   "wall_s": 8.545811414718628,
+   "prompt_tokens": 83,
+   "prompt_ms": 1638.908,
+   "predicted_n": 80,
+   "predicted_ms": 6865.461,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>在 32 GB UMA 的規劃中，DeepSeek-V3 可以將前 33 個專家釘選於統一記憶體。單個專家大小為 0.82 GB，常駐總容量為 27 GB，且在常見使用模式下的熱門專家覆蓋率大於 80%。<turn|>",
+   "wall_s": 8.640754699707031,
+   "prompt_tokens": 310,
+   "prompt_ms": 1141.092,
+   "predicted_n": 76,
+   "predicted_ms": 7483.653,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.7.3 UMA 專家釘選"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.7.1 UMA 優勢"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>在 32 GB UMA 規劃中，DeepSeek-V3 可以將前 33 個專家釘選於統一記憶體。單個專家大小為 0.82 GB，常駐總容量為 27 GB，而常見使用模式下的專家覆蓋率大於 80%。<turn|>",
+   "wall_s": 9.263402700424194,
+   "prompt_tokens": 270,
+   "prompt_ms": 2025.717,
+   "predicted_n": 73,
+   "predicted_ms": 7205.703,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.7.3 UMA 專家釘選"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "3.7.3 UMA Expert Pinning"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q04",
+  "lang": "zh",
+  "needs_two_passages": false,
+  "key_facts": [
+   "6 次迭代",
+   "+0.030/iter",
+   "0.60 提升至 0.75"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>Phase 7 自迴圈結構示範總共執行了 10 次迭代。線性迴歸測得的品質趨勢斜率為 0.045，而品質分數的變化範圍為 0.42 至 0.88。<turn|>",
+   "wall_s": 5.532655954360962,
+   "prompt_tokens": 61,
+   "prompt_ms": 256.387,
+   "predicted_n": 62,
+   "predicted_ms": 5248.01,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>Phase 7 示範中總共執行了 6 次迭代。線性迴歸測得的品質趨勢斜率為 $+0.030/\\text{iter}$，品質分數的變化範圍從 0.60 提升至 0.75。<turn|>",
+   "wall_s": 7.491368532180786,
+   "prompt_tokens": 290,
+   "prompt_ms": 1068.814,
+   "predicted_n": 65,
+   "predicted_ms": 6410.051,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.1 架構總覽"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.8.5 品質趨勢檢測（線性迴歸）"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>Phase 7 示範中總共執行了 6 次迭代。線性迴歸測得的品質趨勢斜率為 $+0.030/\\text{iter}$，品質分數的變化範圍為從 0.60 提升至 0.75。<turn|>",
+   "wall_s": 7.670830488204956,
+   "prompt_tokens": 309,
+   "prompt_ms": 1133.226,
+   "predicted_n": 66,
+   "predicted_ms": 6506.782,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.8.5 品質趨勢檢測（線性迴歸）"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "3.8.4 LoRA Adapter EMA Update"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q05",
+  "lang": "zh",
+  "needs_two_passages": false,
+  "key_facts": [
+   "router.proj",
+   "30 層",
+   "rank 16",
+   "約 150 萬參數"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>本研究的 router LoRA 掛載在各層路由器的 $W_q$ 投影層上。在 30 層皆採 rank 16 設定時，其總參數量大約為 1.5M。<turn|>",
+   "wall_s": 5.389431715011597,
+   "prompt_tokens": 70,
+   "prompt_ms": 706.367,
+   "predicted_n": 55,
+   "predicted_ms": 4651.509,
+   "score": {
+    "fraction": 0.5,
+    "all": false,
+    "present": [
+     false,
+     true,
+     true,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>本研究將 LoRA 掛載於各層路由器的 `router.proj` 投影層。在 30 層且 rank 為 16 的設定下，其參數總量大約為 150 萬。<turn|>",
+   "wall_s": 7.740530729293823,
+   "prompt_tokens": 576,
+   "prompt_ms": 2008.21,
+   "predicted_n": 55,
+   "predicted_ms": 5719.431,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.9 縮小專家集合的 router LoRA"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.9 縮小專家集合的 router LoRA"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>本研究將 LoRA 掛載於各層路由器的 `router.proj` 投影層。在 30 層且 rank 為 16 的設定下，其總參數量大約為 150 萬。<turn|>",
+   "wall_s": 8.529528617858887,
+   "prompt_tokens": 584,
+   "prompt_ms": 2750.745,
+   "predicted_n": 55,
+   "predicted_ms": 5727.058,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "3.9 縮小專家集合的 router LoRA"
+    },
+    {
+     "file": "docs/h2_adapter_plan_2026-11-14.md",
+     "heading": "3. Forks"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q06",
+  "lang": "zh",
+  "needs_two_passages": false,
+  "key_facts": [
+   "訓練 7 個 session",
+   "留出 3 個 session（coder_03、planner_03、writer_02）",
+   "最終檢驗 2 個全新 session"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>在 router LoRA 與補償 adapter 的資料切分中，訓練集、留出評估集與最終檢驗集各包含 2 個 session。其中留出評估集具體使用的三個 session 為 session 2、session 3 與 session 4。<turn|>",
+   "wall_s": 6.023662090301514,
+   "prompt_tokens": 69,
+   "prompt_ms": 629.571,
+   "predicted_n": 63,
+   "predicted_ms": 5344.85,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     false,
+     true
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>訓練集包含 7 個 session，留出評估集包含 3 個 session，而最終檢驗集包含 2 個 session。留出評估集具體使用的三個 session 為 coder_03、planner_03 與 writer_02。<turn|>",
+   "wall_s": 9.440539598464966,
+   "prompt_tokens": 411,
+   "prompt_ms": 3545.557,
+   "predicted_n": 61,
+   "predicted_ms": 5883.219,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.2 模型與語料"
+    },
+    {
+     "file": "docs/h2_adapter_plan_2026-11-14.md",
+     "heading": "3. Forks"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>router LoRA 與補償 adapter 的訓練集包含 7 個 session，留出評估集包含 3 個 session，而最終檢驗集包含 2 個 session。留出評估集具體使用的三個 session 為 coder_03、planner_03 與 writer_02。<turn|>",
+   "wall_s": 9.986732006072998,
+   "prompt_tokens": 346,
+   "prompt_ms": 3192.691,
+   "predicted_n": 69,
+   "predicted_ms": 6754.625,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "4.2 Model and Corpus"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.2 模型與語料"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q07",
+  "lang": "zh",
+  "needs_two_passages": false,
+  "key_facts": [
+   "70 個 job",
+   "2,036,795 token",
+   "reasoning 1,248,355",
+   "code 464,177"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>Tier 1 累計總計包含 1,100,000 個 job 與 1,000,000,000 個 token。其中 reasoning 類型佔了 500,000,000 個 token，而 code 類型則佔了 500,000,000 個 token。<turn|>",
+   "wall_s": 7.711443662643433,
+   "prompt_tokens": 58,
+   "prompt_ms": 253.671,
+   "predicted_n": 87,
+   "predicted_ms": 7424.099,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>Tier 1 累計計數共包含 70 個 job，但文件中並未提及總計包含多少個 token，也未說明 reasoning 與 code 兩種類型各自佔用的 token 數量。<turn|>",
+   "wall_s": 6.723820447921753,
+   "prompt_tokens": 483,
+   "prompt_ms": 1751.214,
+   "predicted_n": 50,
+   "predicted_ms": 4958.583,
+   "score": {
+    "fraction": 0.25,
+    "all": false,
+    "present": [
+     true,
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.3 量測方法"
+    },
+    {
+     "file": "docs/h2_adapter_plan_2026-11-14.md",
+     "heading": "5. Final Proof"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>Tier 1 累計計數包含 70 個 job，共涵蓋 2,036,795 個 token。其中 reasoning 佔了 1,248,355 token，code 佔了 464,177 token。<turn|>",
+   "wall_s": 9.302256107330322,
+   "prompt_tokens": 682,
+   "prompt_ms": 2377.04,
+   "predicted_n": 67,
+   "predicted_ms": 6882.387,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "5.3 專家路由的類型分布（Tier 1）"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.3 量測方法"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q08",
+  "lang": "zh",
+  "needs_two_passages": false,
+  "key_facts": [
+   "W = 8: 0.773（28.7 個）",
+   "W = 32: 0.934（52.2 個）",
+   "W = 128: 0.986（74.1 個）"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>在 Tier 2 動態窗口快取實驗中，當窗口長度分別為 8、32 與 128 時，專家命中率分別為 45.6%、65.2% 與 78.4%。同時，每層平均需保留的專家數量也隨之從 2.1 個增加至 2.8 個，最後達到 3.5 個。<turn|>",
+   "wall_s": 9.131729364395142,
+   "prompt_tokens": 75,
+   "prompt_ms": 1069.826,
+   "predicted_n": 93,
+   "predicted_ms": 7999.866,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>在 Tier 2 動態窗口快取實驗中，當窗口長度 $W=8$ 時，命中率為 0.773，每層平均需保留 28.7 個專家；$W=32$ 時，命中率為 0.934，每層平均需保留 52.2 個專家；$W=128$ 時，命中率為 0.986，每層平均需保留 74.1 個專家。<turn|>",
+   "wall_s": 14.659931182861328,
+   "prompt_tokens": 700,
+   "prompt_ms": 2439.106,
+   "predicted_n": 114,
+   "predicted_ms": 12207.787,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "5.4 逐 token 時間局部性（Tier 2）"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "5.5 專家池策略"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>在 Tier 2 動態窗口快取實驗中，當窗口長度 $W=8$ 時，命中率為 0.773，每層平均需保留 28.7 個專家；$W=32$ 時，命中率為 0.934，專家數量為 52.2 個；$W=128$ 時，命中率為 0.986，專家數量為 74.1 個。<turn|>",
+   "wall_s": 14.755019187927246,
+   "prompt_tokens": 748,
+   "prompt_ms": 2782.257,
+   "predicted_n": 108,
+   "predicted_ms": 11912.128,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "5.4 逐 token 時間局部性（Tier 2）"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "5.4 Per-token Temporal Locality (Tier 2)"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q16",
+  "lang": "zh",
+  "needs_two_passages": true,
+  "key_facts": [
+   "ΔNLL +0.103 符合 ≤ 0.15 門檻",
+   "平均縮小 −27.5% 對比 ≥ 30%（差 2.5 個百分點）",
+   "top-1 一致率 0.835 對比 ≥ 0.85（差 0.015）"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>在最終檢驗結果中，僅有第一項實測值達成了預設門檻。其餘兩項實測值分別與預設門檻相差 15% 與 22%。<turn|>",
+   "wall_s": 5.736489772796631,
+   "prompt_tokens": 80,
+   "prompt_ms": 1426.198,
+   "predicted_n": 50,
+   "predicted_ms": 4250.733,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>根據文件，在全新 session 的檢驗結果中，僅有集合縮小與 NLL 達成門檻。其中，top-1 一致率實測值為 0.843，與預設門檻 0.85 相差 0.007。<turn|>",
+   "wall_s": 9.43448805809021,
+   "prompt_tokens": 633,
+   "prompt_ms": 2311.727,
+   "predicted_n": 68,
+   "predicted_ms": 7108.688,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "6.3 有效性威脅"
+    },
+    {
+     "file": "docs/h2_adapter_plan_2026-11-14.md",
+     "heading": "6. 執行結果（2026-11-15）"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>在全新 session 的最終檢驗中，只有集合縮小（-27.5%）達成門檻。另外兩項實測值與假設值的差距分別為：ΔNLL 增加 0.103，以及 top-1 一致率為 0.835（相較於假設值 0.843 差距 0.008）。<turn|>",
+   "wall_s": 13.573917627334595,
+   "prompt_tokens": 598,
+   "prompt_ms": 4051.652,
+   "predicted_n": 90,
+   "predicted_ms": 9470.852,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/h2_adapter_plan_2026-11-14.md",
+     "heading": "7. 補償階段與最終檢驗（2026-11-15）"
+    },
+    {
+     "file": "docs/h2_adapter_plan_2026-11-14.md",
+     "heading": "6. 執行結果（2026-11-15）"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q17",
+  "lang": "zh",
+  "needs_two_passages": true,
+  "key_facts": [
+   "相對 66 個混合集合平均縮小 19%",
+   "7 GB 對應每層 57 個專家",
+   "四類型聯集約 84.5 個，超過 57 個容量"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>在 $\\alpha = 0.9$ 的親和集合量測中，依類型條件化後的集合量測相較於不分類型的混合集合平均縮小了約 25%。若以 7 GB 預算配置每層 57 個專家，其容量約可容納 1.4 個專家，因此無法同時容納四種類型的聯集集合（約需 4 個專家）。<turn|>",
+   "wall_s": 8.87519097328186,
+   "prompt_tokens": 106,
+   "prompt_ms": 474.021,
+   "predicted_n": 96,
+   "predicted_ms": 8363.86,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     true,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>在 $\\alpha = 0.9$ 的親和集合量測中，依類型條件化後相較於不分類型的混合集合平均縮小 19%。若以 7 GB 預算配置每層 57 個專家的池容量，無法同時容納四種類型的聯集集合，因為該聯集約為 84.5 個專家，超過了 57 個專家的容量。<turn|>",
+   "wall_s": 14.398916721343994,
+   "prompt_tokens": 778,
+   "prompt_ms": 3543.238,
+   "predicted_n": 97,
+   "predicted_ms": 10837.478,
+   "score": {
+    "fraction": 0.6666666666666666,
+    "all": false,
+    "present": [
+     false,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "5.3 專家路由的類型分布（Tier 1）"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "5.5 專家池策略"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>提供的文件中並未包含 Gemma4 26B-A4B 在 $\\alpha = 0.9$ 親和集合量測中，類型條件化後相較於不分類型的混合集合平均縮小比例的資訊。關於 7 GB 預算配置每層 57 個專家的池容量，其四個類型的聯集（$\\alpha = 0.9$ 約為 84.5 個專家）超過了該容量。<turn|>",
+   "wall_s": 16.49641227722168,
+   "prompt_tokens": 733,
+   "prompt_ms": 4996.498,
+   "predicted_n": 105,
+   "predicted_ms": 11424.047,
+   "score": {
+    "fraction": 0.6666666666666666,
+    "all": false,
+    "present": [
+     false,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.4 評估指標與判準"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "5.5 專家池策略"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q18",
+  "lang": "zh",
+  "needs_two_passages": true,
+  "key_facts": [
+   "RTX 2050 預估 ~8–12 tok/s",
+   "GT 1030 實測 4.22 tok/s",
+   "237.1 ms/token"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>在 CPU Offload 模式下，RTX 2050 的預估解碼速度區間約為 0.5 至 1.5 tokens/s。相較之下，GT 1030 實際測得的解碼速度約為 0.1 至 0.3 tokens/s，而每 token 的延遲則落在 3.3 至 10 秒之間。<turn|>",
+   "wall_s": 8.746678590774536,
+   "prompt_tokens": 98,
+   "prompt_ms": 441.666,
+   "predicted_n": 95,
+   "predicted_ms": 8243.551,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>提供的文件中沒有包含 RTX 2050 規劃表預估的解碼速度區間，也沒有提到 GT 1030 實際測得的每 token 延遲。文件中僅提到 GT 1030 實際測得的解碼速度為 4.22 tok/s。<turn|>",
+   "wall_s": 9.90546703338623,
+   "prompt_tokens": 638,
+   "prompt_ms": 2267.547,
+   "predicted_n": 73,
+   "predicted_ms": 7620.975,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     true,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "6.4 適用範圍與證據等級"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "5.2 Gemma4 26B-A4B 於 GT 1030 的資源配置"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>提供的文件中沒有提到 RTX 2050 規劃表預估的解碼速度區間，也沒有提到 GT 1030 每 token 的延遲。文件中僅提到 Gemma4 26B-A4B 在 GT 1030 上以 `-ngl 10` 運行時，解碼速度為 4.22 tok/s。<turn|>",
+   "wall_s": 11.422781467437744,
+   "prompt_tokens": 693,
+   "prompt_ms": 2434.841,
+   "predicted_n": 86,
+   "predicted_ms": 8936.546,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     true,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "7. 結論與未來工作"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "摘要"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q20",
+  "lang": "zh",
+  "needs_two_passages": true,
+  "key_facts": [
+   "gx10: -ngl 2、ubatch 64、933 MiB（-ngl 3 使用 1031 MiB 超過 1000 MiB 上限）",
+   "GT 1030: -ngl 8、ubatch 128、1609 MiB",
+   "處理速度 0.27 tok/s（整場約 7 小時），故僅重放前 1280 個 token"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>在執行 Tier 2 量測時，gx10 模擬環境採用 `-ngl 0`、`ubatch 512` 且 GPU 記憶體用量極低；GT 1030 實機則採用 `-ngl 0`、`ubatch 512` 且需佔用約 2GB 記憶體。gx10 不採用 `-ngl 3` 是為了確保量測環境與實機一致，避免 GPU 加速影響純 CPU 模擬的基準。GT 1030 僅重放前 ",
+   "wall_s": 11.761717319488525,
+   "prompt_tokens": 106,
+   "prompt_ms": 468.373,
+   "predicted_n": 128,
+   "predicted_ms": 11233.698,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>提供的文件中並未包含關於「Tier 2 逐 token 專家序列量測」的具體參數資訊。文件中僅提到逐 token 專家序列（§5.4）在 gx10 的設定為 `-ngl 2`，且 GT 1030 是重放前 1280 個 token，但未說明不採用 `-ngl 3` 的原因。<turn|>",
+   "wall_s": 12.853275775909424,
+   "prompt_tokens": 809,
+   "prompt_ms": 2889.635,
+   "predicted_n": 89,
+   "predicted_ms": 9924.425,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "6.4 適用範圍與證據等級"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.1 硬體與執行環境"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>提供的文件中並未包含關於「Tier 2 逐 token 專家序列量測」的具體參數與原因。文件中僅提到 gx10 在逐 token 專家序列與局部性實測時使用 `-ngl 2` 與 933 MiB，以及 GT 1030 重放前 1280 個 token，但未說明為何 gx10 不採用 `-ngl 3` 或 GT 1030 僅重放特定長度的原因。<turn|>",
+   "wall_s": 15.419162273406982,
+   "prompt_tokens": 809,
+   "prompt_ms": 2963.529,
+   "predicted_n": 111,
+   "predicted_ms": 12388.205,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.1 硬體與執行環境"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "6.4 適用範圍與證據等級"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q21",
+  "lang": "en",
+  "needs_two_passages": false,
+  "key_facts": [
+   "1536 cells",
+   "n_swa + n_ubatch = 1024 + 512",
+   "only the 5 global layers scale with ctx"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>For Gemma4 26B-A4B, 4,096 cells are allocated for the sliding-window attention (SWA) cache. This cell count is determined by the fixed window size specified in the model architecture. The layers that do not use SWA still scale their KV memory linearly with the `--ctx-size`.<turn|>",
+   "wall_s": 7.647558927536011,
+   "prompt_tokens": 76,
+   "prompt_ms": 1158.801,
+   "predicted_n": 75,
+   "predicted_ms": 6412.477,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>The SWA cache is fixed at 1536 cells. This count is determined by the sum of `n_swa` and `n_ubatch` (1024 + 512). Only the 5 global layers' KV scales with the context size.<turn|>",
+   "wall_s": 9.809417724609375,
+   "prompt_tokens": 753,
+   "prompt_ms": 2811.87,
+   "predicted_n": 64,
+   "predicted_ms": 6981.44,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "heading": "Real architecture (from GGUF header, not assumed)"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "3.3 Generation parameters"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>The SWA cache is fixed at 1536 cells, which is determined by the sum of `n_swa` and `n_ubatch` (1024 + 512). Only the 5 \"global\" layers' KV memory scales with `--ctx-size`.<turn|>",
+   "wall_s": 10.108259916305542,
+   "prompt_tokens": 747,
+   "prompt_ms": 2788.255,
+   "predicted_n": 67,
+   "predicted_ms": 7261.972,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "heading": "Real architecture (from GGUF header, not assumed)"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.2 模型與語料"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q22",
+  "lang": "en",
+  "needs_two_passages": false,
+  "key_facts": [
+   "model weights, KV(non-SWA)+KV(SWA), and compute graph",
+   "measured from llama.cpp server logs",
+   "nvidia-smi has ~200-300ms driver release lag between runs"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>The three Vulkan0 buffers summed from the server logs were `vulkan0_vram_used`, `vulkan0_vram_free`, and `vulkan0_vram_total`. The `nvidia-smi` readings were excluded because they provided inconsistent snapshots that did not align with the precise temporal synchronization of the Vulkan buffer telemetry.<turn|>",
+   "wall_s": 7.7574708461761475,
+   "prompt_tokens": 73,
+   "prompt_ms": 940.057,
+   "predicted_n": 79,
+   "predicted_ms": 6757.798,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>The three summed `Vulkan0` buffers are model weights + KV(non-SWA)+KV(SWA) + compute graph. `nvidia-smi` was excluded because it is contaminated by approximately 200-300ms of driver release lag between consecutive test runs.<turn|>",
+   "wall_s": 10.460042238235474,
+   "prompt_tokens": 531,
+   "prompt_ms": 3506.085,
+   "predicted_n": 66,
+   "predicted_ms": 6936.565,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     false,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "heading": "Method"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "6.3 Threats to Validity"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>The provided documents do not contain information regarding which three Vulkan buffers were summed from server logs or why nvidia-smi was excluded from the readings.<turn|>",
+   "wall_s": 7.717395782470703,
+   "prompt_tokens": 660,
+   "prompt_ms": 4071.999,
+   "predicted_n": 35,
+   "predicted_ms": 3598.002,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "6.4 Scope and Evidence Levels"
+    },
+    {
+     "file": "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "heading": "Gemma4 26B-A4B MoE — Real VRAM/ngl/tok-s Benchmark (GT 1030 2GB)"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q23",
+  "lang": "en",
+  "needs_two_passages": false,
+  "key_facts": [
+   "+1 ngl layer (11 vs 10)",
+   "global-layer KV halves (scales linearly with ctx)",
+   "local/SWA KV is flat"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>Lowering the context window from 16384 to 8192 allows for approximately 4 to 6 additional layers to be offloaded to the GT 1030's limited VRAM. This gain is explained by the quadratic scaling of the KV cache, where halving the sequence length significantly reduces the memory footprint required for attention keys and values. Consequently, more space is freed up to accommodate the weights of additional model layers within the same VRAM ceiling.<turn|>",
+   "wall_s": 10.98347282409668,
+   "prompt_tokens": 87,
+   "prompt_ms": 1929.206,
+   "predicted_n": 104,
+   "predicted_ms": 9005.107,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>The provided documents do not contain information regarding the effect of lowering the Gemma4 26B-A4B context window from 16384 to 8192 on the number of GPU-offloaded layers or the KV scaling behavior.<turn|>",
+   "wall_s": 11.307793378829956,
+   "prompt_tokens": 790,
+   "prompt_ms": 4837.081,
+   "predicted_n": 58,
+   "predicted_ms": 6440.869,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "6.4 Scope and Evidence Levels"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "5.4 Per-token Temporal Locality (Tier 2)"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>Lowering the context window from 16384 to 8192 yields exactly +1 ngl layer (11 vs 10) under the same VRAM ceiling. This gain is explained by the fact that global-layer KV halves at ctx=8192, as it scales linearly with ctx while local/SWA KV remains flat.<turn|>",
+   "wall_s": 13.231109619140625,
+   "prompt_tokens": 607,
+   "prompt_ms": 4692.9,
+   "predicted_n": 81,
+   "predicted_ms": 8460.874,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     true,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "7. 結論與未來工作"
+    },
+    {
+     "file": "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "heading": "Results — ctx = 8192"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q24",
+  "lang": "en",
+  "needs_two_passages": false,
+  "key_facts": [
+   "removes every <|channel>…<channel|> block from previous assistant messages",
+   "earlier reasoning is not in context in production"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>The `strip_thinking` macro removes the content enclosed within `<thought>` and `</thought>` tags from the conversation history. This ensures that internal reasoning processes are not included in the context sent to the model during multi-turn interactions. It effectively cleans the prompt by stripping out the \"thinking\" blocks before rendering the final template.<turn|>",
+   "wall_s": 6.441695928573608,
+   "prompt_tokens": 64,
+   "prompt_ms": 267.183,
+   "predicted_n": 72,
+   "predicted_ms": 6124.136,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>The `strip_thinking` macro removes every `<|channel>…` block from previous assistant messages when a multi-turn prompt is rendered. Consequently, earlier reasoning is not in context during production at the `/v1/chat/completions` endpoint.<turn|>",
+   "wall_s": 8.42640209197998,
+   "prompt_tokens": 643,
+   "prompt_ms": 2653.497,
+   "predicted_n": 56,
+   "predicted_ms": 5758.808,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "1.1 The model's real chat template and special tokens (from `tokenizer.chat_template` in the GGUF header)"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "1.3 `llama-server.exe` (b8679) — reasoning-related flags (from `--help`)"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>The provided documents do not contain information regarding a \"strip_thinking macro\" or a \"Gemma4 GGUF chat template inspection.\" Therefore, the answer is not available in the documents.<turn|>",
+   "wall_s": 9.350768089294434,
+   "prompt_tokens": 607,
+   "prompt_ms": 4732.999,
+   "predicted_n": 44,
+   "predicted_ms": 4562.933,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "1.3 `llama-server.exe` (b8679) — reasoning-related flags (from `--help`)"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "4.2 Elicitation of genuine reasoning"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q25",
+  "lang": "en",
+  "needs_two_passages": false,
+  "key_facts": [
+   "543 / 3 840 (14.1%)",
+   "92–123 of 128 experts per layer",
+   "layer 10 with 92/128"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>In the v1 coder imatrix output, 1,152 layer-by-expert cells received zero selections. Layer 14 observed the fewest distinct experts, with only 12 experts selected.<turn|>",
+   "wall_s": 4.3594810962677,
+   "prompt_tokens": 64,
+   "prompt_ms": 270.661,
+   "predicted_n": 48,
+   "predicted_ms": 4038.433,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>543 cells (14.1%) had zero observations, and layer 10 observed the fewest experts with 92/128.<turn|>",
+   "wall_s": 6.18602180480957,
+   "prompt_tokens": 616,
+   "prompt_ms": 2351.221,
+   "predicted_n": 37,
+   "predicted_ms": 3822.656,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     false,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "1.4 What v1's own `.counts` output tells us about sample size"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "1.1 The model's real chat template and special tokens (from `tokenizer.chat_template` in the GGUF header)"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>In the v1 coder imatrix output, 543 of the 3,840 layer-by-expert cells received zero observations. Layer 10 observed the fewest distinct experts, with 92 out of 128 experts ever selected.<turn|>",
+   "wall_s": 9.218091011047363,
+   "prompt_tokens": 740,
+   "prompt_ms": 2798.635,
+   "predicted_n": 60,
+   "predicted_ms": 6415.842,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     false,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "1.4 What v1's own `.counts` output tells us about sample size"
+    },
+    {
+     "file": "docs/expert_routing_visibility_plan.md",
+     "heading": "2.1 Tier 1 — `llama-imatrix.exe` as a zero-code expert-frequency profiler"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q26",
+  "lang": "en",
+  "needs_two_passages": false,
+  "key_facts": [
+   "ffn_gate_up_exps.weight Q4_K: 2.127 MiB/expert (272.2 MiB/layer)",
+   "ffn_down_exps.weight Q8_0: 2.009 MiB/expert (257.1 MiB/layer)",
+   "14 429 MiB total"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>The 4.14 MiB footprint is divided into two expert weight tensors of approximately 2.07 MiB each. The combined size of all expert tensors across the model is 12.42 MiB.<turn|>",
+   "wall_s": 5.681760549545288,
+   "prompt_tokens": 77,
+   "prompt_ms": 1221.016,
+   "predicted_n": 52,
+   "predicted_ms": 4402.076,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>The 4.14 MiB per-expert-per-layer footprint is divided into 2.1270 MiB for the `ffn_gate_up_exps.weight` (Q4_K) and 2.0088 MiB for the `ffn_down_exps.weight` (Q8_0). The combined size of all expert tensors across the model is 14,429 MiB total.<turn|>",
+   "wall_s": 13.63955807685852,
+   "prompt_tokens": 687,
+   "prompt_ms": 2599.262,
+   "predicted_n": 105,
+   "predicted_ms": 11026.345,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     false,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "1.5 Per-expert byte sizes (for the pool budget, thesis §6.2)"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "4.2 Model and Corpus"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>在 Gemma4 26B-A4B 中，每個專家在單層的大小為 4.14 MiB，其中 down 分量以 Q8_0 計為 2.0088 MiB，gate_up 分量以 Q4_K 計為 2.1270 MiB。文件中並未提供所有專家張量在整個模型中的總大小。<turn|>",
+   "wall_s": 13.859896898269653,
+   "prompt_tokens": 721,
+   "prompt_ms": 4057.261,
+   "predicted_n": 91,
+   "predicted_ms": 9742.466,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.2 模型與語料"
+    },
+    {
+     "file": "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "heading": "Why this model, not the \"E4B textonly\" one"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q27",
+  "lang": "en",
+  "needs_two_passages": false,
+  "key_facts": [
+   "raised from 1536 to 3072",
+   "planner turn 1 hit stop_type: limit mid-sentence during reasoning on two seeds",
+   "never reached the answer"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>During the generation of the v2 corpus, it was observed that many high-quality, complex reasoning trajectories were being prematurely truncated. Increasing the `n_predict` budget from 1536 to 3072 tokens allowed the model to complete these longer, more detailed thought processes without being cut off.<turn|>",
+   "wall_s": 6.192343473434448,
+   "prompt_tokens": 59,
+   "prompt_ms": 275.923,
+   "predicted_n": 69,
+   "predicted_ms": 5858.017,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     true,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>The original 1536-token budget was empirically too small because a real planner turn produced a well-structured 1536-token reasoning span that was still mid-sentence on two separate seeds. This resulted in a `stop_type: \"limit\"` without ever reaching the answer.<turn|>",
+   "wall_s": 9.217798948287964,
+   "prompt_tokens": 576,
+   "prompt_ms": 2189.547,
+   "predicted_n": 67,
+   "predicted_ms": 7015.531,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "3.3 Generation parameters"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "1.3 `llama-server.exe` (b8679) — reasoning-related flags (from `--help`)"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>The provided documents do not contain information regarding an empirical observation that led to increasing the per-turn n_predict budget.<turn|>",
+   "wall_s": 4.6530115604400635,
+   "prompt_tokens": 484,
+   "prompt_ms": 1883.82,
+   "predicted_n": 29,
+   "predicted_ms": 2718.484,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/test_plan_vram_opt_streaming_experts.md",
+     "heading": "Phase 2 — Full Corpus Generation (8 Sessions, V1–V2 per session)"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "10. Known approximations and open items (to be closed by the pilot)"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q28",
+  "lang": "en",
+  "needs_two_passages": false,
+  "key_facts": [
+   "minimum window length 256 tokens",
+   "purity threshold ≥ 90%",
+   "coverage ≥ 85% of body tokens"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>Under the v2 prefix-differential windowing rules, the minimum window length is 128 tokens. The single-type purity threshold is set at 0.9, and the minimum body-token coverage required outside mixed windows is 0.8.<turn|>",
+   "wall_s": 5.2089524269104,
+   "prompt_tokens": 63,
+   "prompt_ms": 269.652,
+   "predicted_n": 58,
+   "predicted_ms": 4900.297,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>The minimum window length is 256 tokens. The single-type purity threshold is at least 90% of tokens, and the coverage of body tokens must be at least 85%.<turn|>",
+   "wall_s": 7.3386549949646,
+   "prompt_tokens": 686,
+   "prompt_ms": 2595.838,
+   "predicted_n": 46,
+   "predicted_ms": 4729.743,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "5.4 Prefix-differential attribution to chunk types"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "6.3 V2 — Chunk-alignment (automated, per imatrix input file, before the run)"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>The minimum window length is 256 tokens. A window is attributed to a type if at least 90% of its tokens are of that type, and the coverage must be at least 85% of body tokens.<turn|>",
+   "wall_s": 7.7009570598602295,
+   "prompt_tokens": 559,
+   "prompt_ms": 2131.413,
+   "predicted_n": 53,
+   "predicted_ms": 5521.016,
+   "score": {
+    "fraction": 1.0,
+    "all": true,
+    "present": [
+     true,
+     true,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "5.4 Prefix-differential attribution to chunk types"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "5.4 Prefix-differential attribution to chunk types"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q36",
+  "lang": "en",
+  "needs_two_passages": true,
+  "key_facts": [
+   "Gemma4 runs only attention on GPU and all 8-of-128 active experts per token on CPU",
+   "dense specialists are not CPU-bound on expert FFN (3–16× faster than 4.22 tok/s)",
+   "must run one-at-a-time (never concurrently) with -t 2, cores 2+3 affinity, and BelowNormal"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>The three small dense models are significantly faster because their much smaller parameter counts allow them to fit entirely within the GT 1030's limited VRAM, avoiding slow system memory swapping. However, to prevent out-of-memory errors on the 2 GB GPU, a strict maximum context length constraint must be enforced during deployment.<turn|>",
+   "wall_s": 8.461082220077515,
+   "prompt_tokens": 90,
+   "prompt_ms": 2150.053,
+   "predicted_n": 73,
+   "predicted_ms": 6274.68,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>The three recommended small dense models are 3–16× faster because none of them are CPU-bound on expert FFN. When deploying these models on the 2 GB GPU, they must be run one-at-a-time and never concurrently to avoid exceeding 2GB.<turn|>",
+   "wall_s": 8.963337659835815,
+   "prompt_tokens": 577,
+   "prompt_ms": 2262.422,
+   "predicted_n": 64,
+   "predicted_ms": 6685.293,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     false,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/role_expert_screening.md",
+     "heading": "Recommendation"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "Abstract"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>The provided documents do not contain information regarding why the three recommended small dense role models are faster or what runtime constraint must be enforced when deploying them.<turn|>",
+   "wall_s": 6.096825838088989,
+   "prompt_tokens": 689,
+   "prompt_ms": 2577.957,
+   "predicted_n": 34,
+   "predicted_ms": 3470.968,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "heading": "Why this model, not the \"E4B textonly\" one"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "7. 結論與未來工作"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q37",
+  "lang": "en",
+  "needs_two_passages": true,
+  "key_facts": [
+   "initially assumed <start_of_turn> and <end_of_turn> (not in vocabulary)",
+   "replaced by <|turn> (105) and <turn|> (106)",
+   "<|think|> (98)",
+   "<|channel> (100) and <channel|> (101)"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>The initial visibility plan assumed Gemma4 parsed the `<|im_start|>` and `<|im_end|>` tokens using `--parse-special`. In the v2 corpus design, these were replaced by the special tokens `<|begin_of_text|>` (ID 1) and `<|end_of_text|>` (ID 2) as defined in the GGUF header.<turn|>",
+   "wall_s": 8.089056491851807,
+   "prompt_tokens": 67,
+   "prompt_ms": 504.583,
+   "predicted_n": 88,
+   "predicted_ms": 7535.051,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>The provided documents do not contain information regarding which turn tokens the initial visibility plan assumed were parsed with `--parse-special`, nor do they specify which actual special tokens and token IDs from the GGUF header replaced them.<turn|>",
+   "wall_s": 9.357272624969482,
+   "prompt_tokens": 724,
+   "prompt_ms": 4302.182,
+   "predicted_n": 49,
+   "predicted_ms": 5039.151,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "4.3 Segmentation into chunk-type spans (`scripts/segment_chunk_types.py`, new)"
+    },
+    {
+     "file": "docs/expert_routing_visibility_plan.md",
+     "heading": "2.1 Tier 1 — `llama-imatrix.exe` as a zero-code expert-frequency profiler"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>The provided documents do not contain information regarding which turn tokens the initial visibility plan assumed were parsed with `--parse-special`, nor do they mention specific special tokens and token IDs from the GGUF header replacing them in the v2 corpus design.<turn|>",
+   "wall_s": 9.804893970489502,
+   "prompt_tokens": 722,
+   "prompt_ms": 4166.912,
+   "predicted_n": 54,
+   "predicted_ms": 5580.074,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "6.1 V0 — Pilot (before any full generation; ≈ 2 h machine time)"
+    },
+    {
+     "file": "docs/thesis_zh.md",
+     "heading": "4.2 模型與語料"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q38",
+  "lang": "en",
+  "needs_two_passages": true,
+  "key_facts": [
+   "residual contributions from the 5 global layers (5, 11, 17, 23, 29) beyond n_swa = 1 024",
+   "V4 criterion: JSD_deep > JSD_between-spans in ≥ 15/30 layers",
+   "otherwise allow L ≥ 2 048 sessions"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>Tokens beyond the sliding window affect routing through the global attention mechanism applied to the compressed summary of the preceding context. The empirical condition in experiment V4 is the specific threshold of the attention score's decay rate relative to the context length. If this decay remains negligible, long sessions remain mandatory, whereas a significant drop allows for shorter $L \\geq 2,048$ sessions.<turn|>",
+   "wall_s": 9.129237413406372,
+   "prompt_tokens": 87,
+   "prompt_ms": 1936.1,
+   "predicted_n": 83,
+   "predicted_ms": 7147.439,
+   "score": {
+    "fraction": 0.3333333333333333,
+    "all": false,
+    "present": [
+     false,
+     false,
+     true
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>Deep-context influence flows through the residual contributions of the five global layers (5, 11, 17, 23, and 29) that attend beyond 1,024 tokens. In experiment V4, the determination depends on whether a measurable depth effect is shown; if no effect is measured, session length can be reduced to approximately 2,048 tokens.<turn|>",
+   "wall_s": 11.39680290222168,
+   "prompt_tokens": 568,
+   "prompt_ms": 2160.137,
+   "predicted_n": 88,
+   "predicted_ms": 9218.785,
+   "score": {
+    "fraction": 0.6666666666666666,
+    "all": false,
+    "present": [
+     true,
+     false,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "3.1 Why v1's snippets could not represent production routing"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "3.1 Why v1's snippets could not represent production routing"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>Deep-context influence on routing flows through the residual contributions of the five global layers (5, 11, 17, 23, and 29) that attend beyond 1,024 tokens. The empirical condition in V4 is whether there is a measurable depth effect. If no measurable depth effect is shown, session length can be cut to approximately 2,048 tokens, but if it does exist, long sessions are mandatory.<turn|>",
+   "wall_s": 12.891229629516602,
+   "prompt_tokens": 568,
+   "prompt_ms": 2177.43,
+   "predicted_n": 101,
+   "predicted_ms": 10664.926,
+   "score": {
+    "fraction": 0.6666666666666666,
+    "all": false,
+    "present": [
+     true,
+     false,
+     true
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "3.1 Why v1's snippets could not represent production routing"
+    },
+    {
+     "file": "docs/expert_affinity_corpus_design.md",
+     "heading": "3.1 Why v1's snippets could not represent production routing"
+    }
+   ]
+  }
+ },
+ {
+  "id": "Q39",
+  "lang": "en",
+  "needs_two_passages": true,
+  "key_facts": [
+   "LocalAI uses --cache-ram, -ctk/-ctv KV quant, whole-model LRU, and no disk tier",
+   "Spec-Experts uses VRAM→RAM→Disk .kvbin per-token tiering",
+   "2,048 (VRAM) + 4,096 (RAM) + 12,288 (disk) = 18,432 tokens"
+  ],
+  "none": {
+   "answer": "<|channel>thought\n<channel|>Spec-Experts Phase 2 utilizes a hierarchical KV tiering system that moves inactive tokens to slower storage, whereas LocalAI typically manages KV cache within a single unified memory space. To achieve its 18,432-token effective context, the system distributes tokens across 4,096 in VRAM, 8,192 in RAM, and 6,144 on disk. This tiered approach optimizes performance by prioritizing high-speed access for the most recent tokens.<turn|>",
+   "wall_s": 10.474010229110718,
+   "prompt_tokens": 76,
+   "prompt_ms": 1170.641,
+   "predicted_n": 106,
+   "predicted_ms": 9253.624,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": null
+  },
+  "bm25": {
+   "answer": "<|channel>thought\n<channel|>Spec-Experts features unique VRAM→RAM→Disk `.kvbin` per-token tiering, whereas LocalAI uses llama-server RAM prompt cache and KV quantization without disk KV tiering. The effective context is composed of 2,048 tokens in VRAM, 4,096 tokens in RAM, and 12,288 tokens on disk.<turn|>",
+   "wall_s": 12.01728868484497,
+   "prompt_tokens": 525,
+   "prompt_ms": 3021.788,
+   "predicted_n": 84,
+   "predicted_ms": 8978.601,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/localai_comparison.md",
+     "heading": "2. Feature-by-Feature Comparison"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "3.3.1 Memory Hierarchy Design"
+    }
+   ]
+  },
+  "emb": {
+   "answer": "<|channel>thought\n<channel|>Spec-Experts Phase 2 features unique VRAM→RAM→Disk `.kvbin` per-token tiering, whereas LocalAI uses a RAM prompt cache, KV quantization, and whole-model LRU eviction without disk KV tiering. The provided documents do not contain information regarding specific per-tier token counts or the 18,432-token effective context.<turn|>",
+   "wall_s": 11.021640539169312,
+   "prompt_tokens": 627,
+   "prompt_ms": 2349.994,
+   "predicted_n": 82,
+   "predicted_ms": 8667.749,
+   "score": {
+    "fraction": 0.0,
+    "all": false,
+    "present": [
+     false,
+     false,
+     false
+    ]
+   },
+   "retrieved": [
+    {
+     "file": "docs/localai_comparison.md",
+     "heading": "2. Feature-by-Feature Comparison"
+    },
+    {
+     "file": "docs/thesis_en.md",
+     "heading": "3.1 Architecture Overview"
+    }
+   ]
+  }
+ }
+]

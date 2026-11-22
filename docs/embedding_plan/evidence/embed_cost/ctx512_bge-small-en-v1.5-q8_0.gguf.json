@@ -1,0 +1,44 @@
+{
+ "model": "bge-small-en-v1.5-q8_0.gguf",
+ "ctx_arg": 512,
+ "pooling": "cls",
+ "n": 20,
+ "chunk_chars_median": 2396.5,
+ "gpu_mib": 0,
+ "runs": {
+  "1": {
+   "affinity_cores": [
+    0
+   ],
+   "threads": 1,
+   "load_only_s_median": 0.6214863518252969,
+   "cold_s_p50": 0.7701942711137235,
+   "cold_s_p95": 0.8258696168661117,
+   "cold_s_max": 0.8363571977242827,
+   "warm_est_s_p50": 0.14870791928842664,
+   "warm_est_s_p95": 0.2043832650408149,
+   "peak_rss_mib_children": 391.40625,
+   "rss_note": "max VmHWM of the llama-embedding process itself, polled from /proc"
+  },
+  "2": {
+   "affinity_cores": [
+    0,
+    1
+   ],
+   "threads": 2,
+   "load_only_s_median": 0.5914177624508739,
+   "cold_s_p50": 0.6905697314068675,
+   "cold_s_p95": 0.7367444712202996,
+   "cold_s_max": 0.7418268723413348,
+   "warm_est_s_p50": 0.09915196895599365,
+   "warm_est_s_p95": 0.14532670876942574,
+   "peak_rss_mib_children": 391.6796875,
+   "rss_note": "max VmHWM of the llama-embedding process itself, polled from /proc"
+  }
+ },
+ "h4c": {
+  "two_core_cold_p95_le_1s": true,
+  "two_core_warm_p95_le_1s": true,
+  "rss_le_300_mib": false
+ }
+}

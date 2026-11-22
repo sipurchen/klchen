@@ -1,0 +1,347 @@
+{
+ "model": "multilingual-e5-small-Q8_0.gguf",
+ "chunks": 498,
+ "questions": 40,
+ "cjk_thresholds": {
+  "zh": 0.5,
+  "mixed_lower": 0.1
+ },
+ "questions_with_a_supporting_chunk": 32,
+ "variants": {
+  "base": {
+   "hit3": {
+    "all40": 0.25,
+    "zh": 0.4,
+    "en": 0.1,
+    "answerable37": 0.27
+   },
+   "mrr": {
+    "all40": 0.234,
+    "zh": 0.364,
+    "en": 0.104,
+    "answerable37": 0.253
+   },
+   "answer_hit3": {
+    "all40": 0.275,
+    "zh": 0.55,
+    "en": 0.0,
+    "answerable37": 0.243
+   }
+  },
+  "no_prefix": {
+   "hit3": {
+    "all40": 0.275,
+    "zh": 0.45,
+    "en": 0.1,
+    "answerable37": 0.297
+   },
+   "mrr": {
+    "all40": 0.258,
+    "zh": 0.39,
+    "en": 0.126,
+    "answerable37": 0.279
+   },
+   "answer_hit3": {
+    "all40": 0.3,
+    "zh": 0.55,
+    "en": 0.05,
+    "answerable37": 0.297
+   }
+  },
+  "swapped": {
+   "hit3": {
+    "all40": 0.25,
+    "zh": 0.4,
+    "en": 0.1,
+    "answerable37": 0.27
+   },
+   "mrr": {
+    "all40": 0.234,
+    "zh": 0.364,
+    "en": 0.104,
+    "answerable37": 0.253
+   },
+   "answer_hit3": {
+    "all40": 0.275,
+    "zh": 0.55,
+    "en": 0.0,
+    "answerable37": 0.243
+   }
+  },
+  "both_query": {
+   "hit3": {
+    "all40": 0.25,
+    "zh": 0.4,
+    "en": 0.1,
+    "answerable37": 0.27
+   },
+   "mrr": {
+    "all40": 0.234,
+    "zh": 0.364,
+    "en": 0.104,
+    "answerable37": 0.253
+   },
+   "answer_hit3": {
+    "all40": 0.275,
+    "zh": 0.55,
+    "en": 0.0,
+    "answerable37": 0.243
+   }
+  },
+  "trunc256": {
+   "hit3": {
+    "all40": 0.3,
+    "zh": 0.5,
+    "en": 0.1,
+    "answerable37": 0.324
+   },
+   "mrr": {
+    "all40": 0.253,
+    "zh": 0.381,
+    "en": 0.124,
+    "answerable37": 0.273
+   },
+   "answer_hit3": {
+    "all40": 0.275,
+    "zh": 0.5,
+    "en": 0.05,
+    "answerable37": 0.27
+   }
+  }
+ },
+ "language_of_top3_e5_base": {
+  "corpus_share": {
+   "zh": 0.028,
+   "en": 0.769,
+   "mixed": 0.203
+  },
+  "top3_share_for_english_questions": {
+   "zh": 0.0,
+   "en": 1.0,
+   "mixed": 0.0
+  }
+ },
+ "cosine_question_to_gold_chunks": {
+  "zh": 0.8995,
+  "en": 0.9019
+ },
+ "cosine_question_to_all_chunks_mean": {
+  "zh": 0.8551,
+  "en": 0.8849
+ },
+ "language_of_top3_other_models_english_questions": {
+  "bge-small-en-v1.5-q8_0.gguf": {
+   "zh": 0.0,
+   "en": 0.983,
+   "mixed": 0.017
+  },
+  "all-MiniLM-L6-v2.Q8_0.gguf": {
+   "zh": 0.0,
+   "en": 1.0,
+   "mixed": 0.0
+  },
+  "Qwen3-Embedding-0.6B-Q8_0.gguf": {
+   "zh": 0.0,
+   "en": 0.833,
+   "mixed": 0.167
+  }
+ },
+ "sentence_checks": [
+  {
+   "a": "embedding",
+   "b": "vector",
+   "expected": "high",
+   "note": "synonym, English",
+   "cosine": 1.0
+  },
+  {
+   "a": "expert routing pool",
+   "b": "expert pool routing",
+   "expected": "high",
+   "note": "paraphrase, English",
+   "cosine": 0.967
+  },
+  {
+   "a": "model fine-tuning",
+   "b": "data augmentation",
+   "expected": "low",
+   "note": "unrelated, English",
+   "cosine": 0.8992
+  },
+  {
+   "a": "embeddings are vectors",
+   "b": "embeddings represent text in vector space",
+   "expected": "high",
+   "note": "similar meaning, English",
+   "cosine": 0.9421
+  },
+  {
+   "a": "嵌入向量",
+   "b": "向量表示",
+   "expected": "high",
+   "note": "synonym, Chinese",
+   "cosine": 0.9769
+  },
+  {
+   "a": "專家路由",
+   "b": "路由專家",
+   "expected": "high",
+   "note": "paraphrase, Chinese",
+   "cosine": 0.9912
+  },
+  {
+   "a": "expert routing",
+   "b": "專家路由",
+   "expected": "high",
+   "note": "translation pair",
+   "cosine": 0.8996
+  },
+  {
+   "a": "英文文本",
+   "b": "中文文本",
+   "expected": "low",
+   "note": "different language names",
+   "cosine": 0.9773
+  }
+ ],
+ "english_question_samples_base": [
+  {
+   "id": "Q21",
+   "gold": [
+    [
+     "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "Real architecture (from GGUF header, not assumed)"
+    ]
+   ],
+   "top3": [
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "4.1 Prompt rendering (real template tokens)"
+    ],
+    [
+     "docs/thesis_en.md",
+     "3.3.4 Prompt Replay (llama.cpp KV Workaround)"
+    ],
+    [
+     "docs/role_expert_screening.md",
+     "Open items for next round"
+    ]
+   ]
+  },
+  {
+   "id": "Q22",
+   "gold": [
+    [
+     "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "Method"
+    ]
+   ],
+   "top3": [
+    [
+     "docs/expert_routing_visibility_plan.md",
+     "1. What was actually checked on this machine"
+    ],
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "4.1 Prompt rendering (real template tokens)"
+    ],
+    [
+     "docs/thesis_en.md",
+     "5.6.3 Compensation Adapter (Stage Two)"
+    ]
+   ]
+  },
+  {
+   "id": "Q23",
+   "gold": [
+    [
+     "docs/gemma4_26b_a4b_vram_benchmark.md",
+     "Results — ctx = 8192"
+    ]
+   ],
+   "top3": [
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "3.3 Generation parameters"
+    ],
+    [
+     "docs/test_plan_vram_opt_streaming_experts.md",
+     "Phase 3 — Determinism & Depth Validation (V3–V4b)"
+    ],
+    [
+     "docs/test_plan_vram_opt_streaming_experts.md",
+     "Phase 4 — Type Separation & Reproducibility (V5–V6)"
+    ]
+   ]
+  },
+  {
+   "id": "Q24",
+   "gold": [
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "1.1 The model's real chat template and special tokens (from `tokenizer.chat_template` in the GGUF header)"
+    ]
+   ],
+   "top3": [
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "3.3 Generation parameters"
+    ],
+    [
+     "docs/thesis_en.md",
+     "5.6.3 Compensation Adapter (Stage Two)"
+    ],
+    [
+     "docs/test_plan_vram_opt_streaming_experts.md",
+     "T4.2 — V5: Type separation (the thesis claim)"
+    ]
+   ]
+  },
+  {
+   "id": "Q25",
+   "gold": [
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "1.4 What v1's own `.counts` output tells us about sample size"
+    ]
+   ],
+   "top3": [
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "4.1 Prompt rendering (real template tokens)"
+    ],
+    [
+     "docs/thesis_en.md",
+     "5.6.3 Compensation Adapter (Stage Two)"
+    ],
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "3.3 Generation parameters"
+    ]
+   ]
+  },
+  {
+   "id": "Q26",
+   "gold": [
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "1.5 Per-expert byte sizes (for the pool budget, thesis §6.2)"
+    ]
+   ],
+   "top3": [
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "3.4 Decision: thoughts are retained in the accumulated transcript"
+    ],
+    [
+     "docs/expert_affinity_corpus_design.md",
+     "4.1 Prompt rendering (real template tokens)"
+    ],
+    [
+     "docs/thesis_en.md",
+     "1.2 Research Questions and Hypotheses"
+    ]
+   ]
+  }
+ ]
+}

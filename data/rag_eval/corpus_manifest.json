@@ -1,0 +1,66 @@
+{
+  "schema": "rag_eval_corpus_manifest/v1",
+  "normalization": "LF",
+  "excluded": [
+    "docs/embedding_research_plan_2026-11-19.md",
+    "docs/rag_architecture_2026-11-19.md",
+    "docs/embedding_plan/**"
+  ],
+  "files": [
+    {
+      "file": "docs/RTX2050_LLM_Harness_Plan.md",
+      "sha256_lf": "1275bcb9286f0ae4b9599f3d444112d500009b73f1af9d84739b5a0e559d3bc4",
+      "bytes_utf8_lf": 11647
+    },
+    {
+      "file": "docs/comparison_report.md",
+      "sha256_lf": "69ae70e074da0398c8cd27fd1847b5092f991003449345ed326bb4dff1723f1b",
+      "bytes_utf8_lf": 7295
+    },
+    {
+      "file": "docs/expert_affinity_corpus_design.md",
+      "sha256_lf": "7210dabc145f705a8672ee7c673a9d916837b4aa5129aed4ea88bc8570fde4fb",
+      "bytes_utf8_lf": 52752
+    },
+    {
+      "file": "docs/expert_routing_visibility_plan.md",
+      "sha256_lf": "008317eb0b1ebb50389c80b85fe7fb804adb6382434294004e8068e0ef884ea7",
+      "bytes_utf8_lf": 31845
+    },
+    {
+      "file": "docs/gemma4_26b_a4b_vram_benchmark.md",
+      "sha256_lf": "91bd954eeaae3cb111fa92e40dd566d3491d417b278e92b456e746621e8915be",
+      "bytes_utf8_lf": 6591
+    },
+    {
+      "file": "docs/h2_adapter_plan_2026-11-14.md",
+      "sha256_lf": "73fadc09da116e460fed4032e949debe7e1fde3daa3d3e916bb81a6a8c978c72",
+      "bytes_utf8_lf": 7359
+    },
+    {
+      "file": "docs/localai_comparison.md",
+      "sha256_lf": "610b8736a4e14ab6db05538e7540f2da2bec8552e949cf83b5a575ca3557403a",
+      "bytes_utf8_lf": 10008
+    },
+    {
+      "file": "docs/role_expert_screening.md",
+      "sha256_lf": "5609a7fe3bf6950ac1fedac483f16c86393f017ffde213be3e2512fb482827ff",
+      "bytes_utf8_lf": 4358
+    },
+    {
+      "file": "docs/test_plan_vram_opt_streaming_experts.md",
+      "sha256_lf": "66190131bbd0a41e3d5638149b201c57af0b43571388bcc1024c467b15e001dc",
+      "bytes_utf8_lf": 21144
+    },
+    {
+      "file": "docs/thesis_en.md",
+      "sha256_lf": "289387cecfadcfde78d26494415f295542056643011c39355eeb9f6177354cba",
+      "bytes_utf8_lf": 56212
+    },
+    {
+      "file": "docs/thesis_zh.md",
+      "sha256_lf": "8925924d5b4595333a0266e2855167320c586e9ab6c7aff06e2dcef41bec8107",
+      "bytes_utf8_lf": 52216
+    }
+  ]
+}

@@ -1,0 +1,1675 @@
+{
+  "schema": "routing_fingerprint_eval/v1",
+  "session_count": 12,
+  "sessions": [
+    "base_all/coder_01",
+    "base_all/coder_02",
+    "base_all/coder_03",
+    "base_all/coder_pilot",
+    "base_all/planner_01",
+    "base_all/planner_02",
+    "base_all/planner_03",
+    "base_all/planner_pilot",
+    "base_all/writer_01",
+    "base_all/writer_02",
+    "base_new/coder_04",
+    "base_new/writer_04"
+  ],
+  "c1": {
+    "cap": 57,
+    "prefix_tokens": 32,
+    "neighbors": 8,
+    "per_session": {
+      "base_all/coder_01": {
+        "eligible_spans": 7,
+        "knn_hit_rate": 0.9328547216652344,
+        "static_all_hit_rate": 0.8674287453451733,
+        "delta": 0.06542597632006109
+      },
+      "base_all/coder_02": {
+        "eligible_spans": 7,
+        "knn_hit_rate": 0.9192055711173358,
+        "static_all_hit_rate": 0.8374595393713041,
+        "delta": 0.08174603174603168
+      },
+      "base_all/coder_03": {
+        "eligible_spans": 13,
+        "knn_hit_rate": 0.9108308289506637,
+        "static_all_hit_rate": 0.849598672677185,
+        "delta": 0.061232156273478666
+      },
+      "base_all/coder_pilot": {
+        "eligible_spans": 14,
+        "knn_hit_rate": 0.9308831448572967,
+        "static_all_hit_rate": 0.8729172276072519,
+        "delta": 0.05796591725004485
+      },
+      "base_all/planner_01": {
+        "eligible_spans": 6,
+        "knn_hit_rate": 0.8866666666666667,
+        "static_all_hit_rate": 0.8023035914702581,
+        "delta": 0.08436307519640862
+      },
+      "base_all/planner_02": {
+        "eligible_spans": 6,
+        "knn_hit_rate": 0.9144471153846154,
+        "static_all_hit_rate": 0.8340932158119658,
+        "delta": 0.0803538995726496
+      },
+      "base_all/planner_03": {
+        "eligible_spans": 6,
+        "knn_hit_rate": 0.9240737928940176,
+        "static_all_hit_rate": 0.8433128353072173,
+        "delta": 0.08076095758680024
+      },
+      "base_all/planner_pilot": {
+        "eligible_spans": 6,
+        "knn_hit_rate": 0.9172975398585155,
+        "static_all_hit_rate": 0.8540228064618308,
+        "delta": 0.06327473339668466
+      },
+      "base_all/writer_01": {
+        "eligible_spans": 11,
+        "knn_hit_rate": 0.9204568036816233,
+        "static_all_hit_rate": 0.7091870620228009,
+        "delta": 0.2112697416588224
+      },
+      "base_all/writer_02": {
+        "eligible_spans": 15,
+        "knn_hit_rate": 0.8735797342192692,
+        "static_all_hit_rate": 0.8367317275747508,
+        "delta": 0.03684800664451837
+      },
+      "base_new/coder_04": {
+        "eligible_spans": 11,
+        "knn_hit_rate": 0.9131714876033058,
+        "static_all_hit_rate": 0.8449696747533991,
+        "delta": 0.06820181284990667
+      },
+      "base_new/writer_04": {
+        "eligible_spans": 11,
+        "knn_hit_rate": 0.927593224789916,
+        "static_all_hit_rate": 0.6959755777310924,
+        "delta": 0.2316176470588236
+      }
+    },
+    "paired_bootstrap": {
+      "mean": 0.0935883296295192,
+      "ci95_low": 0.06505456062989752,
+      "ci95_high": 0.1312780629368911,
+      "samples": 10000,
+      "seed": 0
+    }
+  },
+  "c2": {
+    "per_session": {
+      "base_all/coder_01": {
+        "learned_recall_at_8": 0.51946773826134,
+        "popular_recall_at_8": 0.2863697950776882,
+        "delta": 0.23309794318365173,
+        "token_layer_pairs": 210714
+      },
+      "base_all/coder_02": {
+        "learned_recall_at_8": 0.48890424445517977,
+        "popular_recall_at_8": 0.27898074371220133,
+        "delta": 0.20992350074297844,
+        "token_layer_pairs": 163531
+      },
+      "base_all/coder_03": {
+        "learned_recall_at_8": 0.49467243794069354,
+        "popular_recall_at_8": 0.2947201294310828,
+        "delta": 0.19995230850961077,
+        "token_layer_pairs": 207060
+      },
+      "base_all/coder_pilot": {
+        "learned_recall_at_8": 0.5084221833743687,
+        "popular_recall_at_8": 0.2976836967386554,
+        "delta": 0.21073848663571332,
+        "token_layer_pairs": 231101
+      },
+      "base_all/planner_01": {
+        "learned_recall_at_8": 0.4417910653299548,
+        "popular_recall_at_8": 0.24842390106863502,
+        "delta": 0.1933671642613198,
+        "token_layer_pairs": 181540
+      },
+      "base_all/planner_02": {
+        "learned_recall_at_8": 0.45321238961312027,
+        "popular_recall_at_8": 0.24948223296888142,
+        "delta": 0.20373015664423885,
+        "token_layer_pairs": 190240
+      },
+      "base_all/planner_03": {
+        "learned_recall_at_8": 0.469674046556218,
+        "popular_recall_at_8": 0.26267763164464686,
+        "delta": 0.2069964149115711,
+        "token_layer_pairs": 200274
+      },
+      "base_all/planner_pilot": {
+        "learned_recall_at_8": 0.47925264832160347,
+        "popular_recall_at_8": 0.2892472685122618,
+        "delta": 0.19000537980934168,
+        "token_layer_pairs": 192386
+      },
+      "base_all/writer_01": {
+        "learned_recall_at_8": 0.3990850689100057,
+        "popular_recall_at_8": 0.15274441478221815,
+        "delta": 0.24634065412778758,
+        "token_layer_pairs": 198157
+      },
+      "base_all/writer_02": {
+        "learned_recall_at_8": 0.44522280888649857,
+        "popular_recall_at_8": 0.23367330844175993,
+        "delta": 0.21154950044473864,
+        "token_layer_pairs": 193372
+      },
+      "base_new/coder_04": {
+        "learned_recall_at_8": 0.4853601692149003,
+        "popular_recall_at_8": 0.27527016499323226,
+        "delta": 0.21009000422166807,
+        "token_layer_pairs": 229767
+      },
+      "base_new/writer_04": {
+        "learned_recall_at_8": 0.3989694839877534,
+        "popular_recall_at_8": 0.1506392886673967,
+        "delta": 0.2483301953203567,
+        "token_layer_pairs": 178988
+      }
+    },
+    "paired_bootstrap": {
+      "mean": 0.21367680906774802,
+      "ci95_low": 0.20388272334166502,
+      "ci95_high": 0.22461451833626164,
+      "samples": 10000,
+      "seed": 0
+    }
+  },
+  "prefix_cost_inclusive": {
+    "prefix_tokens": 32,
+    "policies": [
+      "reactive",
+      "spec_type",
+      "static_type",
+      "fingerprint_hybrid",
+      "fingerprint_static_tail"
+    ],
+    "caps": {
+      "32": {
+        "policies": {
+          "reactive": {
+            "hit_rate": 0.7928582881898348,
+            "loads_per_token": 49.71401083443963
+          },
+          "spec_type": {
+            "hit_rate": 0.7931327447780508,
+            "loads_per_token": 50.9856291202652
+          },
+          "static_type": {
+            "hit_rate": 0.684546852035735,
+            "loads_per_token": 75.70875551142359
+          },
+          "fingerprint_hybrid": {
+            "hit_rate": 0.7925657593180979,
+            "loads_per_token": 51.121705630653906
+          },
+          "fingerprint_static_tail": {
+            "hit_rate": 0.749745214357417,
+            "loads_per_token": 60.06114855421987
+          }
+        },
+        "per_session": {
+          "base_all/coder_01": {
+            "eligible_spans": 7,
+            "tokens": 7206,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8125734341752243,
+                "loads_per_token": 44.982375797946155,
+                "loads": 324143,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8126861874363956,
+                "loads_per_token": 45.88787121842908,
+                "loads": 323948,
+                "preloads": 6720
+              },
+              "static_type": {
+                "hit_rate": 0.7363250531964104,
+                "loads_per_token": 63.2819872328615,
+                "loads": 456010,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8123080303450828,
+                "loads_per_token": 45.97862892034416,
+                "loads": 324602,
+                "preloads": 6720
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.7929057960958461,
+                "loads_per_token": 49.702608936996945,
+                "loads": 358157,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/coder_02": {
+            "eligible_spans": 7,
+            "tokens": 5579,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8011979446734779,
+                "loads_per_token": 47.7124932783653,
+                "loads": 266188,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8013689729342176,
+                "loads_per_token": 48.875963434307224,
+                "loads": 265959,
+                "preloads": 6720
+              },
+              "static_type": {
+                "hit_rate": 0.7181327298799068,
+                "loads_per_token": 67.64814482882237,
+                "loads": 377409,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8007580510246759,
+                "loads_per_token": 49.02258469259724,
+                "loads": 266777,
+                "preloads": 6720
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.767624873035789,
+                "loads_per_token": 55.77003047141065,
+                "loads": 311141,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/coder_03": {
+            "eligible_spans": 13,
+            "tokens": 7071,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.7823704803658135,
+                "loads_per_token": 52.23108471220478,
+                "loads": 369326,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.7826839673784943,
+                "loads_per_token": 53.92080328100693,
+                "loads": 368794,
+                "preloads": 12480
+              },
+              "static_type": {
+                "hit_rate": 0.7027164946023665,
+                "loads_per_token": 71.34804129543204,
+                "loads": 504502,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.7820894027247443,
+                "loads_per_token": 54.063498797906945,
+                "loads": 369803,
+                "preloads": 12480
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.7469246452646962,
+                "loads_per_token": 60.73808513647292,
+                "loads": 429479,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/coder_pilot": {
+            "eligible_spans": 14,
+            "tokens": 7876,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8108652869476892,
+                "loads_per_token": 45.392331132554595,
+                "loads": 357510,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.811125042322668,
+                "loads_per_token": 47.03643981716608,
+                "loads": 357019,
+                "preloads": 13440
+              },
+              "static_type": {
+                "hit_rate": 0.7336571017436939,
+                "loads_per_token": 63.92229558151346,
+                "loads": 503452,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8107970416455054,
+                "loads_per_token": 47.11515997968512,
+                "loads": 357639,
+                "preloads": 13440
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.7852658921618418,
+                "loads_per_token": 51.53618588115795,
+                "loads": 405899,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_01": {
+            "eligible_spans": 6,
+            "tokens": 6132,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.7646512828875842,
+                "loads_per_token": 56.48369210697978,
+                "loads": 346358,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.7650712111328549,
+                "loads_per_token": 57.32224396607958,
+                "loads": 345740,
+                "preloads": 5760
+              },
+              "static_type": {
+                "hit_rate": 0.6538547782126549,
+                "loads_per_token": 83.07485322896282,
+                "loads": 509415,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.7642605729506414,
+                "loads_per_token": 57.516797129810826,
+                "loads": 346933,
+                "preloads": 5760
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.6972582354859752,
+                "loads_per_token": 72.65802348336595,
+                "loads": 445539,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_02": {
+            "eligible_spans": 6,
+            "tokens": 6432,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.7740865982587065,
+                "loads_per_token": 54.219216417910445,
+                "loads": 348738,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.7744875881011609,
+                "loads_per_token": 55.018501243781095,
+                "loads": 348119,
+                "preloads": 5760
+              },
+              "static_type": {
+                "hit_rate": 0.6832050684079602,
+                "loads_per_token": 76.03078358208955,
+                "loads": 489030,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.7738656975538972,
+                "loads_per_token": 55.16775497512438,
+                "loads": 349079,
+                "preloads": 5760
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.7353279177031509,
+                "loads_per_token": 63.52129975124378,
+                "loads": 408569,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_03": {
+            "eligible_spans": 6,
+            "tokens": 6778,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.779842874004131,
+                "loads_per_token": 52.83771023900856,
+                "loads": 358134,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.7803309727549916,
+                "loads_per_token": 53.57037474181175,
+                "loads": 357340,
+                "preloads": 5760
+              },
+              "static_type": {
+                "hit_rate": 0.6998579964591325,
+                "loads_per_token": 72.0340808498082,
+                "loads": 488247,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.7798232025179502,
+                "loads_per_token": 53.69223959870168,
+                "loads": 358166,
+                "preloads": 5760
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.7603730205567031,
+                "loads_per_token": 57.510475066391265,
+                "loads": 389806,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_pilot": {
+            "eligible_spans": 6,
+            "tokens": 6506,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.7736429193564914,
+                "loads_per_token": 54.32569935444205,
+                "loads": 353443,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.7741219643406086,
+                "loads_per_token": 55.096065170611745,
+                "loads": 352695,
+                "preloads": 5760
+              },
+              "static_type": {
+                "hit_rate": 0.7028006199405676,
+                "loads_per_token": 71.32785121426376,
+                "loads": 464059,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.7735270007172866,
+                "loads_per_token": 55.23885644020904,
+                "loads": 353624,
+                "preloads": 5760
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.7419561430474434,
+                "loads_per_token": 61.93052566861359,
+                "loads": 402920,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/writer_01": {
+            "eligible_spans": 11,
+            "tokens": 6726,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8038872782238081,
+                "loads_per_token": 47.067053226286056,
+                "loads": 316573,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8040136534839925,
+                "loads_per_token": 48.60674992566161,
+                "loads": 316369,
+                "preloads": 10560
+              },
+              "static_type": {
+                "hit_rate": 0.6321364852809991,
+                "loads_per_token": 88.28724353256021,
+                "loads": 593820,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.803677272276737,
+                "loads_per_token": 48.687481415402914,
+                "loads": 316912,
+                "preloads": 10560
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.7642382793141045,
+                "loads_per_token": 56.582812964614924,
+                "loads": 380576,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/writer_02": {
+            "eligible_spans": 15,
+            "tokens": 6500,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.7885621794871794,
+                "loads_per_token": 50.74507692307692,
+                "loads": 329843,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.788875641025641,
+                "loads_per_token": 52.885230769230766,
+                "loads": 329354,
+                "preloads": 14400
+              },
+              "static_type": {
+                "hit_rate": 0.6256916666666666,
+                "loads_per_token": 89.834,
+                "loads": 583921,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.7878865384615384,
+                "loads_per_token": 53.122615384615386,
+                "loads": 330897,
+                "preloads": 14400
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.6776814102564103,
+                "loads_per_token": 77.35646153846155,
+                "loads": 502817,
+                "preloads": 0
+              }
+            }
+          },
+          "base_new/coder_04": {
+            "eligible_spans": 11,
+            "tokens": 7854,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8190874076903488,
+                "loads_per_token": 43.41902215431627,
+                "loads": 341013,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8192561115355232,
+                "loads_per_token": 44.72307104660046,
+                "loads": 340695,
+                "preloads": 10560
+              },
+              "static_type": {
+                "hit_rate": 0.6933112638994992,
+                "loads_per_token": 73.60529666412019,
+                "loads": 578096,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8186651175621764,
+                "loads_per_token": 44.86490960020372,
+                "loads": 341809,
+                "preloads": 10560
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.7629445717681012,
+                "loads_per_token": 56.89330277565572,
+                "loads": 446840,
+                "preloads": 0
+              }
+            }
+          },
+          "base_new/writer_04": {
+            "eligible_spans": 11,
+            "tokens": 6064,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8035317722075638,
+                "loads_per_token": 47.1523746701847,
+                "loads": 285932,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8035716248900616,
+                "loads_per_token": 48.88423482849604,
+                "loads": 285874,
+                "preloads": 10560
+              },
+              "static_type": {
+                "hit_rate": 0.6328729661389622,
+                "loads_per_token": 88.11048812664907,
+                "loads": 534302,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8031311840369393,
+                "loads_per_token": 48.98994063324538,
+                "loads": 286515,
+                "preloads": 10560
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.7644417875989445,
+                "loads_per_token": 56.5339709762533,
+                "loads": 342822,
+                "preloads": 0
+              }
+            }
+          }
+        },
+        "paired_bootstrap": {
+          "fingerprint_hybrid_minus_spec_type": {
+            "hit_rate": {
+              "mean": -0.0005669854599529197,
+              "ci95_low": -0.0006760313707722758,
+              "ci95_high": -0.00046535687193336334,
+              "samples": 10000,
+              "seed": 0
+            },
+            "loads_per_token": {
+              "mean": 0.13607651038870236,
+              "ci95_low": 0.11168564926400555,
+              "ci95_high": 0.16224752898534883,
+              "samples": 10000,
+              "seed": 0
+            }
+          },
+          "fingerprint_hybrid_minus_reactive": {
+            "hit_rate": {
+              "mean": -0.0002925288717369375,
+              "ci95_low": -0.00039695719191379397,
+              "ci95_high": -0.0001950452961413804,
+              "samples": 10000,
+              "seed": 0
+            },
+            "loads_per_token": {
+              "mean": 1.4076947962142643,
+              "ci95_low": 1.1576939900497416,
+              "ci95_high": 1.676338875433977,
+              "samples": 10000,
+              "seed": 0
+            }
+          }
+        }
+      },
+      "48": {
+        "policies": {
+          "reactive": {
+            "hit_rate": 0.9037869767497059,
+            "loads_per_token": 23.09112558007055
+          },
+          "spec_type": {
+            "hit_rate": 0.9040795780895762,
+            "loads_per_token": 25.027133058997787
+          },
+          "static_type": {
+            "hit_rate": 0.8130748985681051,
+            "loads_per_token": 44.86202434365475
+          },
+          "fingerprint_hybrid": {
+            "hit_rate": 0.9033269428486058,
+            "loads_per_token": 25.20776551683072
+          },
+          "fingerprint_static_tail": {
+            "hit_rate": 0.8700861872295333,
+            "loads_per_token": 31.179315064912007
+          }
+        },
+        "per_session": {
+          "base_all/coder_01": {
+            "eligible_spans": 7,
+            "tokens": 7206,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9126497594597095,
+                "loads_per_token": 20.96405772966972,
+                "loads": 151067,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.912900707743547,
+                "loads_per_token": 22.302664446294756,
+                "loads": 150633,
+                "preloads": 10080
+              },
+              "static_type": {
+                "hit_rate": 0.8555775279859377,
+                "loads_per_token": 34.66139328337496,
+                "loads": 249770,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9123467712091775,
+                "loads_per_token": 22.435609214543437,
+                "loads": 151591,
+                "preloads": 10080
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8968111064853362,
+                "loads_per_token": 24.76533444351929,
+                "loads": 178459,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/coder_02": {
+            "eligible_spans": 7,
+            "tokens": 5579,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9063086275915636,
+                "loads_per_token": 22.485929378024736,
+                "loads": 125449,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9066103543048336,
+                "loads_per_token": 24.220290374619108,
+                "loads": 125045,
+                "preloads": 10080
+              },
+              "static_type": {
+                "hit_rate": 0.8422970066320129,
+                "loads_per_token": 37.848718408316905,
+                "loads": 211158,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9056775407779172,
+                "loads_per_token": 24.444165621079048,
+                "loads": 126294,
+                "preloads": 10080
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8798477923164247,
+                "loads_per_token": 28.836529844058074,
+                "loads": 160879,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/coder_03": {
+            "eligible_spans": 13,
+            "tokens": 7071,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8922918729081224,
+                "loads_per_token": 25.84995050205063,
+                "loads": 182785,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8927220336586056,
+                "loads_per_token": 28.394145099703014,
+                "loads": 182055,
+                "preloads": 18720
+              },
+              "static_type": {
+                "hit_rate": 0.8328966907085278,
+                "loads_per_token": 40.10479422995333,
+                "loads": 283581,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8920844529298072,
+                "loads_per_token": 28.547164474614622,
+                "loads": 183137,
+                "preloads": 18720
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8670490972516853,
+                "loads_per_token": 31.90821665959553,
+                "loads": 225623,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/coder_pilot": {
+            "eligible_spans": 14,
+            "tokens": 7876,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9107488996106314,
+                "loads_per_token": 21.420264093448452,
+                "loads": 168706,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9109885517183003,
+                "loads_per_token": 23.92242254951752,
+                "loads": 168253,
+                "preloads": 20160
+              },
+              "static_type": {
+                "hit_rate": 0.8551469654647029,
+                "loads_per_token": 34.764728288471304,
+                "loads": 273807,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9105415185373286,
+                "loads_per_token": 24.029710512950736,
+                "loads": 169098,
+                "preloads": 20160
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8925199974606399,
+                "loads_per_token": 25.795200609446418,
+                "loads": 203163,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_01": {
+            "eligible_spans": 6,
+            "tokens": 6132,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8853493966079583,
+                "loads_per_token": 27.51614481409002,
+                "loads": 168729,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8858651337247228,
+                "loads_per_token": 28.801369863013697,
+                "loads": 167970,
+                "preloads": 8640
+              },
+              "static_type": {
+                "hit_rate": 0.7809673298543162,
+                "loads_per_token": 52.56784083496412,
+                "loads": 322346,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8849471352467928,
+                "loads_per_token": 29.021689497716896,
+                "loads": 169321,
+                "preloads": 8640
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8320898564905415,
+                "loads_per_token": 40.29843444227006,
+                "loads": 247110,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_02": {
+            "eligible_spans": 6,
+            "tokens": 6432,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.89752668946932,
+                "loads_per_token": 24.593594527363184,
+                "loads": 158186,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8979931073797678,
+                "loads_per_token": 25.824937810945272,
+                "loads": 157466,
+                "preloads": 8640
+              },
+              "static_type": {
+                "hit_rate": 0.8200060893449419,
+                "loads_per_token": 43.19853855721393,
+                "loads": 277853,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8971885364842455,
+                "loads_per_token": 26.018034825870647,
+                "loads": 158708,
+                "preloads": 8640
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8667320947346601,
+                "loads_per_token": 31.984297263681594,
+                "loads": 205723,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_03": {
+            "eligible_spans": 6,
+            "tokens": 6778,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8973332841546179,
+                "loads_per_token": 24.64001180289171,
+                "loads": 167010,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8979375676207337,
+                "loads_per_token": 25.76969607553851,
+                "loads": 166027,
+                "preloads": 8640
+              },
+              "static_type": {
+                "hit_rate": 0.8342898593488738,
+                "loads_per_token": 39.770433756270286,
+                "loads": 269564,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8971912806137504,
+                "loads_per_token": 25.948804957214517,
+                "loads": 167241,
+                "preloads": 8640
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8800469656732566,
+                "loads_per_token": 28.78872823841841,
+                "loads": 195130,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_pilot": {
+            "eligible_spans": 6,
+            "tokens": 6506,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.8913765498514192,
+                "loads_per_token": 26.06962803565939,
+                "loads": 169609,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.8920874321139461,
+                "loads_per_token": 27.227021211189673,
+                "loads": 168499,
+                "preloads": 8640
+              },
+              "static_type": {
+                "hit_rate": 0.8312134952351675,
+                "loads_per_token": 40.50876114355979,
+                "loads": 263550,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.8911895429859616,
+                "loads_per_token": 27.442514601905934,
+                "loads": 169901,
+                "preloads": 8640
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8682984936981248,
+                "loads_per_token": 31.608361512450045,
+                "loads": 205644,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/writer_01": {
+            "eligible_spans": 11,
+            "tokens": 6726,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9140827881851521,
+                "loads_per_token": 20.620130835563486,
+                "loads": 138691,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9141682773317474,
+                "loads_per_token": 22.954653583110318,
+                "loads": 138553,
+                "preloads": 15840
+              },
+              "static_type": {
+                "hit_rate": 0.7583698830409357,
+                "loads_per_token": 57.99122807017544,
+                "loads": 390049,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9135048072157795,
+                "loads_per_token": 23.113886410942612,
+                "loads": 139624,
+                "preloads": 15840
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8784951432252949,
+                "loads_per_token": 29.16116562592923,
+                "loads": 196138,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/writer_02": {
+            "eligible_spans": 15,
+            "tokens": 6500,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9052884615384615,
+                "loads_per_token": 22.73076923076923,
+                "loads": 147750,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9052128205128205,
+                "loads_per_token": 26.072,
+                "loads": 147868,
+                "preloads": 21600
+              },
+              "static_type": {
+                "hit_rate": 0.7698487179487179,
+                "loads_per_token": 55.23630769230769,
+                "loads": 359036,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9039128205128205,
+                "loads_per_token": 26.384,
+                "loads": 149896,
+                "preloads": 21600
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8208557692307692,
+                "loads_per_token": 42.994615384615386,
+                "loads": 279465,
+                "preloads": 0
+              }
+            }
+          },
+          "base_new/coder_04": {
+            "eligible_spans": 11,
+            "tokens": 7854,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.916867201426025,
+                "loads_per_token": 19.951871657754012,
+                "loads": 156702,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9169971776589424,
+                "loads_per_token": 21.93748408454291,
+                "loads": 156457,
+                "preloads": 15840
+              },
+              "static_type": {
+                "hit_rate": 0.8150385154061625,
+                "loads_per_token": 44.390756302521005,
+                "loads": 348645,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9162258085052203,
+                "loads_per_token": 22.122612681436213,
+                "loads": 157911,
+                "preloads": 15840
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8737012987012988,
+                "loads_per_token": 30.31168831168831,
+                "loads": 238068,
+                "preloads": 0
+              }
+            }
+          },
+          "base_new/writer_04": {
+            "eligible_spans": 11,
+            "tokens": 6064,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9156201901934916,
+                "loads_per_token": 20.251154353562004,
+                "loads": 122803,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9154717733069481,
+                "loads_per_token": 22.89891160949868,
+                "loads": 123019,
+                "preloads": 15840
+              },
+              "static_type": {
+                "hit_rate": 0.7612467018469657,
+                "loads_per_token": 57.300791556728235,
+                "loads": 347472,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9151130991644679,
+                "loads_per_token": 22.98499340369393,
+                "loads": 123541,
+                "preloads": 15840
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8845866314863676,
+                "loads_per_token": 27.69920844327177,
+                "loads": 167968,
+                "preloads": 0
+              }
+            }
+          }
+        },
+        "paired_bootstrap": {
+          "fingerprint_hybrid_minus_spec_type": {
+            "hit_rate": {
+              "mean": -0.0007526352409705228,
+              "ci95_low": -0.0008937372477158848,
+              "ci95_high": -0.000620393361986726,
+              "samples": 10000,
+              "seed": 0
+            },
+            "loads_per_token": {
+              "mean": 0.18063245783292814,
+              "ci95_low": 0.14889440687681801,
+              "ci95_high": 0.21449693945181153,
+              "samples": 10000,
+              "seed": 0
+            }
+          },
+          "fingerprint_hybrid_minus_reactive": {
+            "hit_rate": {
+              "mean": -0.0004600339011002948,
+              "ci95_low": -0.0006689268419645294,
+              "ci95_high": -0.0003020394218690772,
+              "samples": 10000,
+              "seed": 0
+            },
+            "loads_per_token": {
+              "mean": 2.1166399367601683,
+              "ci95_low": 1.733120996855844,
+              "ci95_high": 2.531496874497999,
+              "samples": 10000,
+              "seed": 0
+            }
+          }
+        }
+      },
+      "57": {
+        "policies": {
+          "reactive": {
+            "hit_rate": 0.9412638872094018,
+            "loads_per_token": 14.096667069743566
+          },
+          "spec_type": {
+            "hit_rate": 0.9414061397601917,
+            "loads_per_token": 16.44492672064305
+          },
+          "static_type": {
+            "hit_rate": 0.865086391559537,
+            "loads_per_token": 32.37926602571114
+          },
+          "fingerprint_hybrid": {
+            "hit_rate": 0.9407704519970627,
+            "loads_per_token": 16.597491783794062
+          },
+          "fingerprint_static_tail": {
+            "hit_rate": 0.9143682381359693,
+            "loads_per_token": 20.55162284736736
+          }
+        },
+        "per_session": {
+          "base_all/coder_01": {
+            "eligible_spans": 7,
+            "tokens": 7206,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9449723609954668,
+                "loads_per_token": 13.206633361087983,
+                "loads": 95167,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9453181376630586,
+                "loads_per_token": 14.784762697751873,
+                "loads": 94569,
+                "preloads": 11970
+              },
+              "static_type": {
+                "hit_rate": 0.899837519659543,
+                "loads_per_token": 24.038995281709685,
+                "loads": 173225,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9447196780460727,
+                "loads_per_token": 14.928393005828477,
+                "loads": 95604,
+                "preloads": 11970
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9323711721713387,
+                "loads_per_token": 16.230918678878712,
+                "loads": 116960,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/coder_02": {
+            "eligible_spans": 7,
+            "tokens": 5579,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9410998088068352,
+                "loads_per_token": 14.136045886359563,
+                "loads": 78865,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9413978012786043,
+                "loads_per_token": 16.210073489872737,
+                "loads": 78466,
+                "preloads": 11970
+              },
+              "static_type": {
+                "hit_rate": 0.8888951126247236,
+                "loads_per_token": 26.66517297006632,
+                "loads": 148765,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9404851526557926,
+                "loads_per_token": 16.429109159347554,
+                "loads": 79688,
+                "preloads": 11970
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9181999462269224,
+                "loads_per_token": 19.632012905538627,
+                "loads": 109527,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/coder_03": {
+            "eligible_spans": 13,
+            "tokens": 7071,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9321736670909349,
+                "loads_per_token": 16.278319898175646,
+                "loads": 115104,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9325195634752275,
+                "loads_per_token": 19.339131664545327,
+                "loads": 114517,
+                "preloads": 22230
+              },
+              "static_type": {
+                "hit_rate": 0.8837304954509028,
+                "loads_per_token": 27.904681091783342,
+                "loads": 197314,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9318495733748173,
+                "loads_per_token": 19.499929288643756,
+                "loads": 115654,
+                "preloads": 22230
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9110026870315373,
+                "loads_per_token": 21.359355112431057,
+                "loads": 151032,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/coder_pilot": {
+            "eligible_spans": 14,
+            "tokens": 7876,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9437309547993905,
+                "loads_per_token": 13.504570848146267,
+                "loads": 106362,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9437949678347723,
+                "loads_per_token": 16.528821736922296,
+                "loads": 106241,
+                "preloads": 23940
+              },
+              "static_type": {
+                "hit_rate": 0.902011913831048,
+                "loads_per_token": 23.5171406805485,
+                "loads": 185221,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.943479663958016,
+                "loads_per_token": 16.60449466734383,
+                "loads": 106837,
+                "preloads": 23940
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9304225918401896,
+                "loads_per_token": 16.698577958354495,
+                "loads": 131518,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_01": {
+            "eligible_spans": 6,
+            "tokens": 6132,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9273449391171994,
+                "loads_per_token": 17.437214611872147,
+                "loads": 106925,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9277499184605349,
+                "loads_per_token": 19.01320939334638,
+                "loads": 106329,
+                "preloads": 10260
+              },
+              "static_type": {
+                "hit_rate": 0.83713171341596,
+                "loads_per_token": 39.0883887801696,
+                "loads": 239690,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9270106273102848,
+                "loads_per_token": 19.190639269406393,
+                "loads": 107417,
+                "preloads": 10260
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.8870603663839965,
+                "loads_per_token": 27.105512067840834,
+                "loads": 166211,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_02": {
+            "eligible_spans": 6,
+            "tokens": 6432,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9390838774875622,
+                "loads_per_token": 14.619869402985074,
+                "loads": 94035,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.939644226782753,
+                "loads_per_token": 16.080534825870647,
+                "loads": 93170,
+                "preloads": 10260
+              },
+              "static_type": {
+                "hit_rate": 0.8741824730514096,
+                "loads_per_token": 30.196206467661693,
+                "loads": 194222,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.93876904539801,
+                "loads_per_token": 16.290578358208954,
+                "loads": 94521,
+                "preloads": 10260
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9143157908374793,
+                "loads_per_token": 20.564210199004975,
+                "loads": 132269,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_03": {
+            "eligible_spans": 6,
+            "tokens": 6778,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9380987508606276,
+                "loads_per_token": 14.856299793449395,
+                "loads": 100696,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9387651224550014,
+                "loads_per_token": 16.210091472410742,
+                "loads": 99612,
+                "preloads": 10260
+              },
+              "static_type": {
+                "hit_rate": 0.8819766155208026,
+                "loads_per_token": 28.325612275007376,
+                "loads": 191991,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9379671977967935,
+                "loads_per_token": 16.401593390380643,
+                "loads": 100910,
+                "preloads": 10260
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9236856988295465,
+                "loads_per_token": 18.315432280908823,
+                "loads": 124142,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/planner_pilot": {
+            "eligible_spans": 6,
+            "tokens": 6506,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.934263244184855,
+                "loads_per_token": 15.776821395634798,
+                "loads": 102644,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9349440260272569,
+                "loads_per_token": 17.19043959422072,
+                "loads": 101581,
+                "preloads": 10260
+              },
+              "static_type": {
+                "hit_rate": 0.8819615226969977,
+                "loads_per_token": 28.329234552720564,
+                "loads": 184310,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.934137719028589,
+                "loads_per_token": 17.383953273901014,
+                "loads": 102840,
+                "preloads": 10260
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9168876165590737,
+                "loads_per_token": 19.94697202582232,
+                "loads": 129775,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/writer_01": {
+            "eligible_spans": 11,
+            "tokens": 6726,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9504416939240757,
+                "loads_per_token": 11.893993458221825,
+                "loads": 79999,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9499969025671523,
+                "loads_per_token": 14.797353553374963,
+                "loads": 80717,
+                "preloads": 18810
+              },
+              "static_type": {
+                "hit_rate": 0.8140722569134701,
+                "loads_per_token": 44.622658340767174,
+                "loads": 300132,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9498773416592329,
+                "loads_per_token": 14.826048171275646,
+                "loads": 80910,
+                "preloads": 18810
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9202454405788483,
+                "loads_per_token": 19.141094261076418,
+                "loads": 128743,
+                "preloads": 0
+              }
+            }
+          },
+          "base_all/writer_02": {
+            "eligible_spans": 15,
+            "tokens": 6500,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9443782051282051,
+                "loads_per_token": 13.349230769230768,
+                "loads": 86770,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9437416666666667,
+                "loads_per_token": 17.448153846153847,
+                "loads": 87763,
+                "preloads": 25650
+              },
+              "static_type": {
+                "hit_rate": 0.8284538461538462,
+                "loads_per_token": 41.171076923076924,
+                "loads": 267612,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9426711538461539,
+                "loads_per_token": 17.705076923076923,
+                "loads": 89433,
+                "preloads": 25650
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.877773717948718,
+                "loads_per_token": 29.334307692307693,
+                "loads": 190673,
+                "preloads": 0
+              }
+            }
+          },
+          "base_new/coder_04": {
+            "eligible_spans": 11,
+            "tokens": 7854,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9477246201510907,
+                "loads_per_token": 12.546091163738222,
+                "loads": 98537,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9477988922841865,
+                "loads_per_token": 14.92322383498854,
+                "loads": 98397,
+                "preloads": 18810
+              },
+              "static_type": {
+                "hit_rate": 0.8660857524828113,
+                "loads_per_token": 32.139419404125285,
+                "loads": 252423,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.947052457346575,
+                "loads_per_token": 15.10236822001528,
+                "loads": 99804,
+                "preloads": 18810
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9132777353365589,
+                "loads_per_token": 20.81334351922587,
+                "loads": 163468,
+                "preloads": 0
+              }
+            }
+          },
+          "base_new/writer_04": {
+            "eligible_spans": 11,
+            "tokens": 6064,
+            "policies": {
+              "reactive": {
+                "hit_rate": 0.9518545239665788,
+                "loads_per_token": 11.554914248021108,
+                "loads": 70069,
+                "preloads": 0
+              },
+              "spec_type": {
+                "hit_rate": 0.9512024516270888,
+                "loads_per_token": 14.813324538258575,
+                "loads": 71018,
+                "preloads": 18810
+              },
+              "static_type": {
+                "hit_rate": 0.8226974769129287,
+                "loads_per_token": 42.5526055408971,
+                "loads": 258039,
+                "preloads": 0
+              },
+              "fingerprint_hybrid": {
+                "hit_rate": 0.9512258135444152,
+                "loads_per_token": 14.807717678100264,
+                "loads": 70984,
+                "preloads": 18810
+              },
+              "fingerprint_static_tail": {
+                "hit_rate": 0.9271760938874231,
+                "loads_per_token": 17.47773746701847,
+                "loads": 105985,
+                "preloads": 0
+              }
+            }
+          }
+        },
+        "paired_bootstrap": {
+          "fingerprint_hybrid_minus_spec_type": {
+            "hit_rate": {
+              "mean": -0.0006356877631292038,
+              "ci95_low": -0.0008019375022407823,
+              "ci95_high": -0.000444678728284057,
+              "samples": 10000,
+              "seed": 0
+            },
+            "loads_per_token": {
+              "mean": 0.15256506315100715,
+              "ci95_low": 0.10672289478817906,
+              "ci95_high": 0.1924650005377864,
+              "samples": 10000,
+              "seed": 0
+            }
+          },
+          "fingerprint_hybrid_minus_reactive": {
+            "hit_rate": {
+              "mean": -0.0004934352123390865,
+              "ci95_low": -0.0007574974720148394,
+              "ci95_high": -0.0003038546792703598,
+              "samples": 10000,
+              "seed": 0
+            },
+            "loads_per_token": {
+              "mean": 2.500824714050495,
+              "ci95_low": 2.0397600690334565,
+              "ci95_high": 2.9997515831999166,
+              "samples": 10000,
+              "seed": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}
